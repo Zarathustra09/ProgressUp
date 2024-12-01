@@ -14,8 +14,8 @@
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
         <li class="menu-item">
-            <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+            <a href="{{route('home')}}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-alt"></i>
                 <div data-i18n="Analytics">Home</div>
             </a>
         </li>
@@ -25,27 +25,25 @@
         </li>
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                <i class="menu-icon tf-icons bx bxs-school"></i>
                 <div data-i18n="Account Settings">My School</div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="#" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-user"></i>
                         <div data-i18n="Account">Parents</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="#"  class="menu-link">
-                        <div data-i18n="Notifications">Staff</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="#"  class="menu-link">
+                    <a href="#" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-building-house"></i>
                         <div data-i18n="Connections">Rooms</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="#"  class="menu-link">
+                    <a href="#" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-calendar"></i>
                         <div data-i18n="Connections">Schedules</div>
                     </a>
                 </li>
@@ -58,7 +56,7 @@
 
         <li class="menu-item">
             <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-user-plus"></i>
+                <i class="menu-icon tf-icons bx bx-envelope"></i>
                 <div data-i18n="Patient Records">Messaging</div>
             </a>
         </li>
@@ -69,10 +67,9 @@
 
         <li class="menu-item">
             <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-folder"></i>
+                <i class="menu-icon tf-icons bx bx-bar-chart"></i>
                 <div data-i18n="Patient Records">Reporting</div>
             </a>
         </li>
-
     </ul>
 </aside>
