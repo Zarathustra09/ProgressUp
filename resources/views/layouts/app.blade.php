@@ -114,7 +114,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <span class="fw-semibold d-block">{{auth()->user()->name}}</span>
+                                                    <span class="fw-semibold d-block">{{auth()->user()->first_name}} {{auth()->user()->last_name}}</span>
                                                     <small class="text-muted">Admin</small>
                                                 </div>
                                             </div>
@@ -125,7 +125,7 @@
                                     </li>
 
                                     <li>
-                                        <a class="dropdown-item" href="{{route('profile')}}">
+                                        <a class="dropdown-item" href="{{route('profile.index')}}">
                                             <i class="bx bx-user me-2"></i>
                                             <span class="align-middle">My Profile</span>
                                         </a>

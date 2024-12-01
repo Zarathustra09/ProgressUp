@@ -4,9 +4,18 @@
     <div class="content-wrapper">
         <!-- Content -->
 
+        @if(session('error'))
+            <div class="alert alert-success">
+                {{ session('error') }}
+            </div>
+        @endif
         <div class="container-xxl flex-grow-1 container-p-y">
             <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Account Settings /</span> Account</h4>
-
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
             <div class="row">
                 <div class="col-md-12">
                     <ul class="nav nav-pills flex-column flex-md-row mb-3">
@@ -51,7 +60,9 @@
                         </div>
                         <hr class="my-0" />
                         <div class="card-body">
-                            <form id="formAccountSettings" method="POST" onsubmit="return false">
+                            <form id="formAccountSettings" method="POST" action="{{ route('profile.update') }}">
+                                @csrf
+                                @method('PUT')
                                 <div class="row">
                                     <div class="mb-3 col-md-6">
                                         <label for="firstName" class="form-label">First Name</label>
@@ -59,14 +70,14 @@
                                             class="form-control"
                                             type="text"
                                             id="firstName"
-                                            name="firstName"
-                                            value="Juan"
+                                            name="first_name"
+                                            value="{{ auth()->user()->first_name }}"
                                             autofocus
                                         />
                                     </div>
                                     <div class="mb-3 col-md-6">
                                         <label for="lastName" class="form-label">Last Name</label>
-                                        <input class="form-control" type="text" name="lastName" id="lastName" value="Dela Cruz" />
+                                        <input class="form-control" type="text" name="last_name" id="lastName" value="{{ auth()->user()->last_name }}" />
                                     </div>
                                     <div class="mb-3 col-md-6">
                                         <label for="email" class="form-label">E-mail</label>
@@ -75,8 +86,8 @@
                                             type="text"
                                             id="email"
                                             name="email"
-                                            value="juan.delacruz@example.com"
-                                            placeholder="juan.delacruz@example.com"
+                                            value="{{ auth()->user()->email }}"
+                                            placeholder="{{ auth()->user()->email }}"
                                         />
                                     </div>
                                     <div class="mb-3 col-md-6">
@@ -86,30 +97,20 @@
                                             <input
                                                 type="text"
                                                 id="phoneNumber"
-                                                name="phoneNumber"
+                                                name="phone_number"
                                                 class="form-control"
-                                                placeholder="912 345 6789"
+                                                value="{{ auth()->user()->phone_number }}"
+                                                placeholder="{{ auth()->user()->phone_number }}"
                                             />
                                         </div>
                                     </div>
                                     <div class="mb-3 col-md-6">
                                         <label for="address" class="form-label">Address</label>
-                                        <input type="text" class="form-control" id="address" name="address" placeholder="123 Rizal Street, Makati City" />
+                                        <input type="text" class="form-control" value="{{ auth()->user()->address }}" id="address" name="address" placeholder="{{ auth()->user()->address }}" />
                                     </div>
                                     <div class="mb-3 col-md-6">
-                                        <label for="state" class="form-label">Province</label>
-                                        <input class="form-control" type="text" id="state" name="state" placeholder="Laguna" />
-                                    </div>
-                                    <div class="mb-3 col-md-6">
-                                        <label for="zipCode" class="form-label">Zip Code</label>
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            id="zipCode"
-                                            name="zipCode"
-                                            placeholder="1000"
-                                            maxlength="6"
-                                        />
+                                        <label for="province" class="form-label">Province</label>
+                                        <input class="form-control" type="text" value="{{ auth()->user()->province }}" id="province" name="province" placeholder="{{ auth()->user()->province }}" />
                                     </div>
                                 </div>
                                 <div class="mt-2">
@@ -129,17 +130,20 @@
                                     <p class="mb-0">Once you delete your account, there is no going back. Please be certain.</p>
                                 </div>
                             </div>
-                            <form id="formAccountDeactivation" onsubmit="return false">
+                            <form id="formAccountDeactivation" method="POST" action="{{ route('profile.destroy') }}">
+                                @csrf
+                                @method('DELETE')
                                 <div class="form-check mb-3">
                                     <input
                                         class="form-check-input"
                                         type="checkbox"
                                         name="accountActivation"
                                         id="accountActivation"
+                                        required
                                     />
-                                    <label class="form-check-label" for="accountActivation"
-                                    >I confirm my account deactivation</label
-                                    >
+                                    <label class="form-check-label" for="accountActivation">
+                                        I confirm my account deactivation
+                                    </label>
                                 </div>
                                 <button type="submit" class="btn btn-danger deactivate-account">Deactivate Account</button>
                             </form>
@@ -148,7 +152,6 @@
                 </div>
             </div>
         </div>
-        <!-- / Content -->
 
         <div class="content-backdrop fade"></div>
     </div>

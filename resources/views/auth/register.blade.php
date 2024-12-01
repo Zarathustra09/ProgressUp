@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register Form in HTML and CSS | CodingNepal</title>
+    <title>{{env('APP_NAME')}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <style>
         /* Google Fonts Link */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-        /* Resetting default styling and setting font-family */
         * {
             margin: 0;
             padding: 0;
@@ -19,120 +20,198 @@
         body {
             width: 100%;
             min-height: 100vh;
-            padding: 0 10px;
             display: flex;
             background: #626cd6;
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
 
-        /* Register form styling */
-        .register_form {
+        .register-container {
             width: 100%;
-            max-width: 435px;
+            max-width: 1000px;
             background: #fff;
-            border-radius: 6px;
-            padding: 41px 30px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
 
-        .register_form h3 {
-            font-size: 20px;
+        .register-header {
+            background: #626cd6;
+            color: white;
+            padding: 20px;
             text-align: center;
         }
 
-        form .input_box label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: 8px;
+        .register-body {
+            padding: 30px;
         }
 
-        /* Input field styling */
-        form .input_box input {
-            width: 100%;
-            height: 57px;
-            border: 1px solid #DADAF2;
-            border-radius: 5px;
-            outline: none;
-            background: #F8F8FB;
-            font-size: 17px;
-            padding: 0px 20px;
-            margin-bottom: 25px;
-            transition: 0.2s ease;
-        }
-
-        form .input_box input:focus {
-            border-color: #626cd6;
-        }
-
-        a {
-            text-decoration: none;
+        .form-label {
+            font-weight: 600;
             color: #626cd6;
-            font-weight: 500;
         }
 
-        a:hover {
-            text-decoration: underline;
+        .form-control {
+            border: 2px solid #e0e0e0;
+            transition: border-color 0.3s ease;
         }
 
-        /* Register button styling */
-        form button {
-            width: 100%;
-            height: 56px;
-            border-radius: 5px;
-            border: none;
-            outline: none;
-            background: #626CD6;
-            color: #fff;
-            font-size: 18px;
-            font-weight: 500;
-            text-transform: uppercase;
-            cursor: pointer;
-            margin-bottom: 28px;
-            transition: 0.3s ease;
+        .form-control:focus {
+            border-color: #626cd6;
+            box-shadow: 0 0 10px rgba(98, 108, 214, 0.1);
         }
 
-        form button:hover {
-            background: #4954d0;
+        .btn-primary {
+            background-color: #626cd6;
+            border-color: #626cd6;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #4954d0;
+            border-color: #4954d0;
+        }
+
+        .input-group-text {
+            background-color: #f8f9fa;
+            color: #626cd6;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .register-body {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
-<div class="register_form">
-    <!-- Register form container -->
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
-        <h3>{{ config('app.name') }}</h3>
-
-        <!-- Name input box -->
-        <div class="input_box">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" placeholder="Enter your name" value="{{ old('name') }}" required autocomplete="name" autofocus />
-        </div>
-
-        <!-- Email input box -->
-        <div class="input_box">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="Enter email address" value="{{ old('email') }}" required autocomplete="email" />
-        </div>
-
-        <!-- Password input box -->
-        <div class="input_box">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="new-password" />
-        </div>
-
-        <!-- Confirm Password input box -->
-        <div class="input_box">
-            <label for="password-confirm">Confirm Password</label>
-            <input type="password" id="password-confirm" name="password_confirmation" placeholder="Confirm your password" required autocomplete="new-password" />
-        </div>
-
-        <!-- Register button -->
-        <button type="submit">Register</button>
-
-        <p class="sign_up">Already have an account? <a href="{{ route('login') }}">Log in</a></p>
-    </form>
+<div class="register-container">
+    <div class="register-header">
+        <h3>{{ config('app.name') }} Registration</h3>
+    </div>
+    <div class="register-body">
+        <form method="POST" action="{{ route('register') }}">
+            @csrf
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label for="first_name" class="form-label">First Name</label>
+                    <input
+                        class="form-control"
+                        type="text"
+                        id="first_name"
+                        name="first_name"
+                        value="{{ old('first_name') }}"
+                        required
+                        autofocus
+                    />
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="middle_name" class="form-label">Middle Name</label>
+                    <input
+                        class="form-control"
+                        type="text"
+                        id="middle_name"
+                        name="middle_name"
+                        value="{{ old('middle_name') }}"
+                    />
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="last_name" class="form-label">Last Name</label>
+                    <input
+                        class="form-control"
+                        type="text"
+                        id="last_name"
+                        name="last_name"
+                        value="{{ old('last_name') }}"
+                        required
+                    />
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label class="form-label" for="phone_number">Phone Number</label>
+                    <div class="input-group">
+                        <span class="input-group-text">PH (+63)</span>
+                        <input
+                            type="text"
+                            id="phone_number"
+                            name="phone_number"
+                            class="form-control"
+                            placeholder="912 345 6789"
+                            value="{{ old('phone_number') }}"
+                            required
+                        />
+                    </div>
+                </div>
+                <div class="mb-3 col-md-12">
+                    <label for="address" class="form-label">Address</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="address"
+                        name="address"
+                        placeholder="123 Street, City"
+                        value="{{ old('address') }}"
+                    />
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="province" class="form-label">Province</label>
+                    <input
+                        class="form-control"
+                        type="text"
+                        id="province"
+                        name="province"
+                        placeholder="Enter Province"
+                        value="{{ old('province') }}"
+                    />
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input
+                        class="form-control"
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="john.doe@example.com"
+                        value="{{ old('email') }}"
+                        required
+                    />
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="password" class="form-label">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        class="form-control"
+                        name="password"
+                        required
+                        autocomplete="new-password"
+                    />
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="password-confirm" class="form-label">Confirm Password</label>
+                    <input
+                        type="password"
+                        id="password-confirm"
+                        class="form-control"
+                        name="password_confirmation"
+                        required
+                        autocomplete="new-password"
+                    />
+                </div>
+            </div>
+            <div class="mt-2">
+                <button type="submit" class="btn btn-primary me-2">
+                    <i class="bx bx-user-plus me-1"></i> Register
+                </button>
+                <a href="{{ route('login') }}" class="btn btn-outline-secondary">
+                    <i class="bx bx-arrow-back me-1"></i> Back to Login
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
 </body>
 </html>
