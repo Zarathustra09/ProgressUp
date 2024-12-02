@@ -25,6 +25,7 @@ class User extends Authenticatable
         'phone_number',
         'address',
         'province',
+        'birthdate',
         'email',
         'password',
     ];
@@ -46,5 +47,16 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'birthdate' => 'date',
     ];
+
+    public function studentMedicalInformation()
+    {
+        return $this->hasOne(StudentMedicalInformation::class);
+    }
+
+    public function studentSchoolDetails()
+    {
+        return $this->hasOne(StudentSchoolDetails::class);
+    }
 }

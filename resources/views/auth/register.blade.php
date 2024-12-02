@@ -145,7 +145,7 @@
                         />
                     </div>
                 </div>
-                <div class="mb-3 col-md-12">
+                <div class="mb-3 col-md-6">
                     <label for="address" class="form-label">Address</label>
                     <input
                         type="text"
@@ -154,6 +154,16 @@
                         name="address"
                         placeholder="123 Street, City"
                         value="{{ old('address') }}"
+                    />
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label for="birthdate" class="form-label">Birthdate</label>
+                    <input
+                        type="date"
+                        class="form-control"
+                        id="birthdate"
+                        name="birthdate"
+                        value="{{ old('birthdate') }}"
                     />
                 </div>
                 <div class="mb-3 col-md-6">

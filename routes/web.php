@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\ParentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StudentMedicalInformationController;
+use App\Http\Controllers\StudentSchoolDetailsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,3 +28,19 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
 Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
+Route::get('/parent/index', [ParentController::class, 'index'])->name('parent.index');
+Route::post('/parent', [ParentController::class, 'store'])->name('parent.store');
+Route::get('/parent/{user}', [ParentController::class, 'show'])->name('parent.show');
+Route::put('/parent/{user}', [ParentController::class, 'update'])->name('parent.update');
+Route::delete('/parent/{user}', [ParentController::class, 'destroy'])->name('parent.destroy');
+
+
+
+
+
+
+Route::resource('student-medical-information', StudentMedicalInformationController::class);
+Route::resource('student-school-details', StudentSchoolDetailsController::class);
+

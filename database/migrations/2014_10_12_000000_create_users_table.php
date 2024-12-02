@@ -20,9 +20,11 @@ return new class extends Migration
             $table->string('phone_number')->unique();
             $table->string('address')->nullable();
             $table->string('province')->nullable();
+            $table->date('birthdate')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->foreignId('parent_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });
