@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ParentController;
+use App\Http\Controllers\ParentDetailsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentMedicalInformationController;
 use App\Http\Controllers\StudentSchoolDetailsController;
@@ -36,10 +37,8 @@ Route::get('/parent/{user}', [ParentController::class, 'show'])->name('parent.sh
 Route::put('/parent/{user}', [ParentController::class, 'update'])->name('parent.update');
 Route::delete('/parent/{user}', [ParentController::class, 'destroy'])->name('parent.destroy');
 
-
-
-
-
+Route::get('/parent-details/index/{id}', [ParentDetailsController::class, 'index'])->name('parent-details.index');
+Route::get('/parent-student/index/{id}', [ParentDetailsController::class, 'indexStudent'])->name('parent-student.index');
 
 Route::resource('student-medical-information', StudentMedicalInformationController::class);
 Route::resource('student-school-details', StudentSchoolDetailsController::class);

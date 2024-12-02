@@ -10,7 +10,7 @@
             </div>
         @endif
         <div class="container-xxl flex-grow-1 container-p-y">
-            <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Account Settings /</span> Account</h4>
+            <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Parent /</span> Details</h4>
             @if(session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
@@ -19,9 +19,18 @@
             <div class="row">
                 <div class="col-md-12">
                     <ul class="nav nav-pills flex-column flex-md-row mb-3">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Account</a>
-                        </li>
+                        <ul class="nav nav-pills flex-column flex-md-row mb-3">
+                            <li class="nav-item">
+                                <a class="nav-link {{ Route::currentRouteName() == 'parent-details.index' ? 'active' : '' }}" href="{{ route('parent-details.index', ['id' => $parent->id]) }}">
+                                    <i class="bx bx-user me-1"></i> Account
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ Route::currentRouteName() == 'parent-student.index' ? 'active' : '' }}" href="{{ route('parent-student.index', ['id' => $parent->id]) }}">
+                                    <i class="bx bx-child me-1"></i> Children
+                                </a>
+                            </li>
+                        </ul>
                     </ul>
                     <div class="card mb-4">
                         <h5 class="card-header">Profile Details</h5>
@@ -39,7 +48,7 @@
 
                                 <div class="button-wrapper">
                                     <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
-                                        <span class="d-none d-sm-block">Upload new photo</span>
+                                        <span class="d-none d-sm-block">Print Profile</span>
                                         <i class="bx bx-upload d-block d-sm-none"></i>
                                         <input
                                             type="file"
@@ -49,12 +58,7 @@
                                             accept="image/png, image/jpeg"
                                         />
                                     </label>
-                                    <button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
-                                        <i class="bx bx-reset d-block d-sm-none"></i>
-                                        <span class="d-none d-sm-block">Reset</span>
-                                    </button>
-
-                                    <p class="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
+                                    <p class="text-muted mb-0">{{$parent->address}} {{$parent->province}}</p>
                                 </div>
                             </div>
                         </div>
@@ -71,8 +75,9 @@
                                             type="text"
                                             id="firstName"
                                             name="first_name"
-                                            value="{{ auth()->user()->first_name }}"
+                                            value="{{ $parent->first_name }}"
                                             autofocus
+                                            readonly
                                         />
                                     </div>
 
@@ -83,12 +88,13 @@
                                             type="text"
                                             id="middleName"
                                             name="middle_name"
-                                            value="{{ auth()->user()->middle_name }}"
+                                            value="{{ $parent->middle_name }}"
+                                            readonly
                                         />
                                     </div>
                                     <div class="mb-3 col-md-6">
                                         <label for="lastName" class="form-label">Last Name</label>
-                                        <input class="form-control" type="text" name="last_name" id="lastName" value="{{ auth()->user()->last_name }}" />
+                                        <input class="form-control" type="text" name="last_name" id="lastName" value="{{ $parent->last_name }}"readonly />
                                     </div>
                                     <div class="mb-3 col-md-6">
                                         <label for="email" class="form-label">E-mail</label>
@@ -97,8 +103,9 @@
                                             type="text"
                                             id="email"
                                             name="email"
-                                            value="{{ auth()->user()->email }}"
-                                            placeholder="{{ auth()->user()->email }}"
+                                            value="{{ $parent->email }}"
+                                            placeholder="{{ $parent->email }}"
+                                            readonly
                                         />
                                     </div>
                                     <div class="mb-3 col-md-6">
@@ -110,56 +117,21 @@
                                                 id="phoneNumber"
                                                 name="phone_number"
                                                 class="form-control"
-                                                value="{{ auth()->user()->phone_number }}"
-                                                placeholder="{{ auth()->user()->phone_number }}"
+                                                value="{{ $parent->phone_number }}"
+                                                placeholder="{{ $parent->phone_number }}"
+                                                readonly
                                             />
                                         </div>
                                     </div>
-                                    <div class="mb-3 col-md-6">
-                                        <label for="address" class="form-label">Address</label>
-                                        <input type="text" class="form-control" value="{{ auth()->user()->address }}" id="address" name="address" placeholder="{{ auth()->user()->address }}" />
-                                    </div>
-                                    <div class="mb-3 col-md-6">
-                                        <label for="province" class="form-label">Province</label>
-                                        <input class="form-control" type="text" value="{{ auth()->user()->province }}" id="province" name="province" placeholder="{{ auth()->user()->province }}" />
-                                    </div>
                                 </div>
                                 <div class="mt-2">
-                                    <button type="submit" class="btn btn-primary me-2">Save changes</button>
                                     <button type="reset" class="btn btn-outline-secondary">Cancel</button>
                                 </div>
                             </form>
                         </div>
                         <!-- /Account -->
                     </div>
-                    <div class="card">
-                        <h5 class="card-header">Delete Account</h5>
-                        <div class="card-body">
-                            <div class="mb-3 col-12 mb-0">
-                                <div class="alert alert-warning">
-                                    <h6 class="alert-heading fw-bold mb-1">Are you sure you want to delete your account?</h6>
-                                    <p class="mb-0">Once you delete your account, there is no going back. Please be certain.</p>
-                                </div>
-                            </div>
-                            <form id="formAccountDeactivation" method="POST" action="{{ route('profile.destroy') }}">
-                                @csrf
-                                @method('DELETE')
-                                <div class="form-check mb-3">
-                                    <input
-                                        class="form-check-input"
-                                        type="checkbox"
-                                        name="accountActivation"
-                                        id="accountActivation"
-                                        required
-                                    />
-                                    <label class="form-check-label" for="accountActivation">
-                                        I confirm my account deactivation
-                                    </label>
-                                </div>
-                                <button type="submit" class="btn btn-danger deactivate-account">Deactivate Account</button>
-                            </form>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
