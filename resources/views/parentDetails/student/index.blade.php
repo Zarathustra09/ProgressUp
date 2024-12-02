@@ -31,7 +31,6 @@
                         </li>
                     </ul>
 
-
                     <div class="card mb-4">
                         <h5 class="card-header">Children Details</h5>
                         <div class="card-body">
@@ -43,11 +42,22 @@
                                         <div class="col-md-4">
                                             <div class="card mb-4">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">{{ $student->first_name }} {{ $student->last_name }}</h5>
-                                                    <p class="card-text">Email: {{ $student->email }}</p>
-                                                    <p class="card-text">Phone: {{ $student->phone_number }}</p>
-                                                    <p class="card-text">Address: {{ $student->address }}</p>
-                                                    <p class="card-text">Province: {{ $student->province }}</p>
+                                                    <div class="d-flex align-items-start align-items-sm-center gap-4">
+                                                        <img
+                                                            src="{{ $student->profile_image ? asset('storage/' . $student->profile_image) : 'https://via.placeholder.com/100' }}"
+                                                            alt="student-avatar"
+                                                            class="d-block rounded"
+                                                            height="100"
+                                                            width="100"
+                                                        />
+                                                        <div>
+                                                            <h5 class="card-title">{{ $student->first_name }} {{ $student->last_name }}</h5>
+                                                            <p class="card-text">Email: {{ $student->email }}</p>
+                                                            <p class="card-text">Phone: {{ $student->phone_number }}</p>
+                                                            <p class="card-text">Address: {{ $student->address }}</p>
+                                                            <p class="card-text">Province: {{ $student->province }}</p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -66,3 +76,11 @@
         <div class="content-backdrop fade"></div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        function createUser() {
+            window.location.href = '{{ route('parent-student.create', ['id' => $id]) }}';
+        }
+    </script>
+@endpush

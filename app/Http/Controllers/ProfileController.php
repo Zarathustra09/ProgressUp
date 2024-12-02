@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -42,6 +43,45 @@ class ProfileController extends Controller
         ]);
 
         return redirect()->route('profile.index')->with('success', 'Profile updated successfully.');
+    }
+
+    public function uploadProfileImage(Request $request)
+    {
+        Log::info('Profile image upload request', $request->all());
+        $user = Auth::user();
+
+        Log::info('Profile image upload request', [
+            'user_id' => $user->id,
+            'request_data' => $request->all()
+        ]);
+
+        $request->validate([
+            'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:800',
+        ]);
+
+        if ($request->hasFile('profile_image')) {
+            $imagePath = $request->file('profile_image')->store('profile_images', 'public');
+            Log::info('Profile image uploaded', ['image_path' => $imagePath]);
+
+            $user->profile_image = $imagePath;
+            $user->save();
+        }
+
+        return redirect()->route('profile.index')->with('success', 'Profile image updated successfully.');
+    }
+
+    public function resetProfileImage(Request $request)
+    {
+        $user = Auth::user();
+        if ($user->profile_image) {
+            // Delete the image file from storage
+            Storage::disk('public')->delete($user->profile_image);
+            // Remove the image path from the database
+            $user->profile_image = null;
+            $user->save();
+        }
+
+        return response()->json(['success' => 'Profile image reset successfully.']);
     }
 
     public function destroy()

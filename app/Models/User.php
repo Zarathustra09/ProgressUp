@@ -26,6 +26,8 @@ class User extends Authenticatable
         'address',
         'province',
         'birthdate',
+        'profile_image',
+        'parent_id',
         'email',
         'password',
     ];

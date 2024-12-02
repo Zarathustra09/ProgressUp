@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ParentDetailsController extends Controller
 {
@@ -19,8 +22,15 @@ class ParentDetailsController extends Controller
         return view('parentDetails.student.index', compact('students', 'id'));
     }
 
-    public function createStudent(Request $request, $id)
+    public function create($id)
     {
+        return view('parentDetails.student.create', compact('id'));
+    }
+
+
+    public function store(Request $request, $id)
+    {
+        Log::info('This is the id: ' . $id);
         $request->validate([
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
@@ -35,37 +45,58 @@ class ParentDetailsController extends Controller
             'notes' => 'nullable|string|max:255',
             'medication' => 'nullable|string|max:255',
             'status' => 'required|string|max:255',
+            'profile_image_data' => 'nullable|string',
         ]);
 
-        $studentId = date('Y') . '-' . str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
+        DB::beginTransaction();
 
-        $student = User::create([
-            'first_name' => $request->first_name,
-            'middle_name' => $request->middle_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'phone_number' => $request->phone_number,
-            'address' => $request->address,
-            'province' => $request->province,
-            'birthdate' => $request->birthdate,
-            'password' => bcrypt($request->password),
-            'role_id' => 1,
-            'parent_id' => $id,
-        ]);
+        try {
+            $studentId = date('Y') . '-' . str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
 
-        $student->studentMedicalInformation()->create([
-            'allergies' => $request->allergies,
-            'notes' => $request->notes,
-            'medication' => $request->medication,
-        ]);
+            $student = new User([
+                'first_name' => $request->first_name,
+                'middle_name' => $request->middle_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'phone_number' => $request->phone_number,
+                'address' => $request->address,
+                'province' => $request->province,
+                'birthdate' => $request->birthdate,
+                'password' => bcrypt($request->password),
+                'role_id' => 1,
+                'parent_id' => $id,
+            ]);
 
-        $student->studentSchoolDetails()->create([
-            'student_id' => $studentId,
-            'status' => $request->status,
-        ]);
+            if ($request->profile_image_data) {
+                $imageData = $request->profile_image_data;
+                $imageName = 'profile_images/' . uniqid() . '.png';
+                Storage::disk('public')->put($imageName, base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData)));
+                $student->profile_image = $imageName;
+            }
 
-        return redirect()->route('parent-student.index', ['id' => $id])
-            ->with('success', 'Student created successfully.');
+            $student->save();
+
+            $student->studentMedicalInformation()->create([
+                'allergies' => $request->allergies,
+                'notes' => $request->notes,
+                'medication' => $request->medication,
+            ]);
+
+            $student->studentSchoolDetails()->create([
+                'student_id' => $studentId,
+                'status' => $request->status,
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('parent-student.index', ['id' => $id])
+                ->with('success', 'Student created successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Failed to create student: ' . $e->getMessage(), ['exception' => $e]);
+            return redirect()->route('parent-student.index', ['id' => $id])
+                ->with('error', 'Failed to create student.');
+        }
     }
 
 }

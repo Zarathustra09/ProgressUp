@@ -29,6 +29,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
 Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::put('/profile/upload-image', [ProfileController::class, 'uploadProfileImage'])->name('profile.uploadImage');
+Route::delete('/profile/reset-image', [ProfileController::class, 'resetProfileImage'])->name('profile.resetImage');
 
 
 Route::get('/parent/index', [ParentController::class, 'index'])->name('parent.index');
@@ -39,6 +41,9 @@ Route::delete('/parent/{user}', [ParentController::class, 'destroy'])->name('par
 
 Route::get('/parent-details/index/{id}', [ParentDetailsController::class, 'index'])->name('parent-details.index');
 Route::get('/parent-student/index/{id}', [ParentDetailsController::class, 'indexStudent'])->name('parent-student.index');
+Route::get('/parent-student/create/{id}', [ParentDetailsController::class, 'create'])->name('parent-student.create');
+Route::post('/parent-student/store/{id}', [ParentDetailsController::class, 'store'])->name('parent-student.store');
+
 
 Route::resource('student-medical-information', StudentMedicalInformationController::class);
 Route::resource('student-school-details', StudentSchoolDetailsController::class);
