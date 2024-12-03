@@ -114,7 +114,7 @@
                         </div>
                         <div class="mt-2">
                             <button type="submit" class="btn btn-primary">Update Student</button>
-                            <a href="{{ route('parent-student.index', ['id' => $id]) }}" class="btn btn-secondary">Cancel</a>
+                            <a href="{{ url()->previous() }}" class="btn btn-secondary">Cancel</a>
                         </div>
                     </form>
                 </div>
