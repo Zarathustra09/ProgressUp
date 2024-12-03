@@ -29,4 +29,10 @@ class StudentController extends Controller
 
         return view('student.index', compact('students'));
     }
+
+    public function list()
+    {
+        $students = User::where('role_id', 1)->get(['id', 'first_name', 'last_name']);
+        return response()->json($students);
+    }
 }
