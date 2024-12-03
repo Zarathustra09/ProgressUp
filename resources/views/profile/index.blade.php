@@ -125,9 +125,17 @@
                                         <label for="address" class="form-label">Address</label>
                                         <input type="text" class="form-control" value="{{ auth()->user()->address }}" id="address" name="address" placeholder="{{ auth()->user()->address }}" />
                                     </div>
-                                    <div class="mb-3 col-md-6">
+                                    <div class="mb-3 col-md-12">
                                         <label for="province" class="form-label">Province</label>
                                         <input class="form-control" type="text" value="{{ auth()->user()->province }}" id="province" name="province" placeholder="{{ auth()->user()->province }}" />
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input class="form-control" type="password" id="password" name="password" />
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label for="password_confirmation" class="form-label">Confirm Password</label>
+                                        <input class="form-control" type="password" id="password_confirmation" name="password_confirmation" />
                                     </div>
                                 </div>
                                 <div class="mt-2">
