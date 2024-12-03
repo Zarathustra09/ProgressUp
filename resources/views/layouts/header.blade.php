@@ -35,6 +35,13 @@
                         <div data-i18n="Account">Parents</div>
                     </a>
                 </li>
+
+                <li class="menu-item">
+                    <a href="{{route('student.index')}}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bxs-graduation"></i>
+                        <div data-i18n="Account">Students</div>
+                    </a>
+                </li>
                 <li class="menu-item">
                     <a href="#" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-building-house"></i>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\ParentDetailsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentMedicalInformationController;
 use App\Http\Controllers\StudentSchoolDetailsController;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,8 @@ Route::get('/parent-student/create/{id}', [ParentDetailsController::class, 'crea
 Route::post('/parent-student/store/{id}', [ParentDetailsController::class, 'store'])->name('parent-student.store');
 Route::get('/parent-student/show/{id}/{studentId}', [ParentDetailsController::class, 'show'])->name('parent-student.show');
 Route::put('/parent-student/update/{id}/{studentId}', [ParentDetailsController::class, 'update'])->name('parent-student.update');
+
+Route::get('/student/index', [StudentController::class, 'index'])->name('student.index');
 
 Route::resource('student-medical-information', StudentMedicalInformationController::class);
 Route::resource('student-school-details', StudentSchoolDetailsController::class);
