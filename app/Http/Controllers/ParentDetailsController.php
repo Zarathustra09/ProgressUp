@@ -27,7 +27,6 @@ class ParentDetailsController extends Controller
         return view('parentDetails.student.create', compact('id'));
     }
 
-
     public function store(Request $request, $id)
     {
         Log::info('This is the id: ' . $id);
@@ -99,4 +98,80 @@ class ParentDetailsController extends Controller
         }
     }
 
+    public function show($id, $studentId)
+    {
+        $student = User::where('id', $studentId)->where('parent_id', $id)->firstOrFail();
+        return view('parentDetails.student.show', compact('student', 'id'));
+    }
+
+    public function edit($id, $studentId)
+    {
+        $student = User::where('id', $studentId)->where('parent_id', $id)->firstOrFail();
+        return view('parentDetails.student.edit', compact('student', 'id'));
+    }
+
+    public function update(Request $request, $id, $studentId)
+    {
+        $student = User::where('id', $studentId)->where('parent_id', $id)->firstOrFail();
+
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $student->id,
+            'phone_number' => 'required|string|max:20',
+            'address' => 'required|string|max:255',
+            'province' => 'required|string|max:255',
+            'birthdate' => 'required|date',
+            'password' => 'nullable|string|min:8|confirmed',
+            'allergies' => 'nullable|string|max:255',
+            'notes' => 'nullable|string|max:255',
+            'medication' => 'nullable|string|max:255',
+            'status' => 'required|string|max:255',
+            'profile_image_data' => 'nullable|string',
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $student->update([
+                'first_name' => $request->first_name,
+                'middle_name' => $request->middle_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'phone_number' => $request->phone_number,
+                'address' => $request->address,
+                'province' => $request->province,
+                'birthdate' => $request->birthdate,
+                'password' => $request->password ? bcrypt($request->password) : $student->password,
+            ]);
+
+            if ($request->profile_image_data) {
+                $imageData = $request->profile_image_data;
+                $imageName = 'profile_images/' . uniqid() . '.png';
+                Storage::disk('public')->put($imageName, base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData)));
+                $student->profile_image = $imageName;
+            }
+
+            $student->studentMedicalInformation()->updateOrCreate([], [
+                'allergies' => $request->allergies,
+                'notes' => $request->notes,
+                'medication' => $request->medication,
+            ]);
+
+            $student->studentSchoolDetails()->updateOrCreate([], [
+                'status' => $request->status,
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('parent-student.index', ['id' => $id])
+                ->with('success', 'Student updated successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Failed to update student: ' . $e->getMessage(), ['exception' => $e]);
+            return redirect()->route('parent-student.index', ['id' => $id])
+                ->with('error', 'Failed to update student.');
+        }
+    }
 }

@@ -124,9 +124,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mt-2">
-                                    <button type="reset" class="btn btn-outline-secondary">Cancel</button>
-                                </div>
                             </form>
                         </div>
                         <!-- /Account -->

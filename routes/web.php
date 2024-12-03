@@ -43,7 +43,8 @@ Route::get('/parent-details/index/{id}', [ParentDetailsController::class, 'index
 Route::get('/parent-student/index/{id}', [ParentDetailsController::class, 'indexStudent'])->name('parent-student.index');
 Route::get('/parent-student/create/{id}', [ParentDetailsController::class, 'create'])->name('parent-student.create');
 Route::post('/parent-student/store/{id}', [ParentDetailsController::class, 'store'])->name('parent-student.store');
-
+Route::get('/parent-student/show/{id}/{studentId}', [ParentDetailsController::class, 'show'])->name('parent-student.show');
+Route::put('/parent-student/update/{id}/{studentId}', [ParentDetailsController::class, 'update'])->name('parent-student.update');
 
 Route::resource('student-medical-information', StudentMedicalInformationController::class);
 Route::resource('student-school-details', StudentSchoolDetailsController::class);

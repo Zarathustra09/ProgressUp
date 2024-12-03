@@ -56,6 +56,7 @@
                                                             <p class="card-text">Phone: {{ $student->phone_number }}</p>
                                                             <p class="card-text">Address: {{ $student->address }}</p>
                                                             <p class="card-text">Province: {{ $student->province }}</p>
+                                                            <a href="{{ route('parent-student.show', ['id' => $id, 'studentId' => $student->id]) }}" class="btn btn-primary">View</a>
                                                         </div>
                                                     </div>
                                                 </div>
