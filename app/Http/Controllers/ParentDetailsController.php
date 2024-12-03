@@ -112,9 +112,17 @@ class ParentDetailsController extends Controller
 
     public function update(Request $request, $id, $studentId)
     {
-        $student = User::where('id', $studentId)->where('parent_id', $id)->firstOrFail();
+        Log::info('Update student request', [
+            'parent_id' => $id,
+            'student_id' => $studentId,
+            'data' => $request->except(['password', 'password_confirmation', 'profile_image_data'])
+        ]);
 
-        $request->validate([
+        $student = User::where('id', $studentId)
+            ->where('parent_id', $id)
+            ->firstOrFail();
+
+        $validationRules = [
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -129,12 +137,15 @@ class ParentDetailsController extends Controller
             'medication' => 'nullable|string|max:255',
             'status' => 'required|string|max:255',
             'profile_image_data' => 'nullable|string',
-        ]);
+        ];
+
+        $request->validate($validationRules);
 
         DB::beginTransaction();
 
         try {
-            $student->update([
+            // Prepare user data
+            $userData = [
                 'first_name' => $request->first_name,
                 'middle_name' => $request->middle_name,
                 'last_name' => $request->last_name,
@@ -143,35 +154,84 @@ class ParentDetailsController extends Controller
                 'address' => $request->address,
                 'province' => $request->province,
                 'birthdate' => $request->birthdate,
-                'password' => $request->password ? bcrypt($request->password) : $student->password,
-            ]);
+            ];
 
-            if ($request->profile_image_data) {
-                $imageData = $request->profile_image_data;
-                $imageName = 'profile_images/' . uniqid() . '.png';
-                Storage::disk('public')->put($imageName, base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData)));
-                $student->profile_image = $imageName;
+            // Update password only if provided
+            if ($request->filled('password')) {
+                $userData['password'] = bcrypt($request->password);
             }
 
-            $student->studentMedicalInformation()->updateOrCreate([], [
-                'allergies' => $request->allergies,
-                'notes' => $request->notes,
-                'medication' => $request->medication,
-            ]);
+            // Handle profile image upload
+            if ($request->profile_image_data) {
+                try {
+                    $imageData = $request->profile_image_data;
 
-            $student->studentSchoolDetails()->updateOrCreate([], [
-                'status' => $request->status,
-            ]);
+                    // Remove data URI scheme prefix
+                    $imageData = preg_replace('#^data:image/\w+;base64,#i', '', $imageData);
+
+                    // Decode base64
+                    $imageDecoded = base64_decode($imageData);
+
+                    // Validate image
+                    if (!$imageDecoded) {
+                        throw new \Exception('Invalid base64 image data');
+                    }
+
+                    // Generate unique filename
+                    $imageName = 'profile_images/' . uniqid() . '.png';
+
+                    // Store image
+                    Storage::disk('public')->put($imageName, $imageDecoded);
+
+                    // Update user's profile image
+                    $userData['profile_image'] = $imageName;
+
+                    // Optional: Delete old image if exists
+                    if ($student->profile_image && Storage::disk('public')->exists($student->profile_image)) {
+                        Storage::disk('public')->delete($student->profile_image);
+                    }
+                } catch (\Exception $imageUploadError) {
+                    Log::error('Profile image upload failed: ' . $imageUploadError->getMessage());
+                    // Optionally, you can choose to continue without updating the image
+                    // Or you can throw the exception to rollback the entire transaction
+                }
+            }
+
+            // Update user
+            $student->update($userData);
+
+            // Update medical information
+            $student->studentMedicalInformation()->updateOrCreate(
+                [],
+                [
+                    'allergies' => $request->allergies ?? null,
+                    'notes' => $request->notes ?? null,
+                    'medication' => $request->medication ?? null,
+                ]
+            );
+
+            // Update school details
+            $student->studentSchoolDetails()->updateOrCreate(
+                [],
+                [
+                    'status' => $request->status
+                ]
+            );
 
             DB::commit();
 
             return redirect()->route('parent-student.index', ['id' => $id])
                 ->with('success', 'Student updated successfully.');
+
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Failed to update student: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('Failed to update student', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
             return redirect()->route('parent-student.index', ['id' => $id])
-                ->with('error', 'Failed to update student.');
+                ->with('error', 'Failed to update student: ' . $e->getMessage());
         }
     }
 }

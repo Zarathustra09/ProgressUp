@@ -47,27 +47,44 @@ class ProfileController extends Controller
 
     public function uploadProfileImage(Request $request)
     {
-        Log::info('Profile image upload request', $request->all());
-        $user = Auth::user();
+        try {
+            $user = Auth::user();
 
-        Log::info('Profile image upload request', [
-            'user_id' => $user->id,
-            'request_data' => $request->all()
-        ]);
+            $request->validate([
+                'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:800',
+            ]);
 
-        $request->validate([
-            'profile_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:800',
-        ]);
+            if ($request->hasFile('profile_image')) {
+                // Add more detailed logging
+                $file = $request->file('profile_image');
+                Log::info('File details', [
+                    'original_name' => $file->getClientOriginalName(),
+                    'size' => $file->getSize(),
+                    'mime_type' => $file->getMimeType()
+                ]);
 
-        if ($request->hasFile('profile_image')) {
-            $imagePath = $request->file('profile_image')->store('profile_images', 'public');
-            Log::info('Profile image uploaded', ['image_path' => $imagePath]);
+                $imagePath = $file->store('profile_images', 'public');
 
-            $user->profile_image = $imagePath;
-            $user->save();
+                // Verify the path was generated
+                if (!$imagePath) {
+                    Log::error('Failed to store image');
+                    return back()->with('error', 'Image upload failed');
+                }
+
+                $user->profile_image = $imagePath;
+
+                // Add error handling for save
+                if (!$user->save()) {
+                    Log::error('Failed to save user profile image path');
+                    return back()->with('error', 'Could not update profile image');
+                }
+            }
+
+            return redirect()->route('profile.index')->with('success', 'Profile image updated successfully.');
+        } catch (\Exception $e) {
+            Log::error('Profile image upload error: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while uploading the image');
         }
-
-        return redirect()->route('profile.index')->with('success', 'Profile image updated successfully.');
     }
 
     public function resetProfileImage(Request $request)
@@ -80,6 +97,8 @@ class ProfileController extends Controller
             $user->profile_image = null;
             $user->save();
         }
+
+        Log::info('Profile image reset process completed successfully.');
 
         return response()->json(['success' => 'Profile image reset successfully.']);
     }

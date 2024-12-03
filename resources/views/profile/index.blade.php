@@ -5,7 +5,7 @@
         <!-- Content -->
 
         @if(session('error'))
-            <div class="alert alert-success">
+            <div class="alert alert-danger">
                 {{ session('error') }}
             </div>
         @endif
@@ -51,7 +51,7 @@
                                                 name="profile_image"
                                                 hidden
                                                 accept="image/png, image/jpeg"
-                                                onchange="document.getElementById('formProfileImageUpload').submit()"
+                                                onchange="document.getElementById('formProfileImageUpload').submit();"
                                             />
                                         </label>
                                         <button type="button" class="btn btn-outline-secondary account-image-reset mb-4" onclick="resetImage()">
@@ -64,13 +64,6 @@
                                 </div>
                             </form>
                         </div>
-
-                        <script>
-                            function resetImage() {
-                                document.getElementById('upload').value = '';
-                                document.getElementById('uploadedAvatar').src = 'https://via.placeholder.com/100';
-                            }
-                        </script>
                         <hr class="my-0" />
                         <div class="card-body">
                             <form id="formAccountSettings" method="POST" action="{{ route('profile.update') }}">
@@ -139,7 +132,6 @@
                                 </div>
                                 <div class="mt-2">
                                     <button type="submit" class="btn btn-primary me-2">Save changes</button>
-                                    <button type="reset" class="btn btn-outline-secondary">Cancel</button>
                                 </div>
                             </form>
                         </div>
@@ -181,9 +173,7 @@
     </div>
 @endsection
 
-
 @push('scripts')
-
     <script>
         function resetImage() {
             document.getElementById('upload').value = '';

@@ -101,7 +101,14 @@
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                                     <div class="avatar avatar-online">
-                                        <img src="https://via.placeholder.com/40" alt="User Avatar" class="w-px-40 h-auto rounded-circle" />
+                                        <div class="rounded-circle overflow-hidden" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                                            <img
+                                                src="{{ auth()->user()->profile_image ? asset('storage/' . auth()->user()->profile_image) : 'https://via.placeholder.com/40' }}"
+                                                alt="User Avatar"
+                                                class="img-fluid"
+                                                style="width: 100%; height: 100%; object-fit: cover;"
+                                            />
+                                        </div>
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
@@ -110,7 +117,13 @@
                                             <div class="d-flex">
                                                 <div class="flex-shrink-0 me-3">
                                                     <div class="avatar avatar-online">
-                                                        <img src="https://via.placeholder.com/40" alt class="w-px-40 h-auto rounded-circle" />
+                                                        <div class="rounded-circle overflow-hidden" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                                                            <img
+                                                                src="{{ auth()->user()->profile_image ? asset('storage/' . auth()->user()->profile_image) : 'https://via.placeholder.com/40' }}"
+                                                                alt class="img-fluid"
+                                                                style="width: 100%; height: 100%; object-fit: cover;"
+                                                            />
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
@@ -123,14 +136,12 @@
                                     <li>
                                         <div class="dropdown-divider"></div>
                                     </li>
-
                                     <li>
                                         <a class="dropdown-item" href="{{route('profile.index')}}">
                                             <i class="bx bx-user me-2"></i>
                                             <span class="align-middle">My Profile</span>
                                         </a>
                                     </li>
-
                                     <li>
                                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                             <i class="bx bx-power-off me-2"></i>
