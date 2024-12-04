@@ -53,6 +53,7 @@
                                                         <div>
                                                             <h5 class="card-title">{{ $student->first_name }} {{ $student->last_name }}</h5>
                                                             <p class="card-text">Student ID: {{ $student->studentSchoolDetails->student_id }}</p>
+                                                            <p class="card-text">Status: {{ $student->studentSchoolDetails->status }}</p>
                                                             <a href="{{ route('parent-student.show', ['id' => $id, 'studentId' => $student->id]) }}" class="btn btn-primary">View</a>
                                                         </div>
                                                     </div>
