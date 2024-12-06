@@ -12,7 +12,7 @@
             <table id="students-table" class="table table-hover">
                 <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Student ID</th>
                     <th>First Name</th>
                     <th>Middle Name</th>
                     <th>Last Name</th>
@@ -24,14 +24,14 @@
                 <tbody>
                 @foreach($room->students as $student)
                     <tr>
-                        <td>{{ $student->id }}</td>
+                        <td>{{ $student->studentSchoolDetails->student_id }}</td>
                         <td>{{ $student->first_name }}</td>
                         <td>{{ $student->middle_name }}</td>
                         <td>{{ $student->last_name }}</td>
                         <td>{{ $student->email }}</td>
                         <td>{{ $student->phone_number }}</td>
                         <td>
-                            <a href="javascript:void(0)" onclick="deleteStudent({{ $student->pivot->id }})" class="text-danger me-2">
+                            <a href="javascript:void(0)" onclick="deleteStudent({{ $student->id }})" class="text-danger me-2">
                                 <i class="bx bx-trash"></i>
                             </a>
                         </td>
@@ -126,6 +126,7 @@
         }
 
         function deleteStudent(id) {
+            console.log('Attempting to delete student with ID:', id);
             Swal.fire({
                 title: '<h4 class="fw-bold text-danger">Are you sure?</h4>',
                 text: 'This action cannot be undone!',
@@ -144,6 +145,7 @@
                         type: 'DELETE',
                         data: { _token: '{{ csrf_token() }}' },
                         success: function() {
+                            console.log('Successfully deleted student with ID:', id);
                             Swal.fire({
                                 title: '<h4 class="fw-bold text-success">Deleted!</h4>',
                                 text: 'Student has been deleted successfully.',
@@ -157,6 +159,7 @@
                             });
                         },
                         error: function() {
+                            console.error('Error deleting student with ID:', id);
                             Swal.fire({
                                 title: '<h4 class="fw-bold text-danger">Error!</h4>',
                                 text: 'There was an error deleting the student.',

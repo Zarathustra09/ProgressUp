@@ -37,9 +37,9 @@ class RoomStudentController extends Controller
         return response()->json(['success' => 'Student added to the room successfully.']);
     }
 
-    public function destroy($id)
+    public function destroy($student_id)
     {
-        $roomStudent = RoomStudent::findOrFail($id);
+        $roomStudent = RoomStudent::where('student_id', $student_id)->firstOrFail();
         $roomStudent->delete();
 
         return response()->json(['success' => 'Student removed from the room successfully.']);
