@@ -13,37 +13,37 @@
 
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
-        <li class="menu-item">
-            <a href="{{route('home')}}" class="menu-link">
+        <li class="menu-item {{ request()->routeIs('home') ? 'active' : '' }}">
+            <a href="{{ route('home') }}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-alt"></i>
                 <div data-i18n="Analytics">Home</div>
             </a>
         </li>
 
+
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Interface</span>
         </li>
-        <li class="menu-item">
+        <li class="menu-item {{ request()->routeIs('parent.index', 'student.index', 'room.index') ? 'active' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bxs-school"></i>
                 <div data-i18n="Account Settings">My School</div>
             </a>
             <ul class="menu-sub">
-                <li class="menu-item">
-                    <a href="{{route('parent.index')}}" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('parent.index') ? 'active' : '' }}">
+                    <a href="{{ route('parent.index') }}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-user"></i>
                         <div data-i18n="Account">Parents</div>
                     </a>
                 </li>
-
-                <li class="menu-item">
-                    <a href="{{route('student.index')}}" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('student.index') ? 'active' : '' }}">
+                    <a href="{{ route('student.index') }}" class="menu-link">
                         <i class="menu-icon tf-icons bx bxs-graduation"></i>
                         <div data-i18n="Account">Students</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="{{route('room.index')}}" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('room.index') ? 'active' : '' }}">
+                    <a href="{{ route('room.index') }}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-building-house"></i>
                         <div data-i18n="Connections">Rooms</div>
                     </a>
@@ -56,6 +56,7 @@
                 </li>
             </ul>
         </li>
+
 
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Relationship</span>
