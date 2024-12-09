@@ -45,7 +45,7 @@
                 <li class="menu-item {{ request()->routeIs('room.index') ? 'active' : '' }}">
                     <a href="{{ route('room.index') }}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-building-house"></i>
-                        <div data-i18n="Connections">Rooms</div>
+                        <div data-i18n="Connections">Branches</div>
                     </a>
                 </li>
                 <li class="menu-item">

@@ -21,4 +21,9 @@ class Room extends Model
         return $this->belongsToMany(User::class, 'room_student', 'room_id', 'student_id')
             ->where('role_id', 1);
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'branch_id');
+    }
 }

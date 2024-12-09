@@ -51,11 +51,11 @@ Route::put('/parent-student/update/{id}/{studentId}', [ParentDetailsController::
 
 Route::get('/student/index', [StudentController::class, 'index'])->name('student.index');
 
-Route::get('/rooms/index', [RoomController::class, 'index'])->name('room.index');
-Route::post('/rooms', [RoomController::class, 'store'])->name('room.store');
-Route::get('/rooms/{id}', [RoomController::class, 'show'])->name('room.show');
-Route::put('/rooms/{id}', [RoomController::class, 'update'])->name('room.update');
-Route::delete('/rooms/{id}', [RoomController::class, 'destroy'])->name('room.destroy');
+Route::get('/branch/index', [RoomController::class, 'index'])->name('room.index');
+Route::post('/branch', [RoomController::class, 'store'])->name('room.store');
+Route::get('/branch/{id}', [RoomController::class, 'show'])->name('room.single.show');
+Route::put('/branch/{id}', [RoomController::class, 'update'])->name('room.update');
+Route::delete('/branch/{id}', [RoomController::class, 'destroy'])->name('room.destroy');
 
 Route::get('/rooms/{id}', [RoomStudentController::class, 'show'])->name('room.show');
 Route::post('/room-student', [RoomStudentController::class, 'store'])->name('room-student.store');

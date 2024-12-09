@@ -2,17 +2,16 @@
 
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home /</span> Rooms</h4>
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home /</span> Branches</h4>
 
         <button type="button" class="btn btn-primary mb-3" id="addRoom" onclick="createRoom()">
-            <span class="tf-icons bx bx-plus"></span>&nbsp; Add Room
+            <span class="tf-icons bx bx-plus"></span>&nbsp; Add Branch
         </button>
 
         <div class="table-responsive">
             <table id="rooms-table" class="table table-hover">
                 <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Name</th>
                     <th>Description</th>
                     <th>Capacity</th>
@@ -24,7 +23,6 @@
                 <tbody>
                 @foreach($rooms as $room)
                     <tr>
-                        <td>{{ $room->id }}</td>
                         <td>{{ $room->name }}</td>
                         <td>{{ $room->description }}</td>
                         <td>{{ $room->capacity }}</td>
@@ -58,7 +56,7 @@
         // Create Room Function
         function createRoom() {
             Swal.fire({
-                title: '<h4 class="fw-bold text-primary">Create Room</h4>',
+                title: '<h4 class="fw-bold text-primary">Create Branch</h4>',
                 html: `
             <div class="container-fluid">
                 <div class="row mb-3">
@@ -145,9 +143,10 @@
         }
 
         function editRoom(id) {
-            $.get('{{ route('room.show', '') }}/' + id, function(room) {
+            $.get('{{ route('room.single.show', '') }}/' + id, function(room) {
+
                 Swal.fire({
-                    title: '<h4 class="fw-bold text-primary">Edit Room</h4>',
+                    title: '<h4 class="fw-bold text-primary">Edit Branch</h4>',
                     html: `
                 <div class="container-fluid">
                     <div class="row mb-3">

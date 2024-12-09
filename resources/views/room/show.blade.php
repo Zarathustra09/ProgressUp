@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home / Rooms /</span> {{ $room->name }}</h4>
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home / Branches /</span> {{ $room->name }}</h4>
 
         <button type="button" class="btn btn-primary mb-3" id="addStudent" onclick="createStudent()">
             <span class="tf-icons bx bx-plus"></span>&nbsp; Add Student
