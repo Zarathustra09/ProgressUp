@@ -122,7 +122,7 @@
                                 </div>
                             </div>
                         </div>
-                        <span class="fw-semibold d-block mb-1">Rooms</span>
+                        <span class="fw-semibold d-block mb-1">Branches</span>
                         <h3 class="card-title mb-2">{{$roomCount}}</h3>
                     </div>
                 </div>

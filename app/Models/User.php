@@ -47,9 +47,9 @@ class User extends Authenticatable
         return $this->hasOne(StudentSchoolDetails::class);
     }
 
-    public function studentRoom()
+    public function roomStudent()
     {
-        return $this->hasMany(RoomStudent::class);
+        return $this->hasOne(RoomStudent::class, 'student_id');
     }
 
     public function branch()

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Room;
+use App\Models\RoomStudent;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -45,6 +46,7 @@ class ParentDetailsController extends Controller
             'medication' => 'nullable|string|max:255',
             'status' => 'required|string|max:255',
             'profile_image_data' => 'nullable|string',
+            'branch_id' => 'nullable|exists:rooms,id', // Validate branch_id
         ]);
 
         DB::beginTransaction();
@@ -52,7 +54,7 @@ class ParentDetailsController extends Controller
         try {
             $studentId = date('Y') . '-' . str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
 
-            $branchId = User::where('id', $id)->where('role_id', 0)->firstOrFail()->branch_id;
+            $branchId = $request->branch_id ?? User::where('id', $id)->where('role_id', 0)->firstOrFail()->branch_id;
 
             $student = new User([
                 'first_name' => $request->first_name,
@@ -87,6 +89,12 @@ class ParentDetailsController extends Controller
             $student->studentSchoolDetails()->create([
                 'student_id' => $studentId,
                 'status' => $request->status,
+            ]);
+
+            // Store the student in the RoomStudent table
+            RoomStudent::create([
+                'room_id' => $branchId,
+                'student_id' => $student->id,
             ]);
 
             DB::commit();
@@ -221,6 +229,14 @@ class ParentDetailsController extends Controller
                 [],
                 [
                     'status' => $request->status
+                ]
+            );
+
+            // Update RoomStudent
+            $student->roomStudent()->updateOrCreate(
+                [],
+                [
+                    'room_id' => $request->branch_id,
                 ]
             );
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ParentController extends Controller
 {
@@ -63,9 +64,30 @@ class ParentController extends Controller
             'branch_id' => 'nullable|exists:rooms,id', // Validate branch_id
         ]);
 
-        $user->update($request->all());
+        DB::beginTransaction();
 
-        return response()->json(['success' => 'User updated successfully.']);
+        try {
+            $user->update($request->all());
+
+            // Update branch_id and RoomStudent for each student of the parent
+            $students = User::where('parent_id', $user->id)->get();
+            foreach ($students as $student) {
+                $student->update(['branch_id' => $request->branch_id]);
+                $student->roomStudent()->updateOrCreate(
+                    [],
+                    [
+                        'room_id' => $request->branch_id,
+                    ]
+                );
+            }
+
+            DB::commit();
+
+            return response()->json(['success' => 'User updated successfully.']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'Failed to update user: ' . $e->getMessage()], 500);
+        }
     }
 
     public function destroy(User $user)
