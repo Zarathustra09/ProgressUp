@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Room;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +30,6 @@ class ParentDetailsController extends Controller
 
     public function store(Request $request, $id)
     {
-        Log::info('This is the id: ' . $id);
         $request->validate([
             'first_name' => 'required|string|max:255',
             'middle_name' => 'nullable|string|max:255',
@@ -52,6 +52,8 @@ class ParentDetailsController extends Controller
         try {
             $studentId = date('Y') . '-' . str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
 
+            $branchId = User::where('id', $id)->where('role_id', 0)->firstOrFail()->branch_id;
+
             $student = new User([
                 'first_name' => $request->first_name,
                 'middle_name' => $request->middle_name,
@@ -64,6 +66,7 @@ class ParentDetailsController extends Controller
                 'password' => bcrypt($request->password),
                 'role_id' => 1,
                 'parent_id' => $id,
+                'branch_id' => $branchId,
             ]);
 
             if ($request->profile_image_data) {
@@ -101,7 +104,8 @@ class ParentDetailsController extends Controller
     public function show($id, $studentId)
     {
         $student = User::where('id', $studentId)->where('parent_id', $id)->firstOrFail();
-        return view('parentDetails.student.show', compact('student', 'id'));
+        $branches = Room::all(); // Fetch all branches
+        return view('parentDetails.student.show', compact('student', 'id', 'branches'));
     }
 
     public function edit($id, $studentId)
@@ -137,6 +141,7 @@ class ParentDetailsController extends Controller
             'medication' => 'nullable|string|max:255',
             'status' => 'required|string|max:255',
             'profile_image_data' => 'nullable|string',
+            'branch_id' => 'nullable|exists:rooms,id', // Validate branch_id
         ];
 
         $request->validate($validationRules);
@@ -154,6 +159,7 @@ class ParentDetailsController extends Controller
                 'address' => $request->address,
                 'province' => $request->province,
                 'birthdate' => $request->birthdate,
+                'branch_id' => $request->branch_id, // Update branch_id
             ];
 
             // Update password only if provided

@@ -25,6 +25,7 @@ class ParentController extends Controller
             'birthdate' => 'nullable|date',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'branch_id' => 'nullable|exists:rooms,id', // Validate branch_id
         ]);
 
         User::create([
@@ -37,6 +38,7 @@ class ParentController extends Controller
             'birthdate' => $request->birthdate,
             'email' => $request->email,
             'password' => bcrypt($request->password),
+            'branch_id' => $request->branch_id, // Store branch_id
         ]);
 
         return redirect()->route('parent.index')->with('success', 'User created successfully.');
@@ -58,6 +60,7 @@ class ParentController extends Controller
             'province' => 'nullable|string|max:255',
             'birthdate' => 'nullable|date',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'branch_id' => 'nullable|exists:rooms,id', // Validate branch_id
         ]);
 
         $user->update($request->all());

@@ -58,7 +58,7 @@
                                             accept="image/png, image/jpeg"
                                         />
                                     </label>
-                                    <p class="text-muted mb-0">{{$parent->address}} {{$parent->province}}</p>
+                                    <p class="text-muted mb-0">{{$parent->address}} {{$parent->province}}}</p>
                                 </div>
                             </div>
                         </div>
@@ -122,6 +122,18 @@
                                                 readonly
                                             />
                                         </div>
+                                    </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label for="email" class="form-label">School Branch</label>
+                                        <input
+                                            class="form-control"
+                                            type="text"
+                                            id="branch"
+                                            name="branch"
+                                            value="{{ $parent->branch->name }}"
+                                            placeholder="{{ $parent->branch->name }}"
+                                            readonly
+                                        />
                                     </div>
                                 </div>
                             </form>

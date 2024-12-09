@@ -41,6 +41,7 @@
                                                                 </a>
                                                             </p>
                                                             <p class="card-text">Status: {{ $student->studentSchoolDetails->status }}</p>
+                                                            <p class="card-text">Status: {{ $student->branch->name }}</p>
                                                             <a href="{{ route('parent-student.show', ['id' => $student->parent_id, 'studentId' => $student->id]) }}" class="btn btn-primary">View</a>
                                                         </div>
                                                     </div>

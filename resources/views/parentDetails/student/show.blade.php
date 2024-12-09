@@ -92,6 +92,15 @@
                                     <option value="inactive" {{ $student->studentSchoolDetails->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
                                 </select>
                             </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="branch_id" class="form-label">Branch</label>
+                                <select class="form-control" id="branch_id" name="branch_id">
+                                    @foreach($branches as $branch)
+                                        <option value="{{ $branch->id }}" {{ $student->branch_id == $branch->id ? 'selected' : '' }}>{{ $branch->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <h5 class="card-header mt-4">Student Medical Information</h5>
                         <div class="row">

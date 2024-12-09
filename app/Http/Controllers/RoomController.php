@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RoomController extends Controller
 {
@@ -52,5 +53,11 @@ class RoomController extends Controller
         $room->delete();
 
         return response()->json(['success' => 'Room deleted successfully.']);
+    }
+
+    public function list()
+    {
+        Log::info(Room::all());
+        return Room::all();
     }
 }

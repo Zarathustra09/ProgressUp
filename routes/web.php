@@ -56,6 +56,9 @@ Route::post('/branch', [RoomController::class, 'store'])->name('room.store');
 Route::get('/branch/{id}', [RoomController::class, 'show'])->name('room.single.show');
 Route::put('/branch/{id}', [RoomController::class, 'update'])->name('room.update');
 Route::delete('/branch/{id}', [RoomController::class, 'destroy'])->name('room.destroy');
+Route::get('/listBranch', [RoomController::class, 'list'])->name('branch.list');
+
+
 
 Route::get('/rooms/{id}', [RoomStudentController::class, 'show'])->name('room.show');
 Route::post('/room-student', [RoomStudentController::class, 'store'])->name('room-student.store');
