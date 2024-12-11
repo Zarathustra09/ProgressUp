@@ -8,6 +8,27 @@
             <span class="tf-icons bx bx-plus"></span>&nbsp; Add Student
         </button>
 
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="card-title">Staff Members</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            @foreach($room->roomStaff as $staff)
+                                <li class="list-group-item">
+                                    <strong>{{ $staff->staff->first_name }} {{ $staff->staff->last_name }}</strong><br>
+                                    <small>{{ $staff->staff->email }}</small><br>
+                                    <small>{{ $staff->staff->phone_number }}</small>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="table-responsive">
             <table id="students-table" class="table table-hover">
                 <thead>

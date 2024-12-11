@@ -24,7 +24,7 @@ class User extends Authenticatable
         'parent_id',
         'email',
         'password',
-        'branch_id', // Add branch_id to fillable attributes
+        'branch_id',
     ];
 
     protected $hidden = [
@@ -55,5 +55,10 @@ class User extends Authenticatable
     public function branch()
     {
         return $this->belongsTo(Room::class, 'branch_id');
+    }
+
+    public function roomStaff()
+    {
+        return $this->hasMany(RoomStaff::class, 'staff_id');
     }
 }

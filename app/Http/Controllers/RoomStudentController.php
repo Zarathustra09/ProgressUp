@@ -11,7 +11,7 @@ class RoomStudentController extends Controller
 {
     public function show($id)
     {
-        $room = Room::with('students')->findOrFail($id);
+        $room = Room::with(['students', 'roomStaff.staff'])->findOrFail($id);
         return view('room.show', compact('room'));
     }
 
