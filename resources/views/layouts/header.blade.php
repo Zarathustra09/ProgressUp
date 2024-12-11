@@ -24,7 +24,7 @@
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Interface</span>
         </li>
-        <li class="menu-item {{ request()->routeIs('parent.index', 'student.index', 'room.index') ? 'active' : '' }}">
+        <li class="menu-item {{ request()->routeIs('parent.index', 'student.index', 'room.index, staff.index') ? 'active' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bxs-school"></i>
                 <div data-i18n="Account Settings">My School</div>
@@ -46,6 +46,13 @@
                     <a href="{{ route('room.index') }}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-building-house"></i>
                         <div data-i18n="Connections">Branches</div>
+                    </a>
+                </li>
+
+                <li class="menu-item {{ request()->routeIs('staff.index') ? 'active' : '' }}">
+                    <a href="{{route('staff.index')}}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-group"></i>
+                        <div data-i18n="Staff">Staff</div>
                     </a>
                 </li>
                 <li class="menu-item">

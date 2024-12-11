@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -12,7 +13,8 @@ class ProfileController extends Controller
     // Show the form for editing the current user's profile
     public function index()
     {
-        return view('profile.index');
+        $branches = Room::all();
+        return view('profile.index', compact('branches'));
     }
 
     public function update(Request $request)
@@ -29,6 +31,7 @@ class ProfileController extends Controller
             'province' => 'nullable|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
+            'branch_id' => 'nullable|exists:rooms,id',
         ]);
 
         $user->update([
@@ -40,6 +43,7 @@ class ProfileController extends Controller
             'province' => $request->province,
             'email' => $request->email,
             'password' => $request->password ? bcrypt($request->password) : $user->password,
+            'branch_id' => $request->branch_id,
         ]);
 
         return redirect()->route('profile.index')->with('success', 'Profile updated successfully.');

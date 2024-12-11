@@ -5,6 +5,7 @@ use App\Http\Controllers\ParentDetailsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomStudentController;
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentMedicalInformationController;
 use App\Http\Controllers\StudentSchoolDetailsController;
@@ -59,6 +60,11 @@ Route::delete('/branch/{id}', [RoomController::class, 'destroy'])->name('room.de
 Route::get('/listBranch', [RoomController::class, 'list'])->name('branch.list');
 
 
+Route::get('/staff/index', [StaffController::class, 'index'])->name('staff.index');
+Route::post('/staff', [StaffController::class, 'store'])->name('staff.store');
+Route::get('/staff/{user}', [StaffController::class, 'show'])->name('staff.show');
+Route::put('/staff/{user}', [StaffController::class, 'update'])->name('staff.update');
+Route::delete('/staff/{user}', [StaffController::class, 'destroy'])->name('staff.destroy');
 
 Route::get('/rooms/{id}', [RoomStudentController::class, 'show'])->name('room.show');
 Route::post('/room-student', [RoomStudentController::class, 'store'])->name('room-student.store');

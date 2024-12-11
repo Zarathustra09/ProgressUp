@@ -125,9 +125,21 @@
                                         <label for="address" class="form-label">Address</label>
                                         <input type="text" class="form-control" value="{{ auth()->user()->address }}" id="address" name="address" placeholder="{{ auth()->user()->address }}" />
                                     </div>
-                                    <div class="mb-3 col-md-12">
+                                    <div class="mb-3 col-md-6">
                                         <label for="province" class="form-label">Province</label>
                                         <input class="form-control" type="text" value="{{ auth()->user()->province }}" id="province" name="province" placeholder="{{ auth()->user()->province }}" />
+                                    </div>
+
+                                    <div class="mb-3 col-md-6">
+                                        <label for="branch" class="form-label">Branch</label>
+                                        <select id="branch" name="branch_id" class="form-control">
+                                            <option value="">Select Branch</option>
+                                            @foreach($branches as $branch)
+                                                <option value="{{ $branch->id }}" {{ auth()->user()->branch_id == $branch->id ? 'selected' : '' }}>
+                                                    {{ $branch->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="mb-3 col-md-6">
                                         <label for="password" class="form-label">Password</label>
@@ -169,7 +181,7 @@
                                         I confirm my account deactivation
                                     </label>
                                 </div>
-                                <button type="submit" class="btn btn-danger deactivate-account">Deactivate Account</button>
+                                <button type="submit" class="btn btn-danger deactivate-account">Delete Account</button>
                             </form>
                         </div>
                     </div>
