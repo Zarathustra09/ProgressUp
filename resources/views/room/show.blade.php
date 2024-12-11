@@ -2,11 +2,27 @@
 
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home / Branches /</span> {{ $room->name }}</h4>
-
-        <button type="button" class="btn btn-primary mb-3" id="addStudent" onclick="createStudent()">
-            <span class="tf-icons bx bx-plus"></span>&nbsp; Add Student
-        </button>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h4 class="fw-bold py-3 mb-4">
+                    <span class="text-muted fw-light">Home / Branches /</span>
+                    {{ $room->name }}
+                </h4>
+            </div>
+            @include('layouts.session')
+            <div>
+                @if($room->schedules->isNotEmpty())
+                    <a href="{{ route('room_schedules.show', ['id' => $room->schedules->first()->id]) }}" class="btn btn-primary">
+                        View Schedules
+                    </a>
+                @else
+                    <p>No schedules available.</p>
+                @endif
+                    <a href="{{ route('room_schedules.create', ['room_id' => $room->id]) }}" class="btn btn-secondary">
+                        Create Schedule
+                    </a>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-md-6">
@@ -28,7 +44,9 @@
                 </div>
             </div>
         </div>
-
+        <button type="button" class="btn btn-primary mb-3" id="addStudent" onclick="createStudent()">
+            <span class="tf-icons bx bx-plus"></span>&nbsp; Add Student
+        </button>
         <div class="table-responsive">
             <table id="students-table" class="table table-hover">
                 <thead>

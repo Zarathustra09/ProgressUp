@@ -31,4 +31,9 @@ class Room extends Model
     {
         return $this->hasMany(RoomStaff::class, 'room_id');
     }
+
+    public function schedules()
+    {
+        return $this->hasMany(RoomSchedule::class);
+    }
 }

@@ -213,7 +213,7 @@
         <!-- Login button -->
         <button type="submit">Log In</button>
 
-        <p class="sign_up">Don't have an account? <a href="{{ route('register') }}">Sign up</a></p>
+{{--        <p class="sign_up">Don't have an account? <a href="{{ route('register') }}">Sign up</a></p>--}}
     </form>
 </div>
 </body>

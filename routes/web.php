@@ -4,6 +4,7 @@ use App\Http\Controllers\ParentController;
 use App\Http\Controllers\ParentDetailsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\RoomScheduleController;
 use App\Http\Controllers\RoomStudentController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StudentController;
@@ -66,9 +67,20 @@ Route::get('/staff/{user}', [StaffController::class, 'show'])->name('staff.show'
 Route::put('/staff/{user}', [StaffController::class, 'update'])->name('staff.update');
 Route::delete('/staff/{user}', [StaffController::class, 'destroy'])->name('staff.destroy');
 
-Route::get('/rooms/{id}', [RoomStudentController::class, 'show'])->name('room.show');
-Route::post('/room-student', [RoomStudentController::class, 'store'])->name('room-student.store');
-Route::delete('/room-student/{id}', [RoomStudentController::class, 'destroy'])->name('room-student.destroy');
+Route::get('/branch-student/{id}', [RoomStudentController::class, 'show'])->name('room.show');
+Route::post('/branch-student', [RoomStudentController::class, 'store'])->name('room-student.store');
+Route::delete('/branch-student/{id}', [RoomStudentController::class, 'destroy'])->name('room-student.destroy');
+
+
+
+Route::get('/room-schedules', [RoomScheduleController::class, 'index'])->name('room_schedules.index');
+Route::get('/room-schedules/create', [RoomScheduleController::class, 'create'])->name('room_schedules.create');
+Route::post('/room-schedules', [RoomScheduleController::class, 'store'])->name('room_schedules.store');
+Route::get('/room-schedules/{id}', [RoomScheduleController::class, 'show'])->name('room_schedules.show');
+Route::put('/room-schedules/{id}', [RoomScheduleController::class, 'update'])->name('room_schedules.update');
+Route::delete('/room-schedules/{id}', [RoomScheduleController::class, 'destroy'])->name('room_schedules.destroy');
+
+
 
 Route::get('/students/list', [StudentController::class, 'list'])->name('students.list');
 
