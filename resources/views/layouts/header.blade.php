@@ -55,12 +55,6 @@
                         <div data-i18n="Staff">Staff</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="#" class="menu-link">
-                        <i class="menu-icon tf-icons bx bx-calendar"></i>
-                        <div data-i18n="Connections">Schedules</div>
-                    </a>
-                </li>
             </ul>
         </li>
 

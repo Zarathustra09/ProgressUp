@@ -8,6 +8,10 @@
                     <span class="text-muted fw-light">Home / Branches /</span>
                     {{ $room->name }}
                 </h4>
+
+                <a href="{{ route('room.index') }}" class="btn btn-secondary mb-5">
+                    Back
+                </a>
             </div>
             @include('layouts.session')
             <div>
@@ -18,9 +22,9 @@
                 @else
                     <p>No schedules available.</p>
                 @endif
-                    <a href="{{ route('room_schedules.create', ['room_id' => $room->id]) }}" class="btn btn-secondary">
-                        Create Schedule
-                    </a>
+                <a href="{{ route('room_schedules.create', ['room_id' => $room->id]) }}" class="btn btn-secondary">
+                    Create Schedule
+                </a>
             </div>
         </div>
 

@@ -31,9 +31,9 @@
                         <td>{{ $user->phone_number }}</td>
                         <td>{{ $user->branch->name }}</td>
                         <td>
-                            <a href="javascript:void(0)" onclick="viewStaff({{ $user->id }})" class="text-info">
-                                <i class="bx bx-show"></i>
-                            </a>
+{{--                            <a href="javascript:void(0)" onclick="viewStaff({{ $user->id }})" class="text-info">--}}
+{{--                                <i class="bx bx-show"></i>--}}
+{{--                            </a>--}}
                             <a href="javascript:void(0)" onclick="editStaff({{ $user->id }})" class="text-warning me-2">
                                 <i class="bx bx-edit"></i>
                             </a>

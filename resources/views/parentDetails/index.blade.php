@@ -4,18 +4,13 @@
     <div class="content-wrapper">
         <!-- Content -->
 
-        @if(session('error'))
-            <div class="alert alert-success">
-                {{ session('error') }}
-            </div>
-        @endif
+
         <div class="container-xxl flex-grow-1 container-p-y">
             <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Parent /</span> Details</h4>
-            @if(session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
-            @endif
+            <a href="{{ route('parent.index') }}" class="btn btn-secondary mb-2">
+                Back
+            </a>
+          @include('layouts.session')
             <div class="row">
                 <div class="col-md-12">
                     <ul class="nav nav-pills flex-column flex-md-row mb-3">
