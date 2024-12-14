@@ -10,7 +10,7 @@
                     @csrf
                     <input type="hidden" id="room_id" name="room_id" value="{{ $roomId }}">
                     <div class="mb-3">
-                        <label for="event_name" class="form-label">Event Name</label>
+                        <label for="event_name" class="form-label">Schedule Name</label>
                         <input type="text" id="event_name" name="event_name" class="form-control" required>
                     </div>
                     <div class="mb-3">
