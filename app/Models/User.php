@@ -61,4 +61,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(RoomStaff::class, 'staff_id');
     }
+
+    public function studentSchedules()
+    {
+        return $this->hasMany(StudentSchedule::class, 'student_id');
+    }
 }

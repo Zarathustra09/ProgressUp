@@ -14,18 +14,6 @@
                 </a>
             </div>
             @include('layouts.session')
-            <div>
-                @if($room->schedules->isNotEmpty())
-                    <a href="{{ route('room_schedules.show', ['id' => $room->schedules->first()->id]) }}" class="btn btn-primary">
-                        View Schedules
-                    </a>
-                @else
-                    <p>No schedules available.</p>
-                @endif
-                <a href="{{ route('room_schedules.create', ['room_id' => $room->id]) }}" class="btn btn-secondary">
-                    Create Schedule
-                </a>
-            </div>
         </div>
 
         <div class="row">
@@ -74,6 +62,9 @@
                         <td>{{ $student->email }}</td>
                         <td>{{ $student->phone_number }}</td>
                         <td>
+                            <a href="{{ route('studentSchedules.show', $student->id) }}" class="text-primary me-2">
+                                <i class="bx bx-show"></i>
+                            </a>
                             <a href="javascript:void(0)" onclick="deleteStudent({{ $student->id }})" class="text-danger me-2">
                                 <i class="bx bx-trash"></i>
                             </a>

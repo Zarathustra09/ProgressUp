@@ -30,19 +30,20 @@
                 <div data-i18n="Account Settings">My School</div>
             </a>
             <ul class="menu-sub">
-                <li class="menu-item {{ request()->routeIs('parent.index') ? 'active' : '' }}">
+                <li class="menu-item {{ request()->routeIs('parent.index') || request()->routeIs('parent-details.*') || request()->routeIs('parent-student.*') ? 'active' : '' }}">
                     <a href="{{ route('parent.index') }}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-user"></i>
                         <div data-i18n="Account">Parents</div>
                     </a>
                 </li>
+
                 <li class="menu-item {{ request()->routeIs('student.index') ? 'active' : '' }}">
                     <a href="{{ route('student.index') }}" class="menu-link">
                         <i class="menu-icon tf-icons bx bxs-graduation"></i>
                         <div data-i18n="Account">Students</div>
                     </a>
                 </li>
-                <li class="menu-item {{ request()->routeIs('room.index') ? 'active' : '' }}">
+                <li class="menu-item {{ request()->routeIs('room.index') || request()->routeIs('room.*') || request()->routeIs('room.*') ? 'active' : '' }}">
                     <a href="{{ route('room.index') }}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-building-house"></i>
                         <div data-i18n="Connections">Branches</div>

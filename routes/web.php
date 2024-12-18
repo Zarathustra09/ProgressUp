@@ -9,6 +9,7 @@ use App\Http\Controllers\RoomStudentController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentMedicalInformationController;
+use App\Http\Controllers\StudentScheduleController;
 use App\Http\Controllers\StudentSchoolDetailsController;
 use Illuminate\Support\Facades\Route;
 
@@ -73,13 +74,21 @@ Route::delete('/branch-student/{id}', [RoomStudentController::class, 'destroy'])
 
 
 
-Route::get('/room-schedules', [RoomScheduleController::class, 'index'])->name('room_schedules.index');
-Route::get('/room-schedules/create', [RoomScheduleController::class, 'create'])->name('room_schedules.create');
-Route::post('/room-schedules', [RoomScheduleController::class, 'store'])->name('room_schedules.store');
-Route::get('/room-schedules/{id}', [RoomScheduleController::class, 'show'])->name('room_schedules.show');
-Route::put('/room-schedules/{id}', [RoomScheduleController::class, 'update'])->name('room_schedules.update');
-Route::delete('/room-schedules/{id}', [RoomScheduleController::class, 'destroy'])->name('room_schedules.destroy');
+//Route::get('/room-schedules', [RoomScheduleController::class, 'index'])->name('room_schedules.index');
+//Route::get('/room-schedules/create', [RoomScheduleController::class, 'create'])->name('room_schedules.create');
+//Route::post('/room-schedules', [RoomScheduleController::class, 'store'])->name('room_schedules.store');
+//Route::get('/room-schedules/{id}', [RoomScheduleController::class, 'show'])->name('room_schedules.show');
+//Route::put('/room-schedules/{id}', [RoomScheduleController::class, 'update'])->name('room_schedules.update');
+//Route::delete('/room-schedules/{id}', [RoomScheduleController::class, 'destroy'])->name('room_schedules.destroy');
+//
 
+
+Route::get('/studentSchedules', [StudentScheduleController::class, 'index'])->name('studentSchedules.index');
+Route::get('/studentSchedules/create', [StudentScheduleController::class, 'create'])->name('studentSchedules.create');
+Route::post('/studentSchedules', [StudentScheduleController::class, 'store'])->name('studentSchedules.store');
+Route::get('/studentSchedules/{id}', [StudentScheduleController::class, 'show'])->name('studentSchedules.show');
+Route::put('/studentSchedules/{id}', [StudentScheduleController::class, 'update'])->name('studentSchedules.update');
+Route::delete('/studentSchedules/{id}', [StudentScheduleController::class, 'destroy'])->name('studentSchedules.destroy');
 
 
 Route::get('/students/list', [StudentController::class, 'list'])->name('students.list');
