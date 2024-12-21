@@ -25,6 +25,7 @@
                                 <th class="text-nowrap">Start Time</th>
                                 <th class="text-nowrap">End Time</th>
                                 <th class="text-nowrap">Duration</th>
+                                <th class="text-nowrap">QR Code</th>
                                 <th class="text-nowrap">Actions</th>
                             </tr>
                             </thead>
@@ -46,6 +47,9 @@
                                         <span class="badge bg-label-info">
                                             {{ \Carbon\Carbon::parse($schedule->start_time)->diff(\Carbon\Carbon::parse($schedule->end_time))->format('%h hr %i min') }}
                                         </span>
+                                    </td>
+                                    <td>
+                                        {!! QrCode::size(100)->generate($schedule->qr_code_url) !!}
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-warning edit-button" data-id="{{ $schedule->id }}" data-event="{{ $schedule->event_name }}" data-start="{{ $schedule->start_time }}" data-end="{{ $schedule->end_time }}">Edit</button>

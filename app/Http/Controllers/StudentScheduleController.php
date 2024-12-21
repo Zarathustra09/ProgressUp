@@ -37,6 +37,15 @@ class StudentScheduleController extends Controller
             abort(404, 'Student not found');
         }
 
+        foreach ($student->studentSchedules as $schedule) {
+            $schedule->qr_code_url = route('attendances.store', [
+                'student_id' => $student->id,
+                'schedule_id' => $schedule->id,
+                'date' => now()->toDateString(),
+                'status' => 'present'
+            ]);
+        }
+
         Log::info('Show function found student:', ['student' => $student]);
 
         return view('studentSchedule.show', compact('student'));
