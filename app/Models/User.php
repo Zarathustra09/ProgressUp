@@ -1,5 +1,7 @@
 <?php
 
+// app/Models/User.php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -65,5 +67,15 @@ class User extends Authenticatable
     public function studentSchedules()
     {
         return $this->hasMany(StudentSchedule::class, 'student_id');
+    }
+
+    public function sentMessages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function receivedMessages()
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
     }
 }

@@ -50,8 +50,23 @@
                                         </div>
                                     @endforeach
                                 </div>
-                                <div class="d-flex justify-content-center mt-4">
-                                    {{ $students->appends(request()->input())->links() }}
+                                <div class="d-flex justify-content-center align-items-center flex-column text-center mt-4">
+                                    <div class="mb-2">
+                                        Showing {{ $students->firstItem() }} to {{ $students->lastItem() }} of {{ $students->total() }} results
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        @if ($students->previousPageUrl())
+                                            <a href="{{ $students->previousPageUrl() }}{{ request()->has('search') ? '&search=' . request('search') : '' }}" class="btn btn-outline-primary btn-sm">
+                                                Previous
+                                            </a>
+                                        @endif
+
+                                        @if ($students->nextPageUrl())
+                                            <a href="{{ $students->nextPageUrl() }}{{ request()->has('search') ? '&search=' . request('search') : '' }}" class="btn btn-outline-primary btn-sm">
+                                                Next
+                                            </a>
+                                        @endif
+                                    </div>
                                 </div>
                             @endif
                         </div>

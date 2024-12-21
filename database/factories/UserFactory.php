@@ -18,11 +18,20 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'first_name' => fake()->firstName(),
+            'middle_name' => fake()->optional()->lastName(),
+            'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
+            'role_id' => 0,
+            'phone_number' => fake()->phoneNumber(),
+            'address' => fake()->address(),
+            'province' => fake()->state(),
+            'birthdate' => fake()->date(),
+            'profile_image' => fake()->imageUrl(),
+            'branch_id' => 1, // Default branch_id, you can change it as needed
         ];
     }
 

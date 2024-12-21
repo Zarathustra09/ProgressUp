@@ -17,21 +17,37 @@
         </div>
 
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-12">
                 <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="card-title">Staff Members</h5>
+                    <div class="card-header d-flex justify-content-between align-items-center py-3">
+                        <h5 class="card-title m-0">Staff Members</h5>
                     </div>
                     <div class="card-body">
-                        <ul class="list-group list-group-flush">
+                        <div class="row row-cols-1 row-cols-md-2 g-4">
                             @foreach($room->roomStaff as $staff)
-                                <li class="list-group-item">
-                                    <strong>{{ $staff->staff->first_name }} {{ $staff->staff->last_name }}</strong><br>
-                                    <small>{{ $staff->staff->email }}</small><br>
-                                    <small>{{ $staff->staff->phone_number }}</small>
-                                </li>
+                                <div class="col">
+                                    <div class="card h-100 border">
+                                        <div class="card-body p-4">
+                                            <div class="d-flex flex-column gap-2">
+                                                <h6 class="mb-1">{{ $staff->staff->first_name }} {{ $staff->staff->last_name }}</h6>
+                                                <div class="d-flex align-items-center gap-3 text-muted">
+                                                    <div>
+                                                        <i class='bx bx-envelope me-2'></i>
+                                                        {{ $staff->staff->email }}
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center gap-3 text-muted">
+                                                    <div>
+                                                        <i class='bx bx-phone me-2'></i>
+                                                        {{ $staff->staff->phone_number }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             @endforeach
-                        </ul>
+                        </div>
                     </div>
                 </div>
             </div>

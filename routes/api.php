@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,3 +24,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/attendances/{attendance}', [AttendanceController::class, 'show'])->name('attendances.show');
 Route::post('/attendances', [AttendanceController::class, 'store'])->name('attendances.store');
 Route::put('/attendances/{attendance}', [AttendanceController::class, 'update'])->name('attendances.update');
+
+Route::apiResource('messages', MessageController::class);
