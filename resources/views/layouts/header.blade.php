@@ -10,7 +10,9 @@
     </div>
 
     <div class="menu-inner-shadow"></div>
-
+    <li class="menu-header small text-uppercase">
+        <span class="menu-header-text">Dashboard</span>
+    </li>
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
         <li class="menu-item {{ request()->routeIs('home') ? 'active' : '' }}">

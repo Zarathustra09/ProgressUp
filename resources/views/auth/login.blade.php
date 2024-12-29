@@ -3,218 +3,229 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{env('APP_NAME')}}</title>
+    <title>ProgressUp - School Attendance Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        /* Google Fonts Link */
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-
-        /* Resetting default styling and setting font-family */
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: "Montserrat", sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
         body {
-            width: 100%;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ed 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
-            padding: 0 10px;
-            display: flex;
-            background: #626cd6;
-            justify-content: center;
-            align-items: center;
+            padding: 20px;
         }
 
-        /* Login form styling */
-        .login_form {
+        .container {
             width: 100%;
-            max-width: 435px;
-            background: #fff;
-            border-radius: 6px;
-            padding: 41px 30px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .login_form h3 {
-            font-size: 20px;
-            text-align: center;
-        }
-
-        /* Google & Apple button styling */
-
-        .login_form .login_option {
+            max-width: 1000px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             display: flex;
-            width: 100%;
-            justify-content: space-between;
-            align-items: center;
         }
 
-        .login_form .login_option .option {
-            width: calc(100% / 2 - 12px);
+        .login {
+            flex: 1;
+            padding: 48px;
+            background: white;
         }
 
-        .login_form .login_option .option a {
-            height: 56px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 12px;
-            background: #F8F8FB;
-            border: 1px solid #DADAF2;
-            border-radius: 5px;
-            margin: 34px 0 24px 0;
-            text-decoration: none;
-            color: #171645;
-            font-weight: 500;
-            transition: 0.2s ease;
+        .login h1 {
+            color: #1a1a1a;
+            font-size: 32px;
+            margin-bottom: 32px;
+            font-weight: 600;
         }
 
-        .login_form .login_option .option a:hover {
-            background: #ededf5;
-            border-color: #626cd6;
-        }
-
-        .login_form .login_option .option a img {
-            max-width: 25px;
-        }
-
-        .login_form p {
-            text-align: center;
-            font-weight: 500;
-        }
-
-        .login_form .separator {
-            position: relative;
+        .input-group {
             margin-bottom: 24px;
         }
 
-        /* Login option separator styling */
-        .login_form .separator span {
-            background: #fff;
-            z-index: 1;
-            padding: 0 10px;
-            position: relative;
-        }
-
-        .login_form .separator::after {
-            content: '';
-            position: absolute;
+        input[type="email"],
+        input[type="password"] {
             width: 100%;
-            top: 50%;
-            left: 0;
-            height: 1px;
-            background: #C2C2C2;
-            display: block;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
         }
 
-        form .input_box label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-
-        /* Input field styling */
-        form .input_box input {
-            width: 100%;
-            height: 57px;
-            border: 1px solid #DADAF2;
-            border-radius: 5px;
+        input:focus {
+            border-color: #8b24c6;
             outline: none;
-            background: #F8F8FB;
-            font-size: 17px;
-            padding: 0px 20px;
-            margin-bottom: 25px;
-            transition: 0.2s ease;
+            background: white;
         }
 
-        form .input_box input:focus {
-            border-color: #626cd6;
-        }
-
-        form .input_box .password_title {
+        .checkbox-container {
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            margin: 24px 0;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+        }
+
+        .forgot-password {
+            color: #8b24c6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            background: #8b24c6;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-button:hover {
+            background: #7b1fb0;
+            transform: translateY(-2px);
+        }
+
+        .register {
+            flex: 1;
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            padding: 48px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
         }
 
-        form .input_box {
-            position: relative;
+        .register h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.9) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        a {
-            text-decoration: none;
-            color: #626cd6;
-            font-weight: 500;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        /* Login button styling */
-        form button {
-            width: 100%;
-            height: 56px;
-            border-radius: 5px;
-            border: none;
-            outline: none;
-            background: #626CD6;
-            color: #fff;
+        .register p {
             font-size: 18px;
-            font-weight: 500;
-            text-transform: uppercase;
+            line-height: 1.6;
+            margin: 24px 0;
+            opacity: 0.9;
+        }
+
+        .feature-list {
+            text-align: left;
+            margin: 32px 0;
+            width: 100%;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        .feature-item i {
+            margin-right: 12px;
+            font-size: 20px;
+        }
+
+        .trial-button {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            margin-bottom: 28px;
-            transition: 0.3s ease;
+            transition: all 0.3s ease;
+            margin-top: 16px;
         }
 
-        form button:hover {
-            background: #4954d0;
+        .trial-button:hover {
+            background: white;
+            color: #FF6B6B;
         }
 
-        /* Error message styling */
-        .error {
-            color: red;
-            font-size: 14px;
-            margin-top: -20px;
-            margin-bottom: 20px;
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .login, .register {
+                padding: 32px;
+            }
+
+            .register {
+                order: -1;
+            }
         }
     </style>
 </head>
 <body>
-<div class="login_form">
-    <!-- Login form container -->
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
-        <h3>{{ config('app.name') }}</h3>
-
-        <!-- Email input box -->
-        <div class="input_box">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="Enter email address" required />
-            @error('email')
-            <span class="error">{{ $message }}</span>
-            @enderror
-        </div>
-
-        <!-- Password input box -->
-        <div class="input_box">
-            <div class="password_title">
-                <label for="password">Password</label>
-                <a href="{{ route('password.request') }}">Forgot Password?</a>
+<div class="container">
+    <div class="login">
+        <h1>Log in</h1>
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+            <div class="input-group">
+                <input type="email" name="email" placeholder="Email" required>
             </div>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required />
-            @error('password')
-            <span class="error">{{ $message }}</span>
-            @enderror
+            <div class="input-group">
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <div class="checkbox-container">
+                <label class="remember-me">
+                    <input type="checkbox" name="remember">
+                    <span>Remember me</span>
+                </label>
+                <a href="{{ route('password.request') }}" class="forgot-password">Forgot password?</a>
+            </div>
+            <button type="submit" class="login-button">Log in</button>
+        </form>
+    </div>
+    <div class="register">
+        <h1>ProgressUp</h1>
+        <p>Track student attendance easily. Make better decisions with accurate data.</p>
+        <div class="feature-list">
+            <div class="feature-item">
+                <i class="fas fa-check-circle"></i>
+                <span>Track attendance instantly</span>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Get automatic reports</span>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-mobile-alt"></i>
+                <span>Use on any device</span>
+            </div>
         </div>
-
-        <!-- Login button -->
-        <button type="submit">Log In</button>
-
-{{--        <p class="sign_up">Don't have an account? <a href="{{ route('register') }}">Sign up</a></p>--}}
-    </form>
+        <button class="trial-button">DOWNLOAD APP <i class="fas fa-arrow-right"></i></button>
+        <p style="font-size: 14px; margin-top: 24px;">Progress Up NOW!</p>
+    </div>
 </div>
 </body>
 </html>
