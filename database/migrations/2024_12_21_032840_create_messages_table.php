@@ -12,7 +12,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('messages', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->unsignedBigInteger('sender_id'); // Ensure this is unsigned
             $table->unsignedBigInteger('receiver_id'); // Ensure this is unsigned
             $table->string('body', 5000)->nullable();

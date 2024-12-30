@@ -7,9 +7,17 @@ use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Message::all();
+        $user_id = $request->query('user_id');
+
+        if (!$user_id) {
+            return response()->json(['error' => 'User ID is required'], 400);
+        }
+
+        $messages = Message::where('receiver_id', $user_id)->get();
+
+        return response()->json($messages);
     }
 
     public function store(Request $request)
@@ -18,10 +26,16 @@ class MessageController extends Controller
             'sender_id' => 'required|exists:users,id',
             'receiver_id' => 'required|exists:users,id',
             'body' => 'nullable|string|max:5000',
-            'attachment' => 'nullable|string',
+            'attachment' => 'nullable|image', // Validate that the attachment is an image
         ]);
 
-        $message = Message::create($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('attachment')) {
+            $data['attachment'] = $request->file('attachment')->store('attachments');
+        }
+
+        $message = Message::create($data);
 
         return response()->json($message, 201);
     }

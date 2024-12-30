@@ -26,9 +26,13 @@ class StudentSeeder extends Seeder
                     'password' => Hash::make('password'),
                 ]);
 
+                $currentYear = date('Y');
+                $randomDigits = mt_rand(100000, 999999);
+                $studentId = "{$currentYear}-{$randomDigits}";
+
                 StudentSchoolDetails::create([
                     'user_id' => $student->id,
-                    'student_id' => $student->id,
+                    'student_id' => $studentId,
                     'status' => 'active',
                 ]);
 
