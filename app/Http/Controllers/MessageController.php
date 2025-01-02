@@ -15,7 +15,17 @@ class MessageController extends Controller
             return response()->json(['error' => 'User ID is required'], 400);
         }
 
-        $messages = Message::where('receiver_id', $user_id)->get();
+        $messages = Message::where(function ($query) use ($user_id) {
+            $query->where('sender_id', $user_id)
+                ->orWhere('receiver_id', $user_id);
+        })
+            ->with(['sender', 'receiver'])
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->unique(function ($item) {
+                return [min($item->sender_id, $item->receiver_id), max($item->sender_id, $item->receiver_id)];
+            })
+            ->values(); // Reset the keys of the collection
 
         return response()->json($messages);
     }
