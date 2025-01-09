@@ -3,29 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Message;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
     public function index(Request $request)
     {
-        $user_id = $request->query('user_id');
+        $chat_id = $request->query('chat_id');
 
-        if (!$user_id) {
-            return response()->json(['error' => 'User ID is required'], 400);
+        if (!$chat_id) {
+            return response()->json(['error' => 'Chat ID is required'], 400);
         }
 
-        $messages = Message::where(function ($query) use ($user_id) {
-            $query->where('sender_id', $user_id)
-                ->orWhere('receiver_id', $user_id);
-        })
-            ->with(['sender', 'receiver'])
+        $messages = Message::where('chat_id', $chat_id)
+            ->with([
+                'sender:id,first_name,last_name,email,profile_image',
+                'receiver:id,first_name,last_name,email,profile_image',
+                'chat'
+            ])
             ->orderBy('created_at', 'desc')
-            ->get()
-            ->unique(function ($item) {
-                return [min($item->sender_id, $item->receiver_id), max($item->sender_id, $item->receiver_id)];
-            })
-            ->values(); // Reset the keys of the collection
+            ->get();
 
         return response()->json($messages);
     }
@@ -35,8 +33,9 @@ class MessageController extends Controller
         $request->validate([
             'sender_id' => 'required|exists:users,id',
             'receiver_id' => 'required|exists:users,id',
+            'chat_id' => 'required|exists:chats,id',
             'body' => 'nullable|string|max:5000',
-            'attachment' => 'nullable|image', // Validate that the attachment is an image
+            'attachment' => 'nullable|image',
         ]);
 
         $data = $request->all();
@@ -52,7 +51,7 @@ class MessageController extends Controller
 
     public function show(Message $message)
     {
-        return $message;
+        return response()->json($message->load(['sender', 'receiver', 'chat']));
     }
 
     public function update(Request $request, Message $message)
@@ -71,5 +70,13 @@ class MessageController extends Controller
         $message->delete();
 
         return response()->json(null, 204);
+    }
+
+    public function getAllStudents(Request $request)
+    {
+        $students = User::where('role_id', 1)
+            ->select('id', 'first_name', 'last_name', 'email', 'profile_image')
+            ->paginate(10);
+        return response()->json($students);
     }
 }
