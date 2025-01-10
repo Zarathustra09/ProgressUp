@@ -13,7 +13,7 @@ Route::middleware('auth:sanctum')->get('/profile/{user_id}', [ProfileController:
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::get('/students', [MessageController::class, 'getAllStudents'])->name('students.getAll');
+    Route::get('/students', [MessageController::class, 'getSpecificStudent'])->name('students.getSpecific');
 
 
     Route::get('/attendances/{attendance}', [AttendanceController::class, 'show'])->name('attendances.show');

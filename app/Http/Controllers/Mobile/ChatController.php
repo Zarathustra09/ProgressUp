@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Mobile;
 use App\Http\Controllers\Controller;
 use App\Models\Chat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ChatController extends Controller
 {
@@ -13,58 +14,97 @@ class ChatController extends Controller
      */
     public function index(Request $request)
     {
-        $userId = $request->input('user_id');
+        DB::beginTransaction();
 
-        $chats = Chat::with(['userOne', 'userTwo', 'messages'])
-            ->where('user_one_id', $userId)
-            ->orWhere('user_two_id', $userId)
-            ->get();
+        try {
+            $userId = $request->input('user_id');
 
-        return response()->json($chats);
+            $chats = Chat::with([
+                'userOne:id,first_name,last_name,email,profile_image,created_at',
+                'userTwo:id,first_name,last_name,email,profile_image,created_at',
+                'messages' => function ($query) {
+                    $query->latest()->first();
+                }
+            ])
+                ->where('user_one_id', $userId)
+                ->orWhere('user_two_id', $userId)
+                ->get();
+
+            DB::commit();
+            return response()->json($chats);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'Transaction failed'], 500);
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $request->validate([
-            'user_one_id' => 'required|exists:users,id',
-            'user_two_id' => 'required|exists:users,id',
-        ]);
+        DB::beginTransaction();
 
-        $chat = Chat::create($request->all());
-        return response()->json($chat, 201);
+        try {
+            $request->validate([
+                'user_one_id' => 'required|exists:users,id',
+                'user_two_id' => 'required|exists:users,id',
+            ]);
+
+            $chat = Chat::create($request->all());
+
+            DB::commit();
+            return response()->json($chat, 201);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'Transaction failed'], 500);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Chat $chat)
     {
-        return response()->json($chat->load(['userOne', 'userTwo', 'messages']));
+        DB::beginTransaction();
+
+        try {
+            $chat = $chat->load(['userOne', 'userTwo', 'messages']);
+
+            DB::commit();
+            return response()->json($chat);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'Transaction failed'], 500);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Chat $chat)
     {
-        $request->validate([
-            'user_one_id' => 'required|exists:users,id',
-            'user_two_id' => 'required|exists:users,id',
-        ]);
+        DB::beginTransaction();
 
-        $chat->update($request->all());
-        return response()->json($chat);
+        try {
+            $request->validate([
+                'user_one_id' => 'required|exists:users,id',
+                'user_two_id' => 'required|exists:users,id',
+            ]);
+
+            $chat->update($request->all());
+
+            DB::commit();
+            return response()->json($chat);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'Transaction failed'], 500);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Chat $chat)
     {
-        $chat->delete();
-        return response()->json(null, 204);
+        DB::beginTransaction();
+
+        try {
+            $chat->delete();
+
+            DB::commit();
+            return response()->json(null, 204);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'Transaction failed'], 500);
+        }
     }
 }
