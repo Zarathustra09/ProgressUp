@@ -19,34 +19,40 @@ class StudentSeeder extends Seeder
 
         foreach ($rooms as $room) {
             foreach ($parents as $parent) {
-                $student = User::factory()->create([
-                    'role_id' => 1, // Student role
-                    'branch_id' => $room->id,
-                    'parent_id' => $parent->id,
-                    'password' => Hash::make('password'),
-                ]);
+                if ($parent->branch_id !== $room->id) {
+                    continue;
+                }
 
-                $currentYear = date('Y');
-                $randomDigits = mt_rand(100000, 999999);
-                $studentId = "{$currentYear}-{$randomDigits}";
+                for ($i = 0; $i < 3; $i++) {
+                    $student = User::factory()->create([
+                        'role_id' => 1, // Student role
+                        'branch_id' => $room->id,
+                        'parent_id' => $parent->id,
+                        'password' => Hash::make('password'),
+                    ]);
 
-                StudentSchoolDetails::create([
-                    'user_id' => $student->id,
-                    'student_id' => $studentId,
-                    'status' => 'active',
-                ]);
+                    $currentYear = date('Y');
+                    $randomDigits = mt_rand(100000, 999999);
+                    $studentId = "{$currentYear}-{$randomDigits}";
 
-                StudentMedicalInformation::create([
-                    'user_id' => $student->id,
-                    'allergies' => 'None',
-                    'notes' => 'No medical conditions',
-                    'medication' => 'None',
-                ]);
+                    StudentSchoolDetails::create([
+                        'user_id' => $student->id,
+                        'student_id' => $studentId,
+                        'status' => 'active',
+                    ]);
 
-                RoomStudent::create([
-                    'room_id' => $room->id,
-                    'student_id' => $student->id,
-                ]);
+                    StudentMedicalInformation::create([
+                        'user_id' => $student->id,
+                        'allergies' => 'None',
+                        'notes' => 'No medical conditions',
+                        'medication' => 'None',
+                    ]);
+
+                    RoomStudent::create([
+                        'room_id' => $room->id,
+                        'student_id' => $student->id,
+                    ]);
+                }
             }
         }
     }

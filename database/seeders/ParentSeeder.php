@@ -14,11 +14,13 @@ class ParentSeeder extends Seeder
         $rooms = Room::all();
 
         foreach ($rooms as $room) {
-            User::factory()->create([
-                'role_id' => 0, // Parent role
-                'branch_id' => $room->id,
-                'password' => Hash::make('password'),
-            ]);
+            for ($i = 0; $i < 3; $i++) {
+                User::factory()->create([
+                    'role_id' => 0, // Parent role
+                    'branch_id' => $room->id,
+                    'password' => Hash::make('password'),
+                ]);
+            }
         }
     }
 }

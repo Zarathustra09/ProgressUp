@@ -126,7 +126,7 @@ class MessageController extends Controller
 
             $search = $request->query('search');
 
-            $students = User::where('role_id', 1)
+            $students = User::whereIn('role_id', [2, 3])
                 ->where('branch_id', $branchId)
                 ->where(function ($query) use ($search) {
                     $query->where('first_name', 'like', '%' . $search . '%')
