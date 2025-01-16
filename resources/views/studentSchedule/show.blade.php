@@ -25,7 +25,9 @@
                                 <th class="text-nowrap">Start Time</th>
                                 <th class="text-nowrap">End Time</th>
                                 <th class="text-nowrap">Duration</th>
+                                <th class="text-nowrap">Session</th>
                                 <th class="text-nowrap">QR Code</th>
+                                <th class="text-nowrap">Attendance Count</th>
                                 <th class="text-nowrap">Actions</th>
                             </tr>
                             </thead>
@@ -48,11 +50,14 @@
                                             {{ \Carbon\Carbon::parse($schedule->start_time)->diff(\Carbon\Carbon::parse($schedule->end_time))->format('%h hr %i min') }}
                                         </span>
                                     </td>
+                                    <td>{{ $schedule->session }}</td>
                                     <td>
                                         {!! QrCode::size(100)->generate($schedule->qr_code_url) !!}
                                     </td>
+                                    <td>{{ $schedule->attendances->count() }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-sm btn-warning edit-button" data-id="{{ $schedule->id }}" data-event="{{ $schedule->event_name }}" data-start="{{ $schedule->start_time }}" data-end="{{ $schedule->end_time }}">Edit</button>
+                                        <a href="{{ route('attendance.show', $schedule->id) }}" class="btn btn-sm btn-info">View</a>
+                                        <button type="button" class="btn btn-sm btn-warning edit-button" data-id="{{ $schedule->id }}" data-event="{{ $schedule->event_name }}" data-start="{{ $schedule->start_time }}" data-end="{{ $schedule->end_time }}" data-session="{{ $schedule->session }}">Edit</button>
                                         <form action="{{ route('studentSchedules.destroy', $schedule->id) }}" method="POST" class="d-inline delete-form">
                                             @csrf
                                             @method('DELETE')
@@ -85,6 +90,7 @@
                 const event = this.getAttribute('data-event');
                 const start = this.getAttribute('data-start');
                 const end = this.getAttribute('data-end');
+                const session = this.getAttribute('data-session');
 
                 Swal.fire({
                     title: 'Edit Schedule',
@@ -103,6 +109,10 @@
                             <div class="mb-3">
                                 <label for="end_time" class="form-label">End Time</label>
                                 <input type="time" id="end_time" name="end_time" class="form-control" value="${end}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="session" class="form-label">Session</label>
+                                <input type="number" id="session" name="session" class="form-control" value="${session}" required min="1">
                             </div>
                         </form>
                     `,

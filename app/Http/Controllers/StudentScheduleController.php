@@ -61,6 +61,7 @@ class StudentScheduleController extends Controller
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
             'event_name' => 'required|string|max:255',
+            'session' => 'required|integer|min:1', // Add this line
         ]);
 
         try {
@@ -82,6 +83,7 @@ class StudentScheduleController extends Controller
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
             'event_name' => 'required|string|max:255',
+            'session' => 'required|integer|min:1', // Add this line
         ]);
 
         $schedule = StudentSchedule::findOrFail($id);
@@ -104,6 +106,4 @@ class StudentScheduleController extends Controller
 
         return redirect()->route('studentSchedules.show', $studentId)->with('success', 'Student schedule deleted successfully.');
     }
-
-
 }

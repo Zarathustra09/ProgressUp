@@ -22,6 +22,10 @@
                         <label for="end_time" class="form-label">End Time</label>
                         <input type="time" id="end_time" name="end_time" class="form-control" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="session" class="form-label">Session</label>
+                        <input type="number" id="session" name="session" class="form-control" required min="1">
+                    </div>
                     <button type="submit" class="btn btn-primary">Create Schedule</button>
                 </form>
             </div>

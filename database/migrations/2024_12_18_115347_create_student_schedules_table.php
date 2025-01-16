@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('event_name')->nullable();
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
+            $table->integer('session')->default(1); // Add this line
             $table->timestamps();
         });
     }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AttendanceWebController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\ParentDetailsController;
 use App\Http\Controllers\ProfileController;
@@ -97,3 +98,6 @@ Route::get('/students/list', [StudentController::class, 'list'])->name('students
 Route::resource('student-medical-information', StudentMedicalInformationController::class);
 Route::resource('student-school-details', StudentSchoolDetailsController::class);
 
+
+
+Route::get('/attendance/{studentScheduleId}', [AttendanceWebController::class, 'show'])->name('attendance.show');

@@ -15,6 +15,7 @@ class StudentSchedule extends Model
         'start_time',
         'end_time',
         'event_name',
+        'session',
     ];
 
     public function student()
@@ -25,5 +26,10 @@ class StudentSchedule extends Model
     public function room()
     {
         return $this->belongsTo(Room::class);
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class, 'schedule_id');
     }
 }
