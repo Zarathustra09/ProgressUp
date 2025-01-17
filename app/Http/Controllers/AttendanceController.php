@@ -33,6 +33,7 @@ class AttendanceController extends Controller
 
         // Check if an attendance record already exists for the given student_id and today's date
         $existingAttendance = Attendance::where('student_id', $request->student_id)
+            ->where('schedule_id', $request->schedule_id)
             ->whereDate('created_at', $currentDate)
             ->first();
 

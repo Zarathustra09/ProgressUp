@@ -4,6 +4,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\Mobile\AuthController;
 use App\Http\Controllers\Mobile\ChatController;
+use App\Http\Controllers\Mobile\MobileAttendanceController;
 use App\Http\Controllers\Mobile\ParentMobileController;
 use App\Http\Controllers\Mobile\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('messages', MessageController::class);
     Route::apiResource('chat', ChatController::class);
+
+    //get student schedule attendances
+    Route::get('/mobile/attendance/{studentScheduleId}', [MobileAttendanceController::class, 'show'])->name('mobile.attendance.show');
 
     // Add the route for getChildren function
     Route::get('/parents/{id}/children', [ParentMobileController::class, 'getChildren'])->name('parents.getChildren');
