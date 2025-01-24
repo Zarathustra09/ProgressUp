@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'getUser']);
 Route::middleware('auth:sanctum')->get('/profile/{user_id}', [ProfileController::class, 'getProfile']);
-
+Route::middleware('auth:sanctum')->post('/profile/picture', [ProfileController::class, 'updateProfilePicture']);
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/students', [MessageController::class, 'getSpecificStudent'])->name('students.getSpecific');

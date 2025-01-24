@@ -53,7 +53,7 @@ class MessageController extends Controller
             $data = $request->all();
 
             if ($request->hasFile('attachment')) {
-                $data['attachment'] = $request->file('attachment')->store('attachments');
+                $data['attachment'] = $request->file('attachment')->store('attachments', 'public');
             }
 
             $message = Message::create($data);
@@ -126,7 +126,7 @@ class MessageController extends Controller
 
             $search = $request->query('search');
 
-            $students = User::whereIn('role_id', [2, 3])
+            $students = User::whereIn('role_id', [0, 3])
                 ->where('branch_id', $branchId)
                 ->where(function ($query) use ($search) {
                     $query->where('first_name', 'like', '%' . $search . '%')
