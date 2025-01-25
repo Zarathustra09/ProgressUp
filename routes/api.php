@@ -7,6 +7,7 @@ use App\Http\Controllers\Mobile\ChatController;
 use App\Http\Controllers\Mobile\MobileAttendanceController;
 use App\Http\Controllers\Mobile\ParentMobileController;
 use App\Http\Controllers\Mobile\ProfileController;
+use App\Http\Controllers\Mobile\StaffController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -31,4 +32,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // Add the route for getChildren function
     Route::get('/parents/{id}/children', [ParentMobileController::class, 'getChildren'])->name('parents.getChildren');
     Route::get('/students/{studentId}/schedule', [ParentMobileController::class, 'getStudentSchedule'])->name('students.getSchedule');
+
+    Route::get('/staff/{branch_id}', [StaffController::class, 'index'])->name('staff.mobile.index');
+    Route::get('/staff/schedule/{user_id}', [StaffController::class, 'showSchedule'])->name('staff.mobile.showSchedule');
+    Route::get('/staff/attendance/{schedule_id}', [StaffController::class, 'showAttendance'])->name('staff.mobile.showAttendance');
+
 });

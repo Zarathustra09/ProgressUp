@@ -19,7 +19,7 @@ class AuthController extends Controller
             $user = Auth::user();
             $token = $user->createToken('authToken')->plainTextToken;
             \Log::info('token', ['token' => $token]);
-            return response()->json(['token' => $token, 'user_id' => $user->id, 'role' => $user->role_id], 200);
+            return response()->json(['token' => $token, 'user_id' => $user->id, 'role' => $user->role_id, 'branch_id' => $user->branch_id], 200);
         }
 
         \Log::warning('Unauthorized login attempt', ['email' => $credentials['email']]);
