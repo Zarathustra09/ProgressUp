@@ -13,16 +13,16 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-6">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0 text-white">Another Chart</h5>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="anotherChart" height="300"></canvas>
-                    </div>
-                </div>
-            </div>
+{{--            <div class="col-12 col-md-6">--}}
+{{--                <div class="card">--}}
+{{--                    <div class="card-header bg-primary text-white">--}}
+{{--                        <h5 class="mb-0 text-white">Another Chart</h5>--}}
+{{--                    </div>--}}
+{{--                    <div class="card-body">--}}
+{{--                        <canvas id="anotherChart" height="300"></canvas>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
         </div>
     </div>
 

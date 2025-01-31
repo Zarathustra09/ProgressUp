@@ -51,7 +51,7 @@
                                         </span>
                                     </td>
                                     <td>{{ $schedule->session }}</td>
-                                    <td>
+                                    <td data-qr-url="{{ $schedule->qr_code_url }}" class="qr-code-cell">
                                         {!! QrCode::size(100)->generate($schedule->qr_code_url) !!}
                                     </td>
                                     <td>{{ $schedule->attendances->count() }}</td>
@@ -84,6 +84,19 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        document.querySelectorAll('.qr-code-cell').forEach(cell => {
+            cell.addEventListener('click', function () {
+                const qrUrl = this.getAttribute('data-qr-url');
+                Swal.fire({
+                    title: 'QR Code',
+                    html: `<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrUrl)}" alt="QR Code">`,
+                    showCloseButton: true,
+                    focusConfirm: false,
+                    confirmButtonText: 'Close'
+                });
+            });
+        });
+
         document.querySelectorAll('.edit-button').forEach(button => {
             button.addEventListener('click', function () {
                 const id = this.getAttribute('data-id');
