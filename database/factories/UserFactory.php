@@ -30,7 +30,7 @@ class UserFactory extends Factory
             'address' => fake()->address(),
             'province' => fake()->state(),
             'birthdate' => fake()->date(),
-            'profile_image' => fake()->imageUrl(),
+            'profile_image' => null,
             'branch_id' => 1, // Default branch_id, you can change it as needed
         ];
     }

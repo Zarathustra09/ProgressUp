@@ -62,23 +62,23 @@
         </li>
 
 
-        <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Relationship</span>
-        </li>
+{{--        <li class="menu-header small text-uppercase">--}}
+{{--            <span class="menu-header-text">Relationship</span>--}}
+{{--        </li>--}}
 
-        <li class="menu-item">
-            <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-envelope"></i>
-                <div data-i18n="Patient Records">Messaging</div>
-            </a>
-        </li>
+{{--        <li class="menu-item">--}}
+{{--            <a href="#" class="menu-link">--}}
+{{--                <i class="menu-icon tf-icons bx bx-envelope"></i>--}}
+{{--                <div data-i18n="Patient Records">Messaging</div>--}}
+{{--            </a>--}}
+{{--        </li>--}}
 
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">Reports</span>
         </li>
 
         <li class="menu-item">
-            <a href="#" class="menu-link">
+            <a href="{{route('report.index')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-bar-chart"></i>
                 <div data-i18n="Patient Records">Reporting</div>
             </a>

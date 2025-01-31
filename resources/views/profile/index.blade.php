@@ -32,7 +32,7 @@
                                 @method('PUT')
                                 <div class="d-flex align-items-start align-items-sm-center gap-4">
                                     <img
-                                        src="{{ auth()->user()->profile_image ? asset('storage/' . auth()->user()->profile_image) : 'https://via.placeholder.com/100' }}"
+                                        src="{{ auth()->user()->profile_image ? asset('storage/' . auth()->user()->profile_image) : 'https://placehold.co/100' }}"
                                         alt="user-avatar"
                                         class="d-block rounded"
                                         height="100"

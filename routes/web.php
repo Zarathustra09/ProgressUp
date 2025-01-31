@@ -5,6 +5,7 @@ use App\Http\Controllers\AttendanceWebController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\ParentDetailsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomScheduleController;
 use App\Http\Controllers\RoomStudentController;
@@ -101,3 +102,7 @@ Route::resource('student-school-details', StudentSchoolDetailsController::class)
 
 
 Route::get('/attendance/{studentScheduleId}', [AttendanceWebController::class, 'show'])->name('attendance.show');
+
+
+
+Route::get('/reports', [ReportController::class, 'index'])->name('report.index');
