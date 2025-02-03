@@ -77,17 +77,30 @@ class StudentScheduleController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
+        Log::info('Update function called with request data:', $request->all());
+
+        $validator = \Validator::make($request->all(), [
             'student_id' => 'required|exists:users,id',
             'room_id' => 'required|exists:rooms,id',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
+            'start_time' => 'required',
+            'end_time' => 'required|after:start_time',
             'event_name' => 'required|string|max:255',
-            'session' => 'required|integer|min:1', // Add this line
+            'session' => 'required|integer|min:1',
         ]);
 
-        $schedule = StudentSchedule::findOrFail($id);
-        $schedule->update($request->all());
+        if ($validator->fails()) {
+            Log::error('Validation errors:', $validator->errors()->toArray());
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        try {
+            $schedule = StudentSchedule::findOrFail($id);
+            $schedule->update($request->all());
+            Log::info('Student schedule updated successfully:', $schedule->toArray());
+        } catch (\Exception $e) {
+            Log::error('Error updating student schedule:', ['error' => $e->getMessage()]);
+            return redirect()->back()->with('error', 'There was an error updating the student schedule.');
+        }
 
         return redirect()->route('studentSchedules.show', $schedule->student_id)->with('success', 'Student schedule updated successfully.');
     }
@@ -105,5 +118,17 @@ class StudentScheduleController extends Controller
         $schedule->delete();
 
         return redirect()->route('studentSchedules.show', $studentId)->with('success', 'Student schedule deleted successfully.');
+    }
+
+    public function showSingle($id)
+    {
+        $schedule = StudentSchedule::findOrFail($id);
+
+        if (!$schedule) {
+            Log::error('Student schedule not found with id:', ['id' => $id]);
+            abort(404, 'Student schedule not found');
+        }
+
+        return response()->json(['schedule' => $schedule]);
     }
 }

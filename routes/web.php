@@ -90,7 +90,8 @@ Route::get('/studentSchedules', [StudentScheduleController::class, 'index'])->na
 Route::get('/studentSchedules/create', [StudentScheduleController::class, 'create'])->name('studentSchedules.create');
 Route::post('/studentSchedules', [StudentScheduleController::class, 'store'])->name('studentSchedules.store');
 Route::get('/studentSchedules/{id}', [StudentScheduleController::class, 'show'])->name('studentSchedules.show');
-Route::put('/studentSchedules/{id}', [StudentScheduleController::class, 'update'])->name('studentSchedules.update');
+Route::put('/updateSingleSchedule/{id}', [StudentScheduleController::class, 'update'])->name('updateSingle.schedule');
+Route::get('/showSingleSchedule/{id}', [StudentScheduleController::class, 'showSingle'])->name('showSingle.schedule');
 Route::delete('/studentSchedules/{id}', [StudentScheduleController::class, 'destroy'])->name('studentSchedules.destroy');
 
 

@@ -57,7 +57,7 @@
                                     <td>{{ $schedule->attendances->count() }}</td>
                                     <td>
                                         <a href="{{ route('attendance.show', $schedule->id) }}" class="btn btn-sm btn-info">View</a>
-                                        <button type="button" class="btn btn-sm btn-warning edit-button" data-id="{{ $schedule->id }}" data-event="{{ $schedule->event_name }}" data-start="{{ $schedule->start_time }}" data-end="{{ $schedule->end_time }}" data-session="{{ $schedule->session }}">Edit</button>
+                                        <button type="button" class="btn btn-sm btn-warning edit-button" data-id="{{ $schedule->id }}">Edit</button>
                                         <form action="{{ route('studentSchedules.destroy', $schedule->id) }}" method="POST" class="d-inline delete-form">
                                             @csrf
                                             @method('DELETE')
@@ -83,6 +83,7 @@
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
     <script>
         document.querySelectorAll('.qr-code-cell').forEach(cell => {
             cell.addEventListener('click', function () {
@@ -97,45 +98,111 @@
             });
         });
 
+
+
         document.querySelectorAll('.edit-button').forEach(button => {
             button.addEventListener('click', function () {
                 const id = this.getAttribute('data-id');
-                const event = this.getAttribute('data-event');
-                const start = this.getAttribute('data-start');
-                const end = this.getAttribute('data-end');
-                const session = this.getAttribute('data-session');
 
-                Swal.fire({
-                    title: 'Edit Schedule',
-                    html: `
-                        <form id="edit-form" action="{{ url('studentSchedules') }}/${id}" method="POST">
-                            @csrf
-                    @method('PUT')
-                    <div class="mb-3">
-                        <label for="event_name" class="form-label">Event Name</label>
-                        <input type="text" id="event_name" name="event_name" class="form-control" value="${event}" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="start_time" class="form-label">Start Time</label>
-                                <input type="time" id="start_time" name="start_time" class="form-control" value="${start}" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="end_time" class="form-label">End Time</label>
-                                <input type="time" id="end_time" name="end_time" class="form-control" value="${end}" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="session" class="form-label">Session</label>
-                                <input type="number" id="session" name="session" class="form-control" value="${session}" required min="1">
-                            </div>
-                        </form>
-                    `,
-                    showCancelButton: true,
-                    confirmButtonText: 'Update',
-                    cancelButtonText: 'Cancel',
-                    preConfirm: () => {
-                        document.getElementById('edit-form').submit();
-                    }
-                });
+                fetch(`{{ url('showSingleSchedule') }}/${id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const schedule = data.schedule;
+
+                        Swal.fire({
+                            title: '<h4 class="fw-bold text-primary">Edit Schedule</h4>',
+                            html: `
+                                <div class="container-fluid">
+                                    <div class="row mb-3">
+                                        <label for="event_name" class="form-label">Event Name</label>
+                                        <input type="text" id="event_name" class="form-control" value="${schedule.event_name}" placeholder="Event Name">
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="start_time" class="form-label">Start Time</label>
+                                        <input type="time" id="start_time" class="form-control" value="${moment(schedule.start_time, 'HH:mm:ss').format('HH:mm')}" placeholder="Start Time">
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="end_time" class="form-label">End Time</label>
+                                        <input type="time" id="end_time" class="form-control" value="${moment(schedule.end_time, 'HH:mm:ss').format('HH:mm')}" placeholder="End Time">
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="session" class="form-label">Session</label>
+                                        <input type="number" id="session" class="form-control" value="${schedule.session}" placeholder="Session" min="1">
+                                    </div>
+                                </div>
+                            `,
+                            customClass: {
+                                popup: 'rounded shadow-lg p-4',
+                                title: 'mb-3 text-center text-primary',
+                                confirmButton: 'btn btn-primary btn-block',
+                                cancelButton: 'btn btn-secondary btn-block ms-2'
+                            },
+                            showCancelButton: true,
+                            confirmButtonText: 'Update',
+                            cancelButtonText: 'Cancel',
+                            focusConfirm: false,
+                            preConfirm: () => {
+                                const event_name = Swal.getPopup().querySelector('#event_name').value;
+                                const start_time = Swal.getPopup().querySelector('#start_time').value;
+                                const end_time = Swal.getPopup().querySelector('#end_time').value;
+                                const session = Swal.getPopup().querySelector('#session').value;
+
+                                if (!event_name || !start_time || !end_time || !session) {
+                                    Swal.showValidationMessage('Please fill out all required fields.');
+                                }
+                                return {
+                                    event_name,
+                                    start_time: moment(start_time, 'HH:mm').format('HH:mm:ss'),
+                                    end_time: moment(end_time, 'HH:mm').format('HH:mm:ss'),
+                                    session
+                                };
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    url: `{{ url('updateSingleSchedule') }}/${id}`,
+                                    type: 'POST',
+                                    data: {
+                                        _token: '{{ csrf_token() }}',
+                                        _method: 'PUT',
+                                        event_name: result.value.event_name,
+                                        start_time: result.value.start_time,
+                                        end_time: result.value.end_time,
+                                        session: result.value.session,
+                                        student_id: schedule.student_id,
+                                        room_id: schedule.room_id
+                                    },
+                                    success: function() {
+                                        Swal.fire({
+                                            title: '<h4 class="fw-bold text-success">Updated!</h4>',
+                                            text: 'Schedule has been updated successfully.',
+                                            icon: 'success',
+                                            customClass: {
+                                                popup: 'rounded shadow-lg',
+                                                confirmButton: 'btn btn-success btn-block'
+                                            }
+                                        }).then(() => {
+                                            location.reload();
+                                        });
+                                    },
+                                    error: function() {
+                                        Swal.fire({
+                                            title: '<h4 class="fw-bold text-danger">Error!</h4>',
+                                            text: 'There was an error updating the schedule.',
+                                            icon: 'error',
+                                            customClass: {
+                                                popup: 'rounded shadow-lg',
+                                                confirmButton: 'btn btn-danger btn-block'
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching schedule:', error);
+                    });
             });
         });
 
