@@ -115,6 +115,10 @@ class StudentScheduleController extends Controller
             return back()->with('error', 'Cannot delete the last remaining student schedule.');
         }
 
+        // Delete related attendances
+        $schedule->attendances()->delete();
+
+        // Delete the schedule
         $schedule->delete();
 
         return redirect()->route('studentSchedules.show', $studentId)->with('success', 'Student schedule deleted successfully.');
