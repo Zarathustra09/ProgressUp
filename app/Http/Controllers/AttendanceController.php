@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Attendance;
 use App\Models\StudentSchedule;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AttendanceController extends Controller
 {
@@ -25,7 +27,14 @@ class AttendanceController extends Controller
         ]);
 
         // Check if the user_id matches the student_id
-        if ($request->user_id !== $request->student_id) {
+//        if ($request->user_id !== $request->student_id) {
+//            return response()->json(['error' => 'Unauthorized'], 403);
+//        }
+
+
+        $student = User::findOrFail($request->student_id);
+        if ((int)$student->parent_id !== (int)$request->user_id) {
+            Log::info('Parent ID: ' . $student->parent_id . ' User ID: ' . $request->user_id . ' Student ID: ' . $request->student_id);
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
