@@ -67,7 +67,7 @@
         </li>
 
         <li class="menu-item">
-            <a href="#" class="menu-link">
+            <a href="{{route('admin.message.index')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-envelope"></i>
                 <div data-i18n="Patient Records">Messaging</div>
             </a>

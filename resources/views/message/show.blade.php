@@ -27,7 +27,7 @@
                     <i class="uil uil-arrow-left"></i>
                 </a>
                 <div class="d-flex align-items-center gap-3">
-                    <img src="{{ Storage::url($chat->userOne->profile_image) ?? 'https://placehold.co/45x45' }}" class="rounded-circle" width="45" height="45" alt="User">
+                    <img src="{{ $chat->userOne->profile_image ? Storage::url($chat->userOne->profile_image) : 'https://placehold.co/45x45' }}" class="rounded-circle" width="45" height="45" alt="User">
                     <h6 class="mb-0">{{ $chat->userOne->first_name }} {{ $chat->userOne->last_name }} & {{ $chat->userTwo->first_name }} {{ $chat->userTwo->last_name }}</h6>
                 </div>
             </div>
@@ -38,7 +38,7 @@
                     <div class="d-flex {{ $message->sender_id == auth()->id() ? 'justify-content-end' : 'justify-content-start' }} mb-3">
                         <div class="d-flex flex-column {{ $message->sender_id == auth()->id() ? 'align-items-end' : 'align-items-start' }}">
                             <div class="d-flex align-items-center gap-2">
-                                <img src="{{ Storage::url($message->sender->profile_image) ?? 'https://placehold.co/45x45' }}" class="rounded-circle" width="30" height="30" alt="User">
+                                <img src="{{ $message->sender->profile_image ? Storage::url($message->sender->profile_image) : 'https://placehold.co/45x45' }}" class="rounded-circle" width="30" height="30" alt="User">
                                 <div class="bg-white p-3 rounded-3 shadow-sm">
                                     <strong>{{ $message->sender->first_name }} {{ $message->sender->last_name }}</strong>
                                     <p class="mb-0">{{ $message->body }}</p>
