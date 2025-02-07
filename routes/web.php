@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminMessage;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceWebController;
 use App\Http\Controllers\ParentController;
@@ -107,3 +108,9 @@ Route::get('/attendance/{studentScheduleId}', [AttendanceWebController::class, '
 
 
 Route::get('/reports', [ReportController::class, 'index'])->name('report.index');
+
+
+
+Route::get('/admin/message', [AdminMessage::class, 'index'])->name('admin.message.index');
+Route::get('/admin/message/{id}', [AdminMessage::class, 'show'])->name('admin.message.show');
+Route::post('/admin/message/{id}', [AdminMessage::class, 'store'])->name('admin.message.store');
