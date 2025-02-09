@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Chat;
 use App\Models\Message;
 use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -18,16 +19,24 @@ class AdminMessage extends Controller
         try {
             $search = $request->input('search');
 
-            // Step 1: Get all chat IDs
-            $chatQuery = Chat::query();
+            // Step 1: Get all chat IDs where user_one_id or user_two_id has role_id 3
+            $chatQuery = Chat::query()
+                ->whereHas('userOne', function ($query) {
+                    $query->where('role_id', 3);
+                })
+                ->orWhereHas('userTwo', function ($query) {
+                    $query->where('role_id', 3);
+                });
 
             if ($search) {
-                $chatQuery->whereHas('userOne', function ($query) use ($search) {
-                    $query->where('first_name', 'like', '%' . $search . '%')
-                        ->orWhere('last_name', 'like', '%' . $search . '%');
-                })->orWhereHas('userTwo', function ($query) use ($search) {
-                    $query->where('first_name', 'like', '%' . $search . '%')
-                        ->orWhere('last_name', 'like', '%' . $search . '%');
+                $chatQuery->where(function ($query) use ($search) {
+                    $query->whereHas('userOne', function ($query) use ($search) {
+                        $query->where('first_name', 'like', '%' . $search . '%')
+                            ->orWhere('last_name', 'like', '%' . $search . '%');
+                    })->orWhereHas('userTwo', function ($query) use ($search) {
+                        $query->where('first_name', 'like', '%' . $search . '%')
+                            ->orWhere('last_name', 'like', '%' . $search . '%');
+                    });
                 });
             }
 
@@ -95,6 +104,7 @@ class AdminMessage extends Controller
         DB::beginTransaction();
 
         try {
+            Log::info('Message request', $request->all());
             $request->validate([
                 'receiver_id' => 'required|exists:users,id',
                 'chat_id' => 'required|exists:chats,id',
@@ -108,7 +118,12 @@ class AdminMessage extends Controller
             // Determine which user has role_id of 3
             $sender = User::where('role_id', 3)
                 ->whereIn('id', [$chat->user_one_id, $chat->user_two_id])
-                ->firstOrFail();
+                ->first();
+
+            if (!$sender) {
+                DB::rollBack();
+                return response()->json(['error' => 'You do not have permission to interfere with this chat'], 403);
+            }
 
             $data = $request->all();
             $data['sender_id'] = $sender->id;

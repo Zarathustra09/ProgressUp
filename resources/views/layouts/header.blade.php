@@ -66,7 +66,7 @@
             <span class="menu-header-text">Relationship</span>
         </li>
 
-        <li class="menu-item">
+        <li class="menu-item {{ request()->routeIs('admin.message.*') ? 'active' : '' }}">
             <a href="{{route('admin.message.index')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-envelope"></i>
                 <div data-i18n="Patient Records">Messaging</div>
