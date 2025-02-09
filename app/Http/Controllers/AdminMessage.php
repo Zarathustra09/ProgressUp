@@ -109,7 +109,7 @@ class AdminMessage extends Controller
                 'receiver_id' => 'required|exists:users,id',
                 'chat_id' => 'required|exists:chats,id',
                 'body' => 'nullable|string|max:5000',
-                'attachment' => 'nullable|image',
+                'attachment' => 'nullable|mimes:jpg,png|max:2048',
             ]);
 
             // Fetch the chat details

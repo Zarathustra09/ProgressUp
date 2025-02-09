@@ -41,7 +41,12 @@
                                 <img src="{{ $message->sender->profile_image ? Storage::url($message->sender->profile_image) : 'https://placehold.co/45x45' }}" class="rounded-circle" width="30" height="30" alt="User">
                                 <div class="bg-white p-3 rounded-3 shadow-sm">
                                     <strong>{{ $message->sender->first_name }} {{ $message->sender->last_name }}</strong>
-                                    <p class="mb-0">{{ $message->body }}</p>
+                                    @if($message->body)
+                                        <p class="mb-0">{{ $message->body }}</p>
+                                    @endif
+                                    @if($message->attachment)
+                                        <img src="{{ Storage::url($message->attachment) }}" class="img-fluid mt-2" alt="Attachment">
+                                    @endif
                                 </div>
                             </div>
                             <small class="text-muted mt-1">{{ $message->created_at->diffForHumans() }}</small>
@@ -58,6 +63,10 @@
                     <input type="hidden" name="receiver_id" value="{{ $chat->userOne->id == auth()->id() ? $chat->userTwo->id : $chat->userOne->id }}">
                     <div class="input-group">
                         <input type="text" name="body" class="form-control rounded-pill bg-light border-0" placeholder="Type a message...">
+                        <input type="file" id="attachment" name="attachment" class="d-none">
+                        <button type="button" class="btn btn-secondary rounded-circle ms-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;" onclick="document.getElementById('attachment').click();">
+                            <i class="bx bx-paperclip"></i>
+                        </button>
                         <button class="btn btn-primary rounded-circle ms-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
                             <i class="bx bx-send"></i>
                         </button>
@@ -86,7 +95,8 @@
                                     <img src="${message.sender.profile_image ? '{{ Storage::url('') }}' + message.sender.profile_image : 'https://placehold.co/45x45'}" class="rounded-circle" width="30" height="30" alt="User">
                                     <div class="bg-white p-3 rounded-3 shadow-sm">
                                         <strong>${message.sender.first_name} ${message.sender.last_name}</strong>
-                                        <p class="mb-0">${message.body}</p>
+                                        ${message.body ? `<p class="mb-0">${message.body}</p>` : ''}
+                                        ${message.attachment ? `<img src="{{ Storage::url('') }}${message.attachment}" class="img-fluid mt-2" alt="Attachment">` : ''}
                                     </div>
                                 </div>
                                 <small class="text-muted mt-1">${new Date(message.created_at).toLocaleString()}</small>
@@ -129,6 +139,49 @@
                         console.error('Error:', error);
                         alert('An error occurred while sending the message');
                     });
+            });
+
+            document.getElementById('attachment').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file && !['image/jpeg', 'image/png'].includes(file.type)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid file type',
+                        text: 'Please select a JPG or PNG image.',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                    });
+                    event.target.value = ''; // Clear the input
+                } else {
+                    const form = document.getElementById('messageForm');
+                    const formData = new FormData(form);
+
+                    fetch(form.action, {
+                        method: form.method,
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    })
+                        .then(response => {
+                            if (response.status === 201) {
+                                return response.json();
+                            } else {
+                                throw new Error('Failed to send attachment');
+                            }
+                        })
+                        .then(data => {
+                            fetchMessages(); // Fetch new messages after sending
+                            form.reset(); // Reset the form
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('An error occurred while sending the attachment');
+                        });
+                }
             });
         });
     </script>
