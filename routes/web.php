@@ -114,3 +114,4 @@ Route::get('/reports', [ReportController::class, 'index'])->name('report.index')
 Route::get('/admin/message', [AdminMessage::class, 'index'])->name('admin.message.index');
 Route::get('/admin/message/{id}', [AdminMessage::class, 'show'])->name('admin.message.show');
 Route::post('/admin/message/{id}', [AdminMessage::class, 'store'])->name('admin.message.store');
+Route::get('/admin/message/fetch/{chatId}', [AdminMessage::class, 'fetchMessages'])->name('admin.message.fetch');

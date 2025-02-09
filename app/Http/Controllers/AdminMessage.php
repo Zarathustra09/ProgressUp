@@ -146,4 +146,18 @@ class AdminMessage extends Controller
             return response()->json(['error' => 'Transaction failed'], 500);
         }
     }
+
+    public function fetchMessages($chatId)
+    {
+        try {
+            $chat = Chat::with([
+                'messages.sender:id,first_name,last_name,email,profile_image',
+                'messages.receiver:id,first_name,last_name,email,profile_image'
+            ])->findOrFail($chatId);
+
+            return response()->json($chat->messages, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch messages'], 500);
+        }
+    }
 }

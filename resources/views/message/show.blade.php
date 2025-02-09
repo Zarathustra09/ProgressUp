@@ -33,7 +33,7 @@
             </div>
 
             <!-- Chat Messages -->
-            <div class="messages-container p-4 bg-light">
+            <div id="messagesContainer" class="messages-container p-4 bg-light">
                 @foreach($chat->messages as $message)
                     <div class="d-flex {{ $message->sender_id == auth()->id() ? 'justify-content-end' : 'justify-content-start' }} mb-3">
                         <div class="d-flex flex-column {{ $message->sender_id == auth()->id() ? 'align-items-end' : 'align-items-start' }}">
@@ -52,7 +52,7 @@
 
             <!-- Chat Input -->
             <div class="mt-auto p-3 bg-white border-top">
-                <form action="{{ route('admin.message.store', $chat->id) }}" method="POST" enctype="multipart/form-data">
+                <form id="messageForm" action="{{ route('admin.message.store', $chat->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" name="chat_id" value="{{ $chat->id }}">
                     <input type="hidden" name="receiver_id" value="{{ $chat->userOne->id == auth()->id() ? $chat->userTwo->id : $chat->userOne->id }}">
@@ -66,5 +66,71 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const messagesContainer = document.getElementById('messagesContainer');
+            let lastMessageId = {{ $chat->messages->last()->id ?? 0 }};
+
+            function fetchMessages() {
+                fetch('{{ route('admin.message.fetch', $chat->id) }}')
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(message => {
+                            if (message.id > lastMessageId) {
+                                const messageElement = document.createElement('div');
+                                messageElement.classList.add('d-flex', message.sender_id == {{ auth()->id() }} ? 'justify-content-end' : 'justify-content-start', 'mb-3');
+                                messageElement.innerHTML = `
+                            <div class="d-flex flex-column ${message.sender_id == {{ auth()->id() }} ? 'align-items-end' : 'align-items-start'}">
+                                <div class="d-flex align-items-center gap-2">
+                                    <img src="${message.sender.profile_image ? '{{ Storage::url('') }}' + message.sender.profile_image : 'https://placehold.co/45x45'}" class="rounded-circle" width="30" height="30" alt="User">
+                                    <div class="bg-white p-3 rounded-3 shadow-sm">
+                                        <strong>${message.sender.first_name} ${message.sender.last_name}</strong>
+                                        <p class="mb-0">${message.body}</p>
+                                    </div>
+                                </div>
+                                <small class="text-muted mt-1">${new Date(message.created_at).toLocaleString()}</small>
+                            </div>
+                        `;
+                                messagesContainer.appendChild(messageElement);
+                                lastMessageId = message.id;
+                            }
+                        });
+                    })
+                    .catch(error => console.error('Error fetching messages:', error));
+            }
+
+            setInterval(fetchMessages, 5000); // Poll every 5 seconds
+
+            document.getElementById('messageForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const form = event.target;
+                const formData = new FormData(form);
+
+                fetch(form.action, {
+                    method: form.method,
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                    .then(response => {
+                        if (response.status === 201) {
+                            return response.json();
+                        } else {
+                            throw new Error('Failed to send message');
+                        }
+                    })
+                    .then(data => {
+                        fetchMessages(); // Fetch new messages after sending
+                        form.reset(); // Reset the form
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while sending the message');
+                    });
+            });
+        });
+    </script>
     </body>
 @endsection
