@@ -6,23 +6,46 @@
             <div class="col-12 col-md-6">
                 <div class="card">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0 text-white" >Room Occupancy Report</h5>
+                        <h5 class="mb-0 text-white">Branch Occupancy Report</h5>
                     </div>
                     <div class="card-body">
-                        <canvas id="studentsPerRoomChart" height="300"></canvas>
+                        <canvas id="studentsPerRoomChart" height="250"></canvas>
                     </div>
                 </div>
             </div>
-{{--            <div class="col-12 col-md-6">--}}
-{{--                <div class="card">--}}
-{{--                    <div class="card-header bg-primary text-white">--}}
-{{--                        <h5 class="mb-0 text-white">Another Chart</h5>--}}
-{{--                    </div>--}}
-{{--                    <div class="card-body">--}}
-{{--                        <canvas id="anotherChart" height="300"></canvas>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
+        </div>
+        <div class="container-fluid py-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0 text-white">Branch Attendance Rate Report</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Branch</th>
+                                    <th>Present Rate (%)</th>
+{{--                                    <th>Absent Rate (%)</th>--}}
+                                    <th>Late Rate (%)</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($branchAttendanceRates as $rate)
+                                    <tr>
+                                        <td>{{ $rate['branch'] }}</td>
+                                        <td>{{ number_format($rate['present_rate'], 2) }}%</td>
+{{--                                        <td>{{ number_format($rate['absent_rate'], 2) }}%</td>--}}
+                                        <td>{{ number_format($rate['late_rate'], 2) }}%</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -67,40 +90,6 @@
                                 title: {
                                     display: true,
                                     text: 'Number of Occupants'
-                                }
-                            }
-                        },
-                        plugins: {
-                            title: {
-                                display: false
-                            }
-                        }
-                    }
-                });
-
-                var ctx2 = document.getElementById('anotherChart').getContext('2d');
-                var chart2 = new Chart(ctx2, {
-                    type: 'bar',
-                    data: {
-                        labels: @json($rooms->pluck('name')),
-                        datasets: [
-                            {
-                                label: 'Example Data',
-                                data: @json($rooms->pluck('example_data')),
-                                backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                                borderColor: 'rgba(255, 99, 132, 1)',
-                                borderWidth: 1
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Example Data'
                                 }
                             }
                         },

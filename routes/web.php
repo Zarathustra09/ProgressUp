@@ -108,6 +108,7 @@ Route::get('/attendance/{studentScheduleId}', [AttendanceWebController::class, '
 
 
 Route::get('/reports', [ReportController::class, 'index'])->name('report.index');
+Route::get('/reports/attendance-rate', [ReportController::class, 'attendanceRate'])->name('reports.attendance_rate');
 
 
 

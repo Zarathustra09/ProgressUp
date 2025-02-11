@@ -28,6 +28,8 @@ class DatabaseSeeder extends Seeder
             StaffSeeder::class,
             ParentSeeder::class,
             StudentSeeder::class,
+            StudentScheduleSeeder::class,
+            AttendanceSeeder::class,
         ]);
 
 

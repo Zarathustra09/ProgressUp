@@ -77,7 +77,7 @@
             <span class="menu-header-text">Reports</span>
         </li>
 
-        <li class="menu-item">
+        <li class="menu-item {{ request()->routeIs('report.index*') ? 'active' : '' }}">
             <a href="{{route('report.index')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-bar-chart"></i>
                 <div data-i18n="Patient Records">Reporting</div>
