@@ -110,7 +110,7 @@ Route::get('/attendance/{studentScheduleId}', [AttendanceWebController::class, '
 
 Route::get('/reports', [ReportController::class, 'index'])->name('report.index');
 Route::get('/reports/attendance-rate', [ReportController::class, 'attendanceRate'])->name('reports.attendance_rate');
-
+Route::get('reports/student/{id}/print', [StudentReportController::class, 'print'])->name('reports.student.print');
 
 
 Route::get('/admin/message', [AdminMessage::class, 'index'])->name('admin.message.index');
@@ -119,3 +119,7 @@ Route::post('/admin/message/{id}', [AdminMessage::class, 'store'])->name('admin.
 Route::get('/admin/message/fetch/{chatId}', [AdminMessage::class, 'fetchMessages'])->name('admin.message.fetch');
 
 Route::get('/create/report', [StudentReportController::class, 'create'])->name('report.student.create');
+Route::post('/create/store', [StudentReportController::class, 'store'])->name('reports.student.store');
+Route::get('reports/student/{id}/print', [StudentReportController::class, 'print'])->name('reports.student.print');
+Route::get('reports/student/{id}', [StudentReportController::class, 'show'])->name('reports.student.show');
+Route::get('reports/student', [StudentReportController::class, 'index'])->name('reports.student.index');

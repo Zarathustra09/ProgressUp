@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\StudentReport;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class StudentReportController extends Controller
 {
@@ -34,9 +35,13 @@ class StudentReportController extends Controller
     {
         $request->validate([
             'student_id' => 'required|exists:users,id',
+            'teacher_name' => 'required|string',
+            'grades' => 'required|array',
+            'remarks' => 'required|string',
         ]);
 
         $student = User::with('studentSchedules.room')->findOrFail($request->student_id);
+        $age = \Carbon\Carbon::parse($student->birthdate)->age;
 
         $reportData = [
             'student' => [
@@ -44,7 +49,11 @@ class StudentReportController extends Controller
                 'first_name' => $student->first_name,
                 'last_name' => $student->last_name,
                 'email' => $student->email,
+                'age' => $age,
             ],
+            'teacher_name' => $request->teacher_name,
+            'grades' => $request->grades,
+            'remarks' => $request->remarks,
             'schedules' => $student->studentSchedules->map(function ($schedule) {
                 return [
                     'event_name' => $schedule->event_name,
@@ -56,17 +65,31 @@ class StudentReportController extends Controller
             })->toArray(),
         ];
 
-        $studentReport = StudentReport::create([
+
+
+        StudentReport::create([
             'student_id' => $student->id,
             'report_data' => json_encode($reportData),
         ]);
 
-        return redirect()->route('reports.student.show', $studentReport->id);
+        $pdf = Pdf::loadView('reports.student.print', ['reportData' => $reportData]);
+
+        return $pdf->stream('student_report.pdf');
     }
 
     public function show($id)
     {
         $report = StudentReport::with('student.studentSchedules.room')->findOrFail($id);
         return view('reports.student.show', compact('report'));
+    }
+
+
+
+    public function print($id)
+    {
+        $report = StudentReport::with('student.studentSchedules.room')->findOrFail($id);
+        $reportData = json_decode($report->report_data, true);
+        $pdf = Pdf::loadView('reports.student.print', compact('reportData'));
+        return $pdf->download('student_report.pdf');
     }
 }
