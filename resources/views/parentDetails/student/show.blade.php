@@ -6,7 +6,7 @@
             <div class="d-flex justify-content-between align-items-center">
                 <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Parent /</span> Edit Student</h4>
                 <div>
-                    <a href="" class="btn btn-success">Generate Report</a>
+                    <a href="{{ route('report.student.create', ['student_id' => $student->id]) }}" class="btn btn-success">Generate Report</a>
                     <a href="{{ route('studentSchedules.show', $student->id) }}" class="btn btn-info">Show Schedules</a>
                 </div>
 

@@ -13,6 +13,7 @@ use App\Http\Controllers\RoomStudentController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentMedicalInformationController;
+use App\Http\Controllers\StudentReportController;
 use App\Http\Controllers\StudentScheduleController;
 use App\Http\Controllers\StudentSchoolDetailsController;
 use Illuminate\Support\Facades\Route;
@@ -116,3 +117,5 @@ Route::get('/admin/message', [AdminMessage::class, 'index'])->name('admin.messag
 Route::get('/admin/message/{id}', [AdminMessage::class, 'show'])->name('admin.message.show');
 Route::post('/admin/message/{id}', [AdminMessage::class, 'store'])->name('admin.message.store');
 Route::get('/admin/message/fetch/{chatId}', [AdminMessage::class, 'fetchMessages'])->name('admin.message.fetch');
+
+Route::get('/create/report', [StudentReportController::class, 'create'])->name('report.student.create');
