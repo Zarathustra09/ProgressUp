@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('room_id')->constrained()->onDelete('cascade');
             $table->string('event_name')->nullable();
+            $table->text('description')->nullable();
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
             $table->integer('session')->default(1); // Add this line

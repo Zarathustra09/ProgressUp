@@ -61,7 +61,8 @@ class StudentScheduleController extends Controller
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
             'event_name' => 'required|string|max:255',
-            'session' => 'required|integer|min:1', // Add this line
+            'description' => 'nullable|string|max:255|regex:/^(\b\w+\b[\s\r\n]*){1,50}$/',
+            'session' => 'required|integer|min:1',
         ]);
 
         try {
@@ -85,6 +86,7 @@ class StudentScheduleController extends Controller
             'start_time' => 'required',
             'end_time' => 'required|after:start_time',
             'event_name' => 'required|string|max:255',
+            'description' => 'nullable|string',
             'session' => 'required|integer|min:1',
         ]);
 

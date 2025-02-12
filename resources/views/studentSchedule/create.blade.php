@@ -15,6 +15,11 @@
                         <input type="text" id="event_name" name="event_name" class="form-control" required>
                     </div>
                     <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea id="description" name="description" class="form-control" oninput="limitWords(this, 50)"></textarea>
+                        <small id="wordCount" class="form-text text-muted">0/50 words</small>
+                    </div>
+                    <div class="mb-3">
                         <label for="start_time" class="form-label">Start Time</label>
                         <input type="time" id="start_time" name="start_time" class="form-control" required>
                     </div>
@@ -31,4 +36,14 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function limitWords(textarea, maxWords) {
+            const words = textarea.value.split(/\s+/).filter(word => word.length > 0);
+            if (words.length > maxWords) {
+                textarea.value = words.slice(0, maxWords).join(' ');
+            }
+            document.getElementById('wordCount').innerText = `${words.length}/${maxWords} words`;
+        }
+    </script>
 @endsection

@@ -16,6 +16,7 @@ class StudentSchedule extends Model
         'end_time',
         'event_name',
         'session',
+        'description', // Add this line
     ];
 
     public function student()

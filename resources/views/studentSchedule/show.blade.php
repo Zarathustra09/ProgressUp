@@ -22,6 +22,7 @@
                             <thead class="table-light">
                             <tr>
                                 <th class="text-nowrap">Event Name</th>
+{{--                                <th class="text-nowrap">Description</th>--}}
                                 <th class="text-nowrap">Start Time</th>
                                 <th class="text-nowrap">End Time</th>
                                 <th class="text-nowrap">Duration</th>
@@ -35,6 +36,7 @@
                             @foreach($student->studentSchedules as $schedule)
                                 <tr>
                                     <td>{{ $schedule->event_name }}</td>
+{{--                                    <td>{{ $schedule->description }}</td>--}}
                                     <td>
                                         <span class="badge bg-label-primary">
                                             {{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i A') }}
@@ -98,8 +100,6 @@
             });
         });
 
-
-
         document.querySelectorAll('.edit-button').forEach(button => {
             button.addEventListener('click', function () {
                 const id = this.getAttribute('data-id');
@@ -116,6 +116,10 @@
                                     <div class="row mb-3">
                                         <label for="event_name" class="form-label">Event Name</label>
                                         <input type="text" id="event_name" class="form-control" value="${schedule.event_name}" placeholder="Event Name">
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="description" class="form-label">Description</label>
+                                        <textarea id="description" class="form-control" placeholder="Description">${schedule.description}</textarea>
                                     </div>
                                     <div class="row mb-3">
                                         <label for="start_time" class="form-label">Start Time</label>
@@ -143,6 +147,7 @@
                             focusConfirm: false,
                             preConfirm: () => {
                                 const event_name = Swal.getPopup().querySelector('#event_name').value;
+                                const description = Swal.getPopup().querySelector('#description').value;
                                 const start_time = Swal.getPopup().querySelector('#start_time').value;
                                 const end_time = Swal.getPopup().querySelector('#end_time').value;
                                 const session = Swal.getPopup().querySelector('#session').value;
@@ -152,6 +157,7 @@
                                 }
                                 return {
                                     event_name,
+                                    description,
                                     start_time: moment(start_time, 'HH:mm').format('HH:mm:ss'),
                                     end_time: moment(end_time, 'HH:mm').format('HH:mm:ss'),
                                     session
@@ -166,6 +172,7 @@
                                         _token: '{{ csrf_token() }}',
                                         _method: 'PUT',
                                         event_name: result.value.event_name,
+                                        description: result.value.description,
                                         start_time: result.value.start_time,
                                         end_time: result.value.end_time,
                                         session: result.value.session,
