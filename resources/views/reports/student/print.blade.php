@@ -3,152 +3,127 @@
 <head>
     <style>
         body {
-            font-family: 'Inter', system-ui, sans-serif;
-            max-width: 21cm;
+            font-family: Arial, sans-serif;
+            max-width: 700px;
             margin: 0 auto;
-            padding: 2rem;
-            background: #f5f5f5;
+            padding: 15px;
         }
 
         .container {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
+            border-radius: 8px;
+            padding: 15px;
         }
 
         .header {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 2px solid #f0f0f0;
+            background-color: #F87B5E;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+            margin-bottom: 15px;
         }
 
         .logo {
-            width: 64px;
-            height: 64px;
-            border-radius: 12px;
-            object-fit: cover;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            margin: 0 auto 8px;
         }
 
-        .header-text {
-            flex: 1;
-        }
-
-        .header-text h1 {
-            margin: 0;
-            font-size: 1.5rem;
-            color: #1a1a1a;
-        }
-
-        .header-text h2 {
-            margin: 0.25rem 0 0;
-            font-size: 1rem;
-            color: #666;
-            font-weight: normal;
-        }
+        .header h1 { font-size: 1.3rem; margin: 0; }
+        .header h2 { font-size: 1rem; margin: 5px 0 0; }
 
         .student-info {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            gap: 10px;
+            margin-bottom: 15px;
+            background-color: #FFFBE6;
+            padding: 12px;
+            border-radius: 8px;
         }
 
         .info-field {
-            background: #f8f8f8;
-            padding: 1rem;
-            border-radius: 8px;
+            margin-bottom: 8px;
         }
 
         .info-field label {
             display: block;
-            font-size: 0.875rem;
+            font-size: 0.8rem;
             color: #666;
-            margin-bottom: 0.5rem;
+            margin-bottom: 3px;
         }
 
         .info-field input {
             width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 1rem;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
         }
 
         .grades {
-            margin-bottom: 2rem;
+            background-color: #FFFBE6;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
         }
 
         .grades h3, .remarks h3 {
-            font-size: 1.25rem;
-            margin: 0 0 1rem;
-            color: #1a1a1a;
+            font-size: 1rem;
+            margin: 0 0 8px;
         }
 
         .grade-item {
             display: grid;
             grid-template-columns: 1fr auto;
-            gap: 1rem;
-            padding: 0.75rem;
-            border-bottom: 1px solid #f0f0f0;
+            gap: 8px;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
         }
 
         .grade-input {
-            width: 80px;
+            width: 50px;
             text-align: center;
-            padding: 0.5rem;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 1rem;
+            padding: 3px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
 
         .grade-code {
-            background: #f8f8f8;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-top: 1.5rem;
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 12px;
+            font-size: 0.85rem;
         }
 
         .grade-code h4 {
-            margin: 0 0 1rem;
-            font-size: 1rem;
-            color: #1a1a1a;
+            margin: 0 0 8px;
+            font-size: 0.9rem;
         }
 
         .remarks {
-            background: #f8f8f8;
-            padding: 1.5rem;
+            background-color: #FFFBE6;
+            padding: 12px;
             border-radius: 8px;
+            font-size: 0.9rem;
         }
 
-        .remarks p {
-            margin: 0;
-            line-height: 1.5;
-            color: #333;
-        }
+        .remarks p { margin: 0; }
 
         @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-            .container {
-                box-shadow: none;
-            }
+            body { padding: 0; }
         }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="header">
-        <img src="logo.png" alt="School Logo" class="logo">
-        <div class="header-text">
-            <h1>Student Progress Report</h1>
-            <h2>Teacher A's House of Learning Biñan</h2>
-        </div>
+        <img src="schoollogo.png" alt="School Logo" class="logo">
+        <h1>Student Progress Report</h1>
+        <h2>Teacher A's House of Learning Biñan</h2>
     </div>
 
     <div class="student-info">
