@@ -9,7 +9,7 @@
                         <h5 class="mb-0 text-white">Branch Occupancy Report</h5>
                     </div>
                     <div class="card-body">
-                        <canvas id="studentsPerRoomChart" height="250"></canvas>
+                        <canvas id="studentsPerRoomChart" height="80"></canvas>
                     </div>
                 </div>
             </div>
