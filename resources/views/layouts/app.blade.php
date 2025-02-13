@@ -64,6 +64,56 @@
         .custom-swal-popup {
             z-index: 10000 !important;
         }
+
+         .swal2-input {
+             width: 20rem !important;
+             max-width: 100%;
+             margin: 1rem auto;
+         }
+
+        .swal2-select {
+            width: 20rem !important;
+            max-width: 100%;
+            margin: 1rem auto;
+        }
+        .swal2-popup {
+            padding: 2rem;
+            border-radius: 1rem;
+        }
+
+        .swal2-title {
+            font-size: 1.5rem;
+            color: #344767;
+            margin-bottom: 1.5rem;
+        }
+
+        .grade-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .grade-item span {
+            font-weight: 600;
+            color: #344767;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .grade-item .form-control {
+            margin-bottom: 0.5rem;
+        }
+
+        #add-criterion {
+            background: #eaecef;
+            color: #344767;
+        }
+
+        .custom-swal-container .swal2-html-container {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
     </style>
 
 </head>

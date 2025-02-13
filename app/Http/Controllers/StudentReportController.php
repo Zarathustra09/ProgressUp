@@ -35,12 +35,28 @@ class StudentReportController extends Controller
     {
         $request->validate([
             'student_id' => 'required|exists:users,id',
-            'teacher_name' => 'required|string',
+            'teacher_id' => 'required|exists:users,id',
             'grades' => 'required|array',
             'remarks' => 'required|string',
         ]);
 
+        // Check if at least one criterion is provided
+        $hasCriterion = false;
+        foreach ($request->grades as $scheduleId => $criteria) {
+            foreach ($criteria as $key => $value) {
+                if (strpos($key, 'criterion') !== false && strpos($key, 'Grade') === false && !empty($value)) {
+                    $hasCriterion = true;
+                    break 2;
+                }
+            }
+        }
+
+        if (!$hasCriterion) {
+            return back()->withErrors(['grades' => 'At least one criterion is required.'])->withInput();
+        }
+
         $student = User::with('studentSchedules.room')->findOrFail($request->student_id);
+        $teacher = User::findOrFail($request->teacher_id);
         $age = \Carbon\Carbon::parse($student->birthdate)->age;
 
         $reportData = [
@@ -51,7 +67,7 @@ class StudentReportController extends Controller
                 'email' => $student->email,
                 'age' => $age,
             ],
-            'teacher_name' => $request->teacher_name,
+            'teacher_name' => $teacher->first_name . ' ' . $teacher->last_name,
             'grades' => $request->grades,
             'remarks' => $request->remarks,
             'schedules' => $student->studentSchedules->map(function ($schedule) {
@@ -65,10 +81,9 @@ class StudentReportController extends Controller
             })->toArray(),
         ];
 
-
-
         StudentReport::create([
             'student_id' => $student->id,
+            'teacher_id' => $teacher->id,
             'report_data' => json_encode($reportData),
         ]);
 
