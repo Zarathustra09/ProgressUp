@@ -123,3 +123,4 @@ Route::post('/create/store', [StudentReportController::class, 'store'])->name('r
 Route::get('reports/student/{id}/print', [StudentReportController::class, 'print'])->name('reports.student.print');
 Route::get('reports/student/{id}', [StudentReportController::class, 'show'])->name('reports.student.show');
 Route::get('reports/student', [StudentReportController::class, 'index'])->name('reports.student.index');
+Route::get('reports/student/{id}/view-pdf', [StudentReportController::class, 'viewPdf'])->name('reports.student.viewPdf');
