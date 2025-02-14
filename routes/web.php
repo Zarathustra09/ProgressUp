@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminMessage;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceWebController;
+use App\Http\Controllers\Mobile\MobileReportController;
 use App\Http\Controllers\ParentController;
 use App\Http\Controllers\ParentDetailsController;
 use App\Http\Controllers\ProfileController;

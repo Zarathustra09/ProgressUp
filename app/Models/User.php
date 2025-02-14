@@ -83,4 +83,11 @@ class User extends Authenticatable
     {
         return $this->belongsTo(User::class, 'parent_id');
     }
+
+    public function studentReports()
+    {
+        return $this->hasMany(StudentReport::class, 'student_id', 'id')->where('role_id', 1);
+    }
+
+
 }
