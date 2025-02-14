@@ -188,6 +188,13 @@
 <div class="container">
     <div class="login">
         <h1>Log in</h1>
+        @if ($errors->any())
+            <div style="color: red; margin-bottom: 20px;">
+                @foreach ($errors->all() as $error)
+                    <p>{{ $error }}</p>
+                @endforeach
+            </div>
+        @endif
         <form method="POST" action="{{ route('login') }}">
             @csrf
             <div class="input-group">
