@@ -17,7 +17,11 @@ class ParentMobileController extends Controller
     public function getStudentSchedule($studentId)
     {
         $student = User::findOrFail($studentId);
-        $schedules = $student->studentSchedules;
+        $schedules = $student->studentSchedules()->with('attendances')->get();
+
+        $schedules->each(function ($schedule) {
+            $schedule->remaining_sessions = $schedule->session - $schedule->attendances->count();
+        });
 
         return response()->json($schedules);
     }
