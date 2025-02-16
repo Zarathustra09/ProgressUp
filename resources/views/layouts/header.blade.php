@@ -80,7 +80,14 @@
         <li class="menu-item {{ request()->routeIs('report.index*') ? 'active' : '' }}">
             <a href="{{route('report.index')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-bar-chart"></i>
-                <div data-i18n="Patient Records">Reporting</div>
+                <div data-i18n="Patient Records">Branch</div>
+            </a>
+        </li>
+
+        <li class="menu-item {{ request()->routeIs('reports.student*') ? 'active' : '' }}">
+            <a href="{{route('reports.student.index')}}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-user"></i>
+                <div data-i18n="Patient Records">Student</div>
             </a>
         </li>
     </ul>
