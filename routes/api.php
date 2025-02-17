@@ -5,6 +5,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\Mobile\AuthController;
 use App\Http\Controllers\Mobile\ChatController;
 use App\Http\Controllers\Mobile\MobileAttendanceController;
+use App\Http\Controllers\Mobile\MobileAttendanceReportController;
 use App\Http\Controllers\Mobile\MobileReportController;
 use App\Http\Controllers\Mobile\ParentMobileController;
 use App\Http\Controllers\Mobile\ProfileController;
@@ -40,4 +41,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/students/{studentId}/report', [MobileReportController::class, 'showPdf'])->name('students.report.showPdf');
     Route::get('/students/{reportId}/pdf', [MobileReportController::class, 'renderPdf']);
+
+    Route::get('/attendance-reports/{id}', [MobileAttendanceReportController::class, 'show'])->name('mobile.attendanceReport.show');
 });

@@ -64,6 +64,10 @@
         </div>
     </div>
 
+
+@endsection
+
+@push('scripts')
     <script>
         $(document).ready(function() {
             $('#activities').DataTable({
@@ -88,17 +92,19 @@
                 showCancelButton: true,
                 confirmButtonText: 'Next',
                 cancelButtonText: 'Cancel',
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                inputValidator: (value) => {
-                    if (!value) {
-                        return 'You need to select a schedule!'
-                    }
-                },
+                confirmButtonColor: '#0d6efd',
+                cancelButtonColor: '#dc3545',
+                background: '#ffffff',
+                backdrop: `rgba(0,0,0,0.4)`,
+                width: '400px',
                 customClass: {
-                    container: 'custom-swal-container',
-                    popup: 'custom-swal-popup',
-                    input: 'form-select'
+                    popup: 'modal-content border-0',
+                    header: 'border-bottom pb-3',
+                    title: 'h5 fw-bold',
+                    input: 'form-select mt-2',
+                    confirmButton: 'btn btn-primary px-4',
+                    cancelButton: 'btn btn-danger px-4',
+                    actions: 'd-flex gap-2'
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -108,44 +114,47 @@
                     Swal.fire({
                         title: 'Add Activity Set',
                         html: `
-                    <div id="activity-container">
-                        <div class="activity-item shadow-sm">
-                            <span>Activity</span>
-                            <input type="text" class="form-control" placeholder="Enter activity" required>
-                            <textarea class="form-control mt-2" placeholder="Enter descriptions (one per line)" required></textarea>
-                            <button type="button" class="btn btn-danger btn-sm remove-activity mt-2">Remove</button>
+                        <div id="activity-container" class="overflow-auto px-2" style="max-height: 60vh;">
+                            <div class="activity-item bg-light rounded p-3 mb-3">
+                                <span class="d-block fw-medium mb-2">Activity</span>
+                                <input type="text" class="form-control" placeholder="Enter activity" required>
+                                <textarea class="form-control mt-2" placeholder="Enter descriptions (one per line)" required></textarea>
+                                <button type="button" class="btn btn-danger btn-sm remove-activity mt-2">Remove</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="btn-group mt-4 w-100">
-                        <button type="button" class="btn btn-secondary" id="add-activity">
-                            <i class="fas fa-plus me-2"></i>Add Activity
-                        </button>
-                        <button type="button" class="btn btn-success" id="save-activities">
-                            <i class="fas fa-save me-2"></i>Save
-                        </button>
-                        <button type="button" class="btn btn-danger" id="cancel-activities">
-                            <i class="fas fa-times me-2"></i>Cancel
-                        </button>
-                    </div>
-                `,
+                        <div class="btn-group d-flex gap-2 mt-4">
+                            <button type="button" class="btn btn-secondary flex-fill" id="add-activity">
+                                <i class="fas fa-plus me-2"></i>Add Activity
+                            </button>
+                            <button type="button" class="btn btn-success flex-fill" id="save-activities">
+                                <i class="fas fa-save me-2"></i>Save
+                            </button>
+                            <button type="button" class="btn btn-danger flex-fill" id="cancel-activities">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </button>
+                        </div>
+                    `,
                         showConfirmButton: false,
                         width: '600px',
+                        background: '#ffffff',
+                        backdrop: `rgba(0,0,0,0.4)`,
                         customClass: {
-                            container: 'custom-swal-container',
-                            popup: 'custom-swal-popup'
+                            popup: 'modal-content border-0',
+                            title: 'h5 fw-bold mb-4',
+                            htmlContainer: 'p-3'
                         }
                     });
 
                     document.getElementById('add-activity').addEventListener('click', function () {
                         const activityContainer = document.getElementById('activity-container');
                         const newActivity = document.createElement('div');
-                        newActivity.classList.add('activity-item', 'shadow-sm');
+                        newActivity.classList.add('activity-item', 'bg-light', 'rounded', 'p-3', 'mb-3');
                         newActivity.innerHTML = `
-                    <span>Activity</span>
-                    <input type="text" class="form-control" placeholder="Enter activity" required>
-                    <textarea class="form-control mt-2" placeholder="Enter descriptions (one per line)" required></textarea>
-                    <button type="button" class="btn btn-danger btn-sm remove-activity mt-2">Remove</button>
-                `;
+                        <span class="d-block fw-medium mb-2">Activity</span>
+                        <input type="text" class="form-control" placeholder="Enter activity" required>
+                        <textarea class="form-control mt-2" placeholder="Enter descriptions (one per line)" required></textarea>
+                        <button type="button" class="btn btn-danger btn-sm remove-activity mt-2">Remove</button>
+                    `;
                         activityContainer.appendChild(newActivity);
                     });
 
@@ -169,14 +178,16 @@
                             Swal.fire({
                                 toast: true,
                                 icon: 'warning',
+                                iconColor: '#ffc107',
                                 title: 'Please add at least one activity.',
                                 position: 'top-end',
                                 showConfirmButton: false,
                                 timer: 3000,
                                 timerProgressBar: true,
+                                background: '#ffffff',
                                 customClass: {
-                                    container: 'custom-swal-container',
-                                    popup: 'custom-swal-popup'
+                                    popup: 'shadow border-0',
+                                    title: 'fs-6 fw-medium'
                                 }
                             });
                             return;
@@ -185,23 +196,23 @@
                         const tableBody = document.getElementById('activities-table-body');
                         const activityRow = document.createElement('tr');
                         const activitiesHtml = Object.values(activities).map((activity) => `
-                    <div class="mb-2">
-                        <span class="fw-bold">${activity.key}</span>
-                        ${activity.descriptions.map(desc => `<div>- ${desc}</div>`).join('')}
-                    </div>
-                    <input type="hidden" name="activities[${scheduleId}][${activity.key}]" value="${activity.key}" required>
-                    ${activity.descriptions.map((desc) => `<input type="hidden" name="activities[${scheduleId}][${activity.key}][descriptions][]" value="${desc}" required>`).join('')}
-                `).join('');
+                        <div class="mb-2">
+                            <span class="fw-bold">${activity.key}</span>
+                            ${activity.descriptions.map(desc => `<div>- ${desc}</div>`).join('')}
+                        </div>
+                        <input type="hidden" name="activities[${scheduleId}][${activity.key}]" value="${activity.key}" required>
+                        ${activity.descriptions.map((desc) => `<input type="hidden" name="activities[${scheduleId}][${activity.key}][descriptions][]" value="${desc}" required>`).join('')}
+                    `).join('');
 
                         activityRow.innerHTML = `
-                    <td>${scheduleName}</td>
-                    <td>${activitiesHtml}</td>
-                    <td>
-                        <button type="button" class="btn btn-danger btn-sm remove-activity-set">
-                            <i class="fas fa-trash me-1"></i>Remove
-                        </button>
-                    </td>
-                `;
+                        <td>${scheduleName}</td>
+                        <td>${activitiesHtml}</td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm remove-activity-set">
+                                <i class="fas fa-trash me-1"></i>Remove
+                            </button>
+                        </td>
+                    `;
                         tableBody.appendChild(activityRow);
                         $('#activities').DataTable().row.add(activityRow).draw();
                         Swal.close();
@@ -220,13 +231,19 @@
                     title: 'Are you sure?',
                     text: "This activity set will be removed.",
                     icon: 'warning',
+                    iconColor: '#ffc107',
                     showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#0d6efd',
                     confirmButtonText: 'Yes, remove it!',
+                    background: '#ffffff',
+                    backdrop: `rgba(0,0,0,0.4)`,
                     customClass: {
-                        container: 'custom-swal-container',
-                        popup: 'custom-swal-popup'
+                        popup: 'modal-content border-0',
+                        title: 'h5 fw-bold',
+                        confirmButton: 'btn btn-danger px-4',
+                        cancelButton: 'btn btn-primary px-4',
+                        actions: 'd-flex gap-2'
                     }
                 }).then((result) => {
                     if (result.isConfirmed) {
@@ -236,9 +253,14 @@
                             title: 'Removed!',
                             text: 'The activity set has been removed.',
                             icon: 'success',
+                            iconColor: '#198754',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            background: '#ffffff',
+                            backdrop: `rgba(0,0,0,0.4)`,
                             customClass: {
-                                container: 'custom-swal-container',
-                                popup: 'custom-swal-popup'
+                                popup: 'modal-content border-0',
+                                title: 'h5 fw-bold'
                             }
                         });
                     }
@@ -248,18 +270,23 @@
 
         @if(session('success'))
         Swal.fire({
+            toast: true,
             icon: 'success',
+            iconColor: '#198754',
             title: 'Success!',
             text: '{{ session('success') }}',
+            position: 'top-end',
             showConfirmButton: false,
             timer: 1500,
+            timerProgressBar: true,
+            background: '#ffffff',
             customClass: {
-                container: 'custom-swal-container',
-                popup: 'custom-swal-popup'
+                popup: 'shadow border-0',
+                title: 'fs-6 fw-medium'
             }
         }).then(() => {
             location.reload();
         });
         @endif
     </script>
-@endsection
+@endpush
