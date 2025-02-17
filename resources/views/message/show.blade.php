@@ -63,7 +63,7 @@
                     <input type="hidden" name="receiver_id" value="{{ $chat->userOne->id == auth()->id() ? $chat->userTwo->id : $chat->userOne->id }}">
                     <div class="input-group">
                         <input type="text" name="body" class="form-control rounded-pill bg-light border-0" placeholder="Type a message...">
-                        <input type="file" id="attachment" name="attachment" class="d-none">
+                        <input type="file" id="attachment" name="attachment" class="d-none" accept=".jpg,.jpeg,.png">
                         <button type="button" class="btn btn-secondary rounded-circle ms-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;" onclick="document.getElementById('attachment').click();">
                             <i class="bx bx-paperclip"></i>
                         </button>

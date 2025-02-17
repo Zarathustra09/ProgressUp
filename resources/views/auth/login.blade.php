@@ -227,7 +227,7 @@
             </div>
             <div class="feature-item">
                 <i class="fas fa-mobile-alt"></i>
-                <span>Use on any device</span>
+                <span>Use on any Android device</span>
             </div>
         </div>
         <button class="trial-button">DOWNLOAD APP <i class="fas fa-arrow-right"></i></button>

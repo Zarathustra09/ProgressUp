@@ -6,6 +6,7 @@ use App\Models\StudentReport;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Log;
 
 class StudentReportController extends Controller
 {
@@ -33,26 +34,29 @@ class StudentReportController extends Controller
 
     public function store(Request $request)
     {
+        Log::info('Request Data:', $request->all());
+
         $request->validate([
             'student_id' => 'required|exists:users,id',
             'teacher_id' => 'required|exists:users,id',
-            'grades' => 'required|array',
+            'activities' => 'required|array',
             'remarks' => 'required|string',
+            'overall_grade' => 'required|string|in:' . implode(',', array_keys(config('grade'))),
         ]);
 
-        // Check if at least one criterion is provided
-        $hasCriterion = false;
-        foreach ($request->grades as $scheduleId => $criteria) {
-            foreach ($criteria as $key => $value) {
-                if (strpos($key, 'criterion') !== false && strpos($key, 'Grade') === false && !empty($value)) {
-                    $hasCriterion = true;
+        // Check if at least one activity is provided
+        $hasActivity = false;
+        foreach ($request->activities as $scheduleId => $activitySet) {
+            foreach ($activitySet as $activityKey => $activity) {
+                if (!empty($activity['descriptions'])) {
+                    $hasActivity = true;
                     break 2;
                 }
             }
         }
 
-        if (!$hasCriterion) {
-            return back()->withErrors(['grades' => 'At least one criterion is required.'])->withInput();
+        if (!$hasActivity) {
+            return back()->withErrors(['activities' => 'At least one activity is required.'])->withInput();
         }
 
         $student = User::with('studentSchedules.room')->findOrFail($request->student_id);
@@ -71,8 +75,9 @@ class StudentReportController extends Controller
                 'age' => $age,
             ],
             'teacher_name' => $teacher->first_name . ' ' . $teacher->last_name,
-            'grades' => $request->grades,
+            'activities' => [],
             'remarks' => $request->remarks,
+            'overall_grade' => config('grade')[$request->overall_grade],
             'schedules' => $student->studentSchedules->map(function ($schedule) {
                 return [
                     'event_name' => $schedule->event_name,
@@ -83,6 +88,19 @@ class StudentReportController extends Controller
                 ];
             })->toArray(),
         ];
+
+        foreach ($request->activities as $scheduleId => $activitySet) {
+            foreach ($activitySet as $activityKey => $activity) {
+                if (!empty($activity['descriptions'])) {
+                    $reportData['activities'][$scheduleId][$activityKey] = [
+                        'key' => $activityKey,
+                        'descriptions' => $activity['descriptions'],
+                    ];
+                }
+            }
+        }
+
+        Log::info('Report Data:', $reportData);
 
         StudentReport::create([
             'student_id' => $student->id,
@@ -117,5 +135,13 @@ class StudentReportController extends Controller
         $reportData = json_decode($report->report_data, true);
         $pdf = Pdf::loadView('reports.student.print', compact('reportData'));
         return $pdf->stream('student_report.pdf');
+    }
+
+    public function destroy($id)
+    {
+        $report = StudentReport::findOrFail($id);
+        $report->delete();
+
+        return response()->json(['success' => 'Report deleted successfully.']);
     }
 }

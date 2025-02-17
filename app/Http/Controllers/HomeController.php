@@ -6,6 +6,7 @@ use App\Models\Room;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
@@ -29,13 +30,13 @@ class HomeController extends Controller
         $parentCount = $this->countParents();
         $studentCount = $this->countStudent();
         $roomCount = $this->countRoom();
-
+        $allStudents = $this->getStudentsWithCompletedSchedules();
         // Fetch quotes from the new API
         $quote = $this->fetchQuotes();
         $quoteContent = $quote['content'];
         $quoteAuthor = $quote['author'];
 
-        return view('home', compact('parentCount', 'studentCount', 'roomCount', 'quoteContent', 'quoteAuthor'));
+        return view('home', compact('parentCount', 'studentCount', 'roomCount', 'quoteContent', 'quoteAuthor', 'allStudents'));
     }
 
     public function countParents()
@@ -72,5 +73,22 @@ class HomeController extends Controller
         $quote = $quotes[array_rand($quotes)];
 
         return $quote;
+    }
+
+    public function getStudentsWithCompletedSchedules()
+    {
+        $students = User::where('role_id', 1)->with(['studentSchedules' => function ($query) {
+            $query->withCount(['attendances as attended_sessions' => function ($query) {
+                $query->where('status', 'present');
+            }]);
+        }])->get();
+
+        $result = $students->filter(function ($student) {
+            return $student->studentSchedules->filter(function ($schedule) {
+                return $schedule->attended_sessions >= ($schedule->session / 2);
+            })->isNotEmpty();
+        });
+
+        return $result;
     }
 }
