@@ -127,6 +127,50 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Students in need of Reports</h5>
+                        <table id="students-table" class="display">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Schedule</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($allStudents as $student)
+                                @foreach($student->studentSchedules as $schedule)
+                                    @if($schedule->attended_sessions >= ($schedule->session / 2))
+                                        <tr>
+                                            <td>{{ $student->first_name }} {{ $student->last_name }}</td>
+                                            <td>{{ $schedule->event_name }}</td>
+                                            <td>
+                                                @if($schedule->attended_sessions == $schedule->session)
+                                                    <span class="badge bg-success">Finished</span>
+                                                @else
+                                                    <span class="badge bg-warning">Half</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#students-table').DataTable();
+        });
+    </script>
+@endpush

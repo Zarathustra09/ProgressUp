@@ -22,23 +22,33 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label fw-bold">Grades</label>
+                        <label class="form-label fw-bold">Activities</label>
                         <div class="table-responsive">
-                            <table class="table table-striped table-hover" id="grades">
+                            <table class="table table-striped table-hover" id="activities">
                                 <thead class="table-light">
                                 <tr>
-                                    <th>Schedule</th>
-                                    <th>Criteria</th>
+                                    <th>Activity</th>
+                                    <th>Descriptions</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
-                                <tbody id="grades-table-body">
+                                <tbody id="activities-table-body">
                                 </tbody>
                             </table>
                         </div>
-                        <button type="button" class="btn btn-success" id="add-grade-set">
-                            <i class="fas fa-plus me-2"></i>Add Grade Set
+                        <button type="button" class="btn btn-success" id="add-activity-set">
+                            <i class="fas fa-plus me-2"></i>Add Activity Set
                         </button>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="overall_grade" class="form-label fw-bold">Overall Grade</label>
+                        <select class="form-select" id="overall_grade" name="overall_grade" required>
+                            <option value="">Select Grade</option>
+                            @foreach(config('grade') as $key => $value)
+                                <option value="{{ $key }}">{{ $value }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="mb-4">
@@ -54,11 +64,9 @@
         </div>
     </div>
 
-
-
     <script>
         $(document).ready(function() {
-            $('#grades').DataTable({
+            $('#activities').DataTable({
                 responsive: true,
                 language: {
                     search: "_INPUT_",
@@ -67,9 +75,7 @@
             });
         });
 
-        const gradeOptions = @json(config('grade'));
-
-        document.getElementById('add-grade-set').addEventListener('click', function () {
+        document.getElementById('add-activity-set').addEventListener('click', function () {
             Swal.fire({
                 title: 'Select Student Schedule',
                 input: 'select',
@@ -100,26 +106,24 @@
                     const scheduleName = document.querySelector(`option[value="${scheduleId}"]`).textContent;
 
                     Swal.fire({
-                        title: 'Add Grade Set',
+                        title: 'Add Activity Set',
                         html: `
-                    <div id="criteria-container">
-                        <div class="grade-item shadow-sm">
-                            <span>Criterion 1</span>
-                            <input type="text" class="form-control" placeholder="Enter criterion" required>
-                            <select class="form-select mt-2" required>
-                                ${Object.entries(gradeOptions).map(([key, value]) => `<option value="${key}">${value}</option>`).join('')}
-                            </select>
-                            <button type="button" class="btn btn-danger btn-sm remove-criterion mt-2">Remove</button>
+                    <div id="activity-container">
+                        <div class="activity-item shadow-sm">
+                            <span>Activity</span>
+                            <input type="text" class="form-control" placeholder="Enter activity" required>
+                            <textarea class="form-control mt-2" placeholder="Enter descriptions (one per line)" required></textarea>
+                            <button type="button" class="btn btn-danger btn-sm remove-activity mt-2">Remove</button>
                         </div>
                     </div>
                     <div class="btn-group mt-4 w-100">
-                        <button type="button" class="btn btn-secondary" id="add-criterion">
-                            <i class="fas fa-plus me-2"></i>Add Criterion
+                        <button type="button" class="btn btn-secondary" id="add-activity">
+                            <i class="fas fa-plus me-2"></i>Add Activity
                         </button>
-                        <button type="button" class="btn btn-success" id="save-criteria">
+                        <button type="button" class="btn btn-success" id="save-activities">
                             <i class="fas fa-save me-2"></i>Save
                         </button>
-                        <button type="button" class="btn btn-danger" id="cancel-criteria">
+                        <button type="button" class="btn btn-danger" id="cancel-activities">
                             <i class="fas fa-times me-2"></i>Cancel
                         </button>
                     </div>
@@ -132,43 +136,40 @@
                         }
                     });
 
-                    document.getElementById('add-criterion').addEventListener('click', function () {
-                        const criteriaContainer = document.getElementById('criteria-container');
-                        const criterionIndex = criteriaContainer.children.length + 1;
-                        const newCriterion = document.createElement('div');
-                        newCriterion.classList.add('grade-item', 'shadow-sm');
-                        newCriterion.innerHTML = `
-                    <span>Criterion ${criterionIndex}</span>
-                    <input type="text" class="form-control" placeholder="Enter criterion" required>
-                    <select class="form-select mt-2" required>
-                        ${Object.entries(gradeOptions).map(([key, value]) => `<option value="${key}">${value}</option>`).join('')}
-                    </select>
-                    <button type="button" class="btn btn-danger btn-sm remove-criterion mt-2">Remove</button>
+                    document.getElementById('add-activity').addEventListener('click', function () {
+                        const activityContainer = document.getElementById('activity-container');
+                        const newActivity = document.createElement('div');
+                        newActivity.classList.add('activity-item', 'shadow-sm');
+                        newActivity.innerHTML = `
+                    <span>Activity</span>
+                    <input type="text" class="form-control" placeholder="Enter activity" required>
+                    <textarea class="form-control mt-2" placeholder="Enter descriptions (one per line)" required></textarea>
+                    <button type="button" class="btn btn-danger btn-sm remove-activity mt-2">Remove</button>
                 `;
-                        criteriaContainer.appendChild(newCriterion);
+                        activityContainer.appendChild(newActivity);
                     });
 
-                    document.getElementById('criteria-container').addEventListener('click', function (e) {
-                        if (e.target && e.target.classList.contains('remove-criterion')) {
-                            e.target.closest('.grade-item').remove();
+                    document.getElementById('activity-container').addEventListener('click', function (e) {
+                        if (e.target && e.target.classList.contains('remove-activity')) {
+                            e.target.closest('.activity-item').remove();
                         }
                     });
 
-                    document.getElementById('save-criteria').addEventListener('click', function () {
-                        const criteria = [];
-                        document.querySelectorAll('#criteria-container .grade-item').forEach((item, index) => {
-                            const criterion = item.querySelector('input').value;
-                            const grade = item.querySelector('select').value;
-                            if (criterion && grade) {
-                                criteria.push({ criterion, grade });
+                    document.getElementById('save-activities').addEventListener('click', function () {
+                        const activities = {};
+                        document.querySelectorAll('#activity-container .activity-item').forEach((item, index) => {
+                            const activity = item.querySelector('input').value;
+                            const descriptions = item.querySelector('textarea').value.split('\n').filter(desc => desc.trim() !== '');
+                            if (activity && descriptions.length > 0) {
+                                activities[`activity${index + 1}`] = { key: activity, descriptions: descriptions };
                             }
                         });
 
-                        if (criteria.length === 0) {
+                        if (Object.keys(activities).length === 0) {
                             Swal.fire({
                                 toast: true,
                                 icon: 'warning',
-                                title: 'Please add at least one criterion.',
+                                title: 'Please add at least one activity.',
                                 position: 'top-end',
                                 showConfirmButton: false,
                                 timer: 3000,
@@ -181,32 +182,32 @@
                             return;
                         }
 
-                        const tableBody = document.getElementById('grades-table-body');
-                        const gradeRow = document.createElement('tr');
-                        const criteriaHtml = criteria.map((criterion, index) => `
+                        const tableBody = document.getElementById('activities-table-body');
+                        const activityRow = document.createElement('tr');
+                        const activitiesHtml = Object.values(activities).map((activity) => `
                     <div class="mb-2">
-                        <span class="fw-bold">${criterion.criterion}</span>
-                        <span class="badge bg-primary ms-2">${criterion.grade}</span>
+                        <span class="fw-bold">${activity.key}</span>
+                        ${activity.descriptions.map(desc => `<div>- ${desc}</div>`).join('')}
                     </div>
-                    <input type="hidden" name="grades[${scheduleId}][criterion${index + 1}]" value="${criterion.criterion}" required>
-                    <input type="hidden" name="grades[${scheduleId}][criterion${index + 1}Grade]" value="${criterion.grade}" required>
+                    <input type="hidden" name="activities[${scheduleId}][${activity.key}]" value="${activity.key}" required>
+                    ${activity.descriptions.map((desc) => `<input type="hidden" name="activities[${scheduleId}][${activity.key}][descriptions][]" value="${desc}" required>`).join('')}
                 `).join('');
 
-                        gradeRow.innerHTML = `
+                        activityRow.innerHTML = `
                     <td>${scheduleName}</td>
-                    <td>${criteriaHtml}</td>
+                    <td>${activitiesHtml}</td>
                     <td>
-                        <button type="button" class="btn btn-danger btn-sm remove-grade-set">
+                        <button type="button" class="btn btn-danger btn-sm remove-activity-set">
                             <i class="fas fa-trash me-1"></i>Remove
                         </button>
                     </td>
                 `;
-                        tableBody.appendChild(gradeRow);
-                        $('#grades').DataTable().row.add(gradeRow).draw();
+                        tableBody.appendChild(activityRow);
+                        $('#activities').DataTable().row.add(activityRow).draw();
                         Swal.close();
                     });
 
-                    document.getElementById('cancel-criteria').addEventListener('click', function () {
+                    document.getElementById('cancel-activities').addEventListener('click', function () {
                         Swal.close();
                     });
                 }
@@ -214,10 +215,10 @@
         });
 
         document.addEventListener('click', function (e) {
-            if (e.target && e.target.classList.contains('remove-grade-set')) {
+            if (e.target && e.target.classList.contains('remove-activity-set')) {
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: "This grade set will be removed.",
+                    text: "This activity set will be removed.",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
@@ -230,10 +231,10 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         const row = e.target.closest('tr');
-                        $('#grades').DataTable().row(row).remove().draw();
+                        $('#activities').DataTable().row(row).remove().draw();
                         Swal.fire({
                             title: 'Removed!',
-                            text: 'The grade set has been removed.',
+                            text: 'The activity set has been removed.',
                             icon: 'success',
                             customClass: {
                                 container: 'custom-swal-container',
