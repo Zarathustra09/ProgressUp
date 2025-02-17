@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminMessage;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AttendanceReportController;
 use App\Http\Controllers\AttendanceWebController;
 use App\Http\Controllers\Mobile\MobileReportController;
 use App\Http\Controllers\ParentController;
@@ -104,10 +105,12 @@ Route::resource('student-medical-information', StudentMedicalInformationControll
 Route::resource('student-school-details', StudentSchoolDetailsController::class);
 
 
-
+Route::put('/attendance-reports/{attendanceId}', [AttendanceReportController::class, 'update'])->name('attendance_reports.update');
 Route::get('/attendance/{studentScheduleId}', [AttendanceWebController::class, 'show'])->name('attendance.show');
-
-
+Route::post('/attendance-reports', [AttendanceReportController::class, 'store'])->name('attendance_reports.store');
+Route::get('/attendance-reports/check/{attendanceId}', [AttendanceReportController::class, 'check']);
+Route::get('/attendance-reports/{attendanceId}/edit', [AttendanceReportController::class, 'edit'])->name('attendance_reports.edit');
+Route::get('/attendance-reports/{attendanceId}', [AttendanceReportController::class, 'show'])->name('attendance_reports.show');
 
 Route::get('/reports', [ReportController::class, 'index'])->name('report.index');
 Route::get('/reports/attendance-rate', [ReportController::class, 'attendanceRate'])->name('reports.attendance_rate');
@@ -125,3 +128,5 @@ Route::get('reports/student/{id}/print', [StudentReportController::class, 'print
 Route::get('reports/student/{id}', [StudentReportController::class, 'show'])->name('reports.student.show');
 Route::get('reports/student', [StudentReportController::class, 'index'])->name('reports.student.index');
 Route::get('reports/student/{id}/view-pdf', [StudentReportController::class, 'viewPdf'])->name('reports.student.viewPdf');
+
+
