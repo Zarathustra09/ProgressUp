@@ -14,14 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-         User::create([
-             'first_name' => 'Admin',
-             'last_name' => 'User',
-             'phone_number' => '1234567890',
-             'email' => 'test@example.com',
-             'password' => Hash::make('password'),
-             'role_id' => 2,
-         ]);
+
 
         $this->call([
             RoomsTableSeeder::class,
@@ -30,6 +23,22 @@ class DatabaseSeeder extends Seeder
             StudentSeeder::class,
             StudentScheduleSeeder::class,
             AttendanceSeeder::class,
+        ]);
+
+        User::create([
+            'first_name' => 'Admin',
+            'middle_name' => 'Super',
+            'last_name' => 'User',
+            'role_id' => 2,
+            'phone_number' => '1234567890',
+            'address' => '123 Admin St',
+            'province' => 'Admin Province',
+            'birthdate' => '1980-01-01',
+            'profile_image' => 'path/to/profile_image.jpg',
+            'parent_id' => null,
+            'email' => 'test@example.com',
+            'password' => Hash::make('password'),
+            'branch_id' => 1,
         ]);
 
 

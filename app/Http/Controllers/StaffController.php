@@ -11,7 +11,7 @@ class StaffController extends Controller
 {
     public function index()
     {
-        $users = User::where('role_id', 3)->get();
+        $users = User::whereIn('role_id', [2, 3])->get();
         return view('staff.index', compact('users'));
     }
 
@@ -28,6 +28,7 @@ class StaffController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'branch_id' => 'nullable|exists:rooms,id',
+            'role_id' => 'required|in:2,3',
         ]);
 
         DB::beginTransaction();
@@ -44,7 +45,7 @@ class StaffController extends Controller
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
                 'branch_id' => $request->branch_id,
-                'role_id' => 3,
+                'role_id' => $request->role_id,
             ]);
 
             if ($request->branch_id) {
@@ -63,11 +64,6 @@ class StaffController extends Controller
         }
     }
 
-    public function show(User $user)
-    {
-        return response()->json($user);
-    }
-
     public function update(Request $request, User $user)
     {
         $request->validate([
@@ -80,6 +76,7 @@ class StaffController extends Controller
             'birthdate' => 'nullable|date',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'branch_id' => 'nullable|exists:rooms,id',
+            'role_id' => 'required|in:2,3',
         ]);
 
         DB::beginTransaction();
@@ -102,6 +99,13 @@ class StaffController extends Controller
             return response()->json(['error' => 'Failed to update staff: ' . $e->getMessage()], 500);
         }
     }
+
+
+    public function show(User $user)
+    {
+        return response()->json($user);
+    }
+
 
     public function destroy(User $user)
     {

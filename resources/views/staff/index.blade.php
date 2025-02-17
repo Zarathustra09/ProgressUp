@@ -18,6 +18,7 @@
                     <th>Email</th>
                     <th>Phone Number</th>
                     <th>Branch</th>
+                    <th>Role</th> <!-- Added Role column header -->
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -30,10 +31,8 @@
                         <td>{{ $user->email }}</td>
                         <td>{{ $user->phone_number }}</td>
                         <td>{{ $user->branch->name }}</td>
+                        <td>{{ $user->role_id == 2 ? 'Admin' : 'Staff' }}</td> <!-- Display role based on role_id -->
                         <td>
-{{--                            <a href="javascript:void(0)" onclick="viewStaff({{ $user->id }})" class="text-info">--}}
-{{--                                <i class="bx bx-show"></i>--}}
-{{--                            </a>--}}
                             <a href="javascript:void(0)" onclick="editStaff({{ $user->id }})" class="text-warning me-2">
                                 <i class="bx bx-edit"></i>
                             </a>
@@ -56,6 +55,7 @@
         });
 
         // Create Staff Function
+        // Create Staff Function
         function createStaff() {
             $.ajax({
                 url: '{{ route('branch.list') }}',
@@ -69,67 +69,74 @@
                     Swal.fire({
                         title: '<h4 class="fw-bold text-primary">Create Staff</h4>',
                         html: `
-                        <div class="container-fluid">
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="first_name" class="form-label">First Name</label>
-                                    <input type="text" id="first_name" class="form-control" placeholder="First Name">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="middle_name" class="form-label">Middle Name</label>
-                                    <input type="text" id="middle_name" class="form-control" placeholder="Middle Name">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="last_name" class="form-label">Last Name</label>
-                                    <input type="text" id="last_name" class="form-control" placeholder="Last Name">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" id="email" class="form-control" placeholder="Email">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="phone_number" class="form-label">Phone Number</label>
-                                    <input type="text" id="phone_number" class="form-control" placeholder="Phone Number">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="address" class="form-label">Address</label>
-                                    <input type="text" id="address" class="form-control" placeholder="Address">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="province" class="form-label">Province</label>
-                                    <input type="text" id="province" class="form-control" placeholder="Province">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="birthdate" class="form-label">Birthdate</label>
-                                    <input type="date" id="birthdate" class="form-control" placeholder="Birthdate">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="password" class="form-label">Password</label>
-                                    <input type="password" id="password" class="form-control" placeholder="Password">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="password_confirmation" class="form-label">Confirm Password</label>
-                                    <input type="password" id="password_confirmation" class="form-control" placeholder="Confirm Password">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <label for="branch_id" class="form-label">Branch</label>
-                                    <select id="branch_id" class="form-control">
-                                        ${branchOptions}
-                                    </select>
-                                </div>
-                            </div>
+                <div class="container-fluid">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="first_name" class="form-label">First Name</label>
+                            <input type="text" id="first_name" class="form-control" placeholder="First Name">
                         </div>
-                    `,
+                        <div class="col-md-6">
+                            <label for="middle_name" class="form-label">Middle Name</label>
+                            <input type="text" id="middle_name" class="form-control" placeholder="Middle Name">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="last_name" class="form-label">Last Name</label>
+                            <input type="text" id="last_name" class="form-control" placeholder="Last Name">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" class="form-control" placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="phone_number" class="form-label">Phone Number</label>
+                            <input type="text" id="phone_number" class="form-control" placeholder="Phone Number">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" id="address" class="form-control" placeholder="Address">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="province" class="form-label">Province</label>
+                            <input type="text" id="province" class="form-control" placeholder="Province">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="birthdate" class="form-label">Birthdate</label>
+                            <input type="date" id="birthdate" class="form-control" placeholder="Birthdate">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" id="password" class="form-control" placeholder="Password">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="password_confirmation" class="form-label">Confirm Password</label>
+                            <input type="password" id="password_confirmation" class="form-control" placeholder="Confirm Password">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="role_id" class="form-label">Role</label>
+                            <select id="role_id" class="form-control">
+                                <option value="2">Admin</option>
+                                <option value="3">Staff</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="branch_id" class="form-label">Branch</label>
+                            <select id="branch_id" class="form-control">
+                                ${branchOptions}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                `,
                         customClass: {
                             popup: 'rounded shadow-lg p-4',
                             title: 'mb-3 text-center text-primary',
@@ -151,12 +158,13 @@
                             const birthdate = Swal.getPopup().querySelector('#birthdate').value;
                             const password = Swal.getPopup().querySelector('#password').value;
                             const password_confirmation = Swal.getPopup().querySelector('#password_confirmation').value;
+                            const role_id = Swal.getPopup().querySelector('#role_id').value;
                             const branch_id = Swal.getPopup().querySelector('#branch_id').value;
 
                             if (!first_name || !last_name || !email || !phone_number || !password || !password_confirmation) {
                                 Swal.showValidationMessage('Please fill out all required fields.');
                             }
-                            return { first_name, middle_name, last_name, email, phone_number, address, province, birthdate, password, password_confirmation, branch_id };
+                            return { first_name, middle_name, last_name, email, phone_number, address, province, birthdate, password, password_confirmation, role_id, branch_id };
                         }
                     }).then((result) => {
                         if (result.isConfirmed) {
@@ -226,34 +234,43 @@
                             Swal.fire({
                                 title: '<h4 class="fw-bold text-primary">Edit Staff</h4>',
                                 html: `
-                            <div class="container-fluid">
-                                <div class="row mb-3">
-                                    <label for="first_name" class="form-label">First Name</label>
-                                    <input type="text" id="first_name" class="form-control" value="${user.first_name}" placeholder="First Name">
+                        <div class="container-fluid">
+                            <div class="row mb-3">
+                                <label for="first_name" class="form-label">First Name</label>
+                                <input type="text" id="first_name" class="form-control" value="${user.first_name}" placeholder="First Name">
+                            </div>
+                            <div class="row mb-3">
+                                <label for="middle_name" class="form-label">Middle Name</label>
+                                <input type="text" id="middle_name" class="form-control" value="${user.middle_name}" placeholder="Middle Name">
+                            </div>
+                            <div class="row mb-3">
+                                <label for="last_name" class="form-label">Last Name</label>
+                                <input type="text" id="last_name" class="form-control" value="${user.last_name}" placeholder="Last Name">
+                            </div>
+                            <div class="row mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" id="email" class="form-control" value="${user.email}" placeholder="Email">
+                            </div>
+                            <div class="row mb-3">
+                                <label for="phone_number" class="form-label">Phone Number</label>
+                                <input type="text" id="phone_number" class="form-control" value="${user.phone_number}" placeholder="Phone Number">
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="role_id" class="form-label">Role</label>
+                                    <select id="role_id" class="form-control">
+                                        <option value="2" ${user.role_id == 2 ? 'selected' : ''}>Admin</option>
+                                        <option value="3" ${user.role_id == 3 ? 'selected' : ''}>Staff</option>
+                                    </select>
                                 </div>
-                                <div class="row mb-3">
-                                    <label for="middle_name" class="form-label">Middle Name</label>
-                                    <input type="text" id="middle_name" class="form-control" value="${user.middle_name}" placeholder="Middle Name">
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="last_name" class="form-label">Last Name</label>
-                                    <input type="text" id="last_name" class="form-control" value="${user.last_name}" placeholder="Last Name">
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" id="email" class="form-control" value="${user.email}" placeholder="Email">
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="phone_number" class="form-label">Phone Number</label>
-                                    <input type="text" id="phone_number" class="form-control" value="${user.phone_number}" placeholder="Phone Number">
-                                </div>
-                                <div class="row mb-3">
+                                <div class="col-md-6">
                                     <label for="branch_id" class="form-label">Branch</label>
                                     <select id="branch_id" class="form-control">
                                         ${branchOptions}
                                     </select>
                                 </div>
                             </div>
+                        </div>
                         `,
                                 customClass: {
                                     popup: 'rounded shadow-lg p-4',
@@ -271,11 +288,12 @@
                                     const last_name = Swal.getPopup().querySelector('#last_name').value;
                                     const email = Swal.getPopup().querySelector('#email').value;
                                     const phone_number = Swal.getPopup().querySelector('#phone_number').value;
+                                    const role_id = Swal.getPopup().querySelector('#role_id').value;
                                     const branch_id = Swal.getPopup().querySelector('#branch_id').value;
                                     if (!first_name || !last_name || !email || !phone_number) {
                                         Swal.showValidationMessage('Please fill out all fields.');
                                     }
-                                    return { first_name, middle_name, last_name, email, phone_number, branch_id };
+                                    return { first_name, middle_name, last_name, email, phone_number, role_id, branch_id };
                                 }
                             }).then((result) => {
                                 if (result.isConfirmed) {
