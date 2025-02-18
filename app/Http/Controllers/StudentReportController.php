@@ -6,6 +6,7 @@ use App\Models\StudentReport;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class StudentReportController extends Controller
@@ -16,8 +17,21 @@ class StudentReportController extends Controller
         return view('reports.student.index', compact('users'));
     }
 
+    public function show($id)
+    {
+        $reports = StudentReport::with('student.studentSchedules.room')->where('student_id', $id)->get();
+        return view('reports.student.show', compact('reports'));
+    }
+
+    public function showSingle($id)
+    {
+        $reports = StudentReport::with('student.studentSchedules.room')->where('id', $id)->get();
+        return response()->json($reports);
+    }
+
     public function create(Request $request)
     {
+        Log::info($request->query('student_id'));
         $studentId = $request->query('student_id');
         $student = User::findOrFail($studentId);
 
@@ -26,126 +40,94 @@ class StudentReportController extends Controller
             ->where('role_id', 3)
             ->get();
 
+        Log::info($teachers);
         // Get programs from the student's schedules
-        $programs = $student->studentSchedules->pluck('event_name')->unique();
+        $programs = $student->studentSchedules->pluck('event_name', 'id')->unique();
 
         return view('reports.student.create', compact('studentId', 'teachers', 'programs', 'student'));
     }
 
     public function store(Request $request)
     {
-        Log::info('Request Data:', $request->all());
-
         $request->validate([
             'student_id' => 'required|exists:users,id',
             'teacher_id' => 'required|exists:users,id',
-            'activities' => 'required|array',
-            'remarks' => 'required|string',
-            'overall_grade' => 'required|string|in:' . implode(',', array_keys(config('grade'))),
-            'schedule_id' => 'required|exists:student_schedules,id', // Add validation for schedule_id
+            'schedule_id' => 'required|exists:student_schedules,id',
+            'date' => 'required|date',
+            'text' => 'required|string',
+            'attachment' => 'nullable|file',
         ]);
 
-        // Check if at least one activity is provided
-        $hasActivity = false;
-        foreach ($request->activities as $scheduleId => $activitySet) {
-            foreach ($activitySet as $activityKey => $activity) {
-                if (!empty($activity['descriptions'])) {
-                    $hasActivity = true;
-                    break 2;
-                }
+        DB::beginTransaction();
+
+        try {
+            $data = $request->all();
+
+            if ($request->hasFile('attachment')) {
+                $data['attachment'] = $request->file('attachment')->store('attachments', 'public');
             }
+
+            $report = StudentReport::create($data);
+
+            DB::commit();
+
+            return redirect()->route('reports.student.show', ['id' => $report->student_id])
+                ->with('success', 'Report created successfully.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error creating report: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to create report.'], 500);
         }
+    }
 
-        if (!$hasActivity) {
-            return back()->withErrors(['activities' => 'At least one activity is required.'])->withInput();
-        }
-
-        $student = User::with('studentSchedules.room')->findOrFail($request->student_id);
-        $teacher = User::findOrFail($request->teacher_id);
-
-        $birthdate = $student->birthdate;
-        $age = $birthdate->diffInYears(now());
-
-        // Filter the schedules to include only the selected schedule
-        $selectedSchedule = $student->studentSchedules->where('id', $request->schedule_id)->first();
-
-        $reportData = [
-            'student' => [
-                'id' => $student->id,
-                'first_name' => $student->first_name,
-                'last_name' => $student->last_name,
-                'email' => $student->email,
-                'birthdate' => $birthdate->format('Y-m-d'),
-                'age' => $age,
-            ],
-            'teacher_name' => $teacher->first_name . ' ' . $teacher->last_name,
-            'activities' => [],
-            'remarks' => $request->remarks,
-            'overall_grade' => config('grade')[$request->overall_grade],
-            'schedules' => [
-                [
-                    'id' => $selectedSchedule->id,
-                    'event_name' => $selectedSchedule->event_name,
-                    'description' => $selectedSchedule->description,
-                    'session' => $selectedSchedule->session,
-                ]
-            ],
-        ];
-
-        foreach ($request->activities as $scheduleId => $activitySet) {
-            foreach ($activitySet as $activityKey => $activity) {
-                if (!empty($activity['descriptions'])) {
-                    $reportData['activities'][$scheduleId][$activityKey] = [
-                        'key' => $activityKey,
-                        'descriptions' => $activity['descriptions'],
-                    ];
-                }
-            }
-        }
-
-        Log::info('Report Data:', $reportData);
-
-        StudentReport::create([
-            'student_id' => $student->id,
-            'teacher_id' => $teacher->id,
-            'schedule_id' => $request->schedule_id, // Add this line
-            'report_data' => json_encode($reportData),
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'student_id' => 'required|exists:users,id',
+            'teacher_id' => 'required|exists:users,id',
+            'program' => 'required|string',
+            'date' => 'required|date',
+            'text' => 'required|string',
+            'attachment' => 'nullable|file',
         ]);
 
-        $pdf = Pdf::loadView('reports.student.print', ['reportData' => $reportData]);
+        DB::beginTransaction();
 
-        return $pdf->stream('student_report.pdf');
-    }
+        try {
+            $data = $request->all();
+            $report = StudentReport::findOrFail($id);
 
-    public function show($id)
-    {
-        $reports = StudentReport::with('student.studentSchedules.room')->where('student_id', $id)->get();
-        return view('reports.student.show', compact('reports'));
-    }
+            if ($request->hasFile('attachment')) {
+                $data['attachment'] = $request->file('attachment')->store('attachments', 'public');
+            }
 
+            $report->update($data);
 
+            DB::commit();
 
-    public function print($id)
-    {
-        $report = StudentReport::with('student.studentSchedules.room')->findOrFail($id);
-        $reportData = json_decode($report->report_data, true);
-        $pdf = Pdf::loadView('reports.student.print', compact('reportData'));
-        return $pdf->download('student_report.pdf');
-    }
-
-    public function viewPdf($id)
-    {
-        $report = StudentReport::with('student.studentSchedules.room')->findOrFail($id);
-        $reportData = json_decode($report->report_data, true);
-        $pdf = Pdf::loadView('reports.student.print', compact('reportData'));
-        return $pdf->stream('student_report.pdf');
+            return response()->json(['success' => 'Report updated successfully.']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error updating report: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to update report.'], 500);
+        }
     }
 
     public function destroy($id)
     {
-        $report = StudentReport::findOrFail($id);
-        $report->delete();
+        DB::beginTransaction();
 
-        return response()->json(['success' => 'Report deleted successfully.']);
+        try {
+            $report = StudentReport::findOrFail($id);
+            $report->delete();
+
+            DB::commit();
+
+            return response()->json(['success' => 'Report deleted successfully.']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error deleting report: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to delete report.'], 500);
+        }
     }
 }

@@ -19,6 +19,11 @@ class StudentSchedule extends Model
         'description', // Add this line
     ];
 
+    protected $casts = [
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
+    ];
+
     public function student()
     {
         return $this->belongsTo(User::class, 'student_id')->where('role_id', 1);

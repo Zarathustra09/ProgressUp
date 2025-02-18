@@ -123,9 +123,14 @@ Route::post('/admin/message/{id}', [AdminMessage::class, 'store'])->name('admin.
 Route::get('/admin/message/fetch/{chatId}', [AdminMessage::class, 'fetchMessages'])->name('admin.message.fetch');
 
 Route::get('/create/report', [StudentReportController::class, 'create'])->name('report.student.create');
+Route::get('/reports/check/{schedule_id}', [StudentReportController::class, 'check'])->name('report.student.check');
 Route::post('/create/store', [StudentReportController::class, 'store'])->name('reports.student.store');
-Route::get('reports/student/{id}/print', [StudentReportController::class, 'print'])->name('reports.student.print');
-Route::get('reports/student/{id}', [StudentReportController::class, 'show'])->name('reports.student.show');
-Route::get('reports/student', [StudentReportController::class, 'index'])->name('reports.student.index');
-Route::get('reports/student/{id}/view-pdf', [StudentReportController::class, 'viewPdf'])->name('reports.student.viewPdf');
 Route::delete('reports/student/{id}', [StudentReportController::class, 'destroy'])->name('reports.student.destroy');
+Route::get('reports/student/{id}', [StudentReportController::class, 'show'])->name('reports.student.show');
+Route::get('reports/student/single/{id}', [StudentReportController::class, 'showSingle'])->name('reports.student.showSingle');
+Route::get('reports/student', [StudentReportController::class, 'index'])->name('reports.student.index');
+
+
+//Route::get('reports/student/{id}/view-pdf', [StudentReportController::class, 'viewPdf'])->name('reports.student.viewPdf');
+//Route::get('reports/student/{id}/print', [StudentReportController::class, 'print'])->name('reports.student.print');
+

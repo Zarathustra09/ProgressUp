@@ -2,292 +2,48 @@
 
 @section('content')
     <div class="container">
-        <div class="card shadow-lg border-0 my-4">
-            <div class="card-header bg-primary text-white">
-                <h1 class="h3 mb-0 text-white">Create Student Report</h1>
+        <h1>Create Student Report</h1>
+        <form id="create-report-form" method="POST" action="{{ route('reports.student.store') }}" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" name="student_id" value="{{ $studentId }}">
+            <div class="mb-4">
+                <label for="teacher_id" class="form-label">Teacher</label>
+                <select name="teacher_id" id="teacher_id" class="form-control" required>
+                    @foreach($teachers as $teacher)
+                        <option value="{{ $teacher->id }}">{{ $teacher->first_name }} {{ $teacher->last_name }}</option>
+                    @endforeach
+                </select>
             </div>
-            <div class="card-body">
-                <form action="{{ route('reports.student.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="student_id" value="{{ $studentId }}">
-                    <input type="hidden" name="schedule_id" id="schedule_id">
-                    <div class="mb-4">
-                        <label for="teacher_id" class="form-label fw-bold">Teacher's Name</label>
-                        <select class="form-select" id="teacher_id" name="teacher_id" required>
-                            <option value="">Select Teacher</option>
-                            @foreach($teachers as $teacher)
-                                <option value="{{ $teacher->id }}">{{ $teacher->first_name }} {{ $teacher->last_name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label fw-bold">Activities</label>
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover" id="activities">
-                                <thead class="table-light">
-                                <tr>
-                                    <th>Activity</th>
-                                    <th>Descriptions</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody id="activities-table-body">
-                                </tbody>
-                            </table>
-                        </div>
-                        <button type="button" class="btn btn-success" id="add-activity-set">
-                            <i class="fas fa-plus me-2"></i>Add Activity Set
-                        </button>
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="overall_grade" class="form-label fw-bold">Overall Grade</label>
-                        <select class="form-select" id="overall_grade" name="overall_grade" required>
-                            <option value="">Select Grade</option>
-                            @foreach(config('grade') as $key => $value)
-                                <option value="{{ $key }}">{{ $value }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="remarks" class="form-label fw-bold">Remarks</label>
-                        <textarea class="form-control" id="remarks" name="remarks" rows="5" required></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-file-export me-2"></i>Generate Report
-                    </button>
-                </form>
+            <div class="mb-4">
+                <label for="schedule_id" class="form-label">Program</label>
+                <select name="schedule_id" id="schedule_id" class="form-control" required>
+                    @foreach($programs as $id => $program)
+                        <option value="{{ $id }}">{{ $program }}</option>
+                    @endforeach
+                </select>
             </div>
-        </div>
+            <div class="mb-4">
+                <label for="date" class="form-label">Date</label>
+                <input type="date" name="date" id="date" class="form-control" required>
+            </div>
+            <div class="mb-4">
+                <label for="text" class="form-label">Report Details</label>
+                <textarea name="text" id="text" class="form-control" rows="4" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="attachment" class="form-label">Attachment</label>
+                <input type="file" name="attachment" id="attachment" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Create Report</button>
+        </form>
     </div>
-
-
 @endsection
 
 @push('scripts')
+    <style>
+        /* Add your custom styles here */
+    </style>
     <script>
-        $(document).ready(function() {
-            $('#activities').DataTable({
-                responsive: true,
-                language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Search records..."
-                }
-            });
-        });
-
-        document.getElementById('add-activity-set').addEventListener('click', function () {
-            Swal.fire({
-                title: 'Select Student Schedule',
-                input: 'select',
-                inputOptions: {
-                    @foreach($student->studentSchedules as $schedule)
-                    '{{ $schedule->id }}': '{{ $schedule->event_name }} ({{ \Carbon\Carbon::parse($schedule->start_time)->format('h:i a') }} - {{ \Carbon\Carbon::parse($schedule->end_time)->format('h:i a') }})',
-                    @endforeach
-                },
-                inputPlaceholder: 'Select a schedule',
-                showCancelButton: true,
-                confirmButtonText: 'Next',
-                cancelButtonText: 'Cancel',
-                confirmButtonColor: '#0d6efd',
-                cancelButtonColor: '#dc3545',
-                background: '#ffffff',
-                backdrop: `rgba(0,0,0,0.4)`,
-                width: '400px',
-                customClass: {
-                    popup: 'modal-content border-0',
-                    header: 'border-bottom pb-3',
-                    title: 'h5 fw-bold',
-                    input: 'form-select mt-2',
-                    confirmButton: 'btn btn-primary px-4',
-                    cancelButton: 'btn btn-danger px-4',
-                    actions: 'd-flex gap-2'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const scheduleId = result.value;
-                    document.getElementById('schedule_id').value = scheduleId; // Set the hidden input value
-                    const scheduleName = document.querySelector(`option[value="${scheduleId}"]`).textContent;
-
-                    Swal.fire({
-                        title: 'Add Activity Set',
-                        html: `
-                <div id="activity-container" class="overflow-auto px-2" style="max-height: 60vh;">
-                    <div class="activity-item bg-light rounded p-3 mb-3">
-                        <span class="d-block fw-medium mb-2">Activity</span>
-                        <input type="text" class="form-control" placeholder="Enter activity" required>
-                        <textarea class="form-control mt-2" placeholder="Enter descriptions (one per line)" required></textarea>
-                        <button type="button" class="btn btn-danger btn-sm remove-activity mt-2">Remove</button>
-                    </div>
-                </div>
-                <div class="btn-group d-flex gap-2 mt-4">
-                    <button type="button" class="btn btn-secondary flex-fill" id="add-activity">
-                        <i class="fas fa-plus me-2"></i>Add Activity
-                    </button>
-                    <button type="button" class="btn btn-success flex-fill" id="save-activities">
-                        <i class="fas fa-save me-2"></i>Save
-                    </button>
-                    <button type="button" class="btn btn-danger flex-fill" id="cancel-activities">
-                        <i class="fas fa-times me-2"></i>Cancel
-                    </button>
-                </div>
-            `,
-                        showConfirmButton: false,
-                        width: '600px',
-                        background: '#ffffff',
-                        backdrop: `rgba(0,0,0,0.4)`,
-                        customClass: {
-                            popup: 'modal-content border-0',
-                            title: 'h5 fw-bold mb-4',
-                            htmlContainer: 'p-3'
-                        }
-                    });
-
-                    document.getElementById('add-activity').addEventListener('click', function () {
-                        const activityContainer = document.getElementById('activity-container');
-                        const newActivity = document.createElement('div');
-                        newActivity.classList.add('activity-item', 'bg-light', 'rounded', 'p-3', 'mb-3');
-                        newActivity.innerHTML = `
-                <span class="d-block fw-medium mb-2">Activity</span>
-                <input type="text" class="form-control" placeholder="Enter activity" required>
-                <textarea class="form-control mt-2" placeholder="Enter descriptions (one per line)" required></textarea>
-                <button type="button" class="btn btn-danger btn-sm remove-activity mt-2">Remove</button>
-            `;
-                        activityContainer.appendChild(newActivity);
-                    });
-
-                    document.getElementById('activity-container').addEventListener('click', function (e) {
-                        if (e.target && e.target.classList.contains('remove-activity')) {
-                            e.target.closest('.activity-item').remove();
-                        }
-                    });
-
-                    document.getElementById('save-activities').addEventListener('click', function () {
-                        const activities = {};
-                        document.querySelectorAll('#activity-container .activity-item').forEach((item, index) => {
-                            const activity = item.querySelector('input').value;
-                            const descriptions = item.querySelector('textarea').value.split('\n').filter(desc => desc.trim() !== '');
-                            if (activity && descriptions.length > 0) {
-                                activities[`activity${index + 1}`] = { key: activity, descriptions: descriptions };
-                            }
-                        });
-
-                        if (Object.keys(activities).length === 0) {
-                            Swal.fire({
-                                toast: true,
-                                icon: 'warning',
-                                iconColor: '#ffc107',
-                                title: 'Please add at least one activity.',
-                                position: 'top-end',
-                                showConfirmButton: false,
-                                timer: 3000,
-                                timerProgressBar: true,
-                                background: '#ffffff',
-                                customClass: {
-                                    popup: 'shadow border-0',
-                                    title: 'fs-6 fw-medium'
-                                }
-                            });
-                            return;
-                        }
-
-                        const tableBody = document.getElementById('activities-table-body');
-                        const activityRow = document.createElement('tr');
-                        const activitiesHtml = Object.values(activities).map((activity) => `
-                <div class="mb-2">
-                    <span class="fw-bold">${activity.key}</span>
-                    ${activity.descriptions.map(desc => `<div>- ${desc}</div>`).join('')}
-                </div>
-                <input type="hidden" name="activities[${scheduleId}][${activity.key}]" value="${activity.key}" required>
-                ${activity.descriptions.map((desc) => `<input type="hidden" name="activities[${scheduleId}][${activity.key}][descriptions][]" value="${desc}" required>`).join('')}
-            `).join('');
-
-                        activityRow.innerHTML = `
-                <td>${scheduleName}</td>
-                <td>${activitiesHtml}</td>
-                <td>
-                    <button type="button" class="btn btn-danger btn-sm remove-activity-set">
-                        <i class="fas fa-trash me-1"></i>Remove
-                    </button>
-                </td>
-            `;
-                        tableBody.appendChild(activityRow);
-                        $('#activities').DataTable().row.add(activityRow).draw();
-                        Swal.close();
-                    });
-
-                    document.getElementById('cancel-activities').addEventListener('click', function () {
-                        Swal.close();
-                    });
-                }
-            });
-        });
-
-        document.addEventListener('click', function (e) {
-            if (e.target && e.target.classList.contains('remove-activity-set')) {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "This activity set will be removed.",
-                    icon: 'warning',
-                    iconColor: '#ffc107',
-                    showCancelButton: true,
-                    confirmButtonColor: '#dc3545',
-                    cancelButtonColor: '#0d6efd',
-                    confirmButtonText: 'Yes, remove it!',
-                    background: '#ffffff',
-                    backdrop: `rgba(0,0,0,0.4)`,
-                    customClass: {
-                        popup: 'modal-content border-0',
-                        title: 'h5 fw-bold',
-                        confirmButton: 'btn btn-danger px-4',
-                        cancelButton: 'btn btn-primary px-4',
-                        actions: 'd-flex gap-2'
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        const row = e.target.closest('tr');
-                        $('#activities').DataTable().row(row).remove().draw();
-                        Swal.fire({
-                            title: 'Removed!',
-                            text: 'The activity set has been removed.',
-                            icon: 'success',
-                            iconColor: '#198754',
-                            showConfirmButton: false,
-                            timer: 1500,
-                            background: '#ffffff',
-                            backdrop: `rgba(0,0,0,0.4)`,
-                            customClass: {
-                                popup: 'modal-content border-0',
-                                title: 'h5 fw-bold'
-                            }
-                        });
-                    }
-                });
-            }
-        });
-
-        @if(session('success'))
-        Swal.fire({
-            toast: true,
-            icon: 'success',
-            iconColor: '#198754',
-            title: 'Success!',
-            text: '{{ session('success') }}',
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 1500,
-            timerProgressBar: true,
-            background: '#ffffff',
-            customClass: {
-                popup: 'shadow border-0',
-                title: 'fs-6 fw-medium'
-            }
-        }).then(() => {
-            location.reload();
-        });
-        @endif
+        // Add your custom scripts here
     </script>
 @endpush

@@ -11,16 +11,22 @@ class StudentReport extends Model
 
     protected $fillable = [
         'student_id',
-        'schedule_id', // Add this line
-        'report_data',
+        'schedule_id',
+        'date',
+        'text',
+        'attachment',
+    ];
+
+    protected $casts = [
+        'date' => 'date',
     ];
 
     public function student()
     {
-        return $this->belongsTo(User::class, 'student_id', 'id')->where('role_id', 1);
+        return $this->belongsTo(User::class, 'student_id');
     }
 
-    public function schedule() // Add this method
+    public function schedule()
     {
         return $this->belongsTo(StudentSchedule::class, 'schedule_id');
     }

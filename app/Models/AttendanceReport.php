@@ -12,18 +12,12 @@ class AttendanceReport extends Model
     protected $fillable = [
         'student_id',
         'attendance_id',
-        'date',
-        'text',
-        'attachment',
-    ];
-
-    protected $casts = [
-        'date' => 'date',
+        'report_data',
     ];
 
     public function student()
     {
-        return $this->belongsTo(User::class, 'student_id');
+        return $this->belongsTo(User::class, 'student_id', 'id')->where('role_id', 1);
     }
 
     public function attendance()

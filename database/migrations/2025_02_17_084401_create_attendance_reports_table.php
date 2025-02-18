@@ -6,25 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up()
     {
         Schema::create('attendance_reports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('attendance_id')->constrained('attendances')->onDelete('cascade');
-            $table->date('date');
-            $table->text('text');
-            $table->string('attachment')->nullable();
+            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('attendance_id');
+            $table->json('report_data');
             $table->timestamps();
+
+            $table->foreign('student_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('attendance_id')->references('id')->on('attendances')->onDelete('cascade');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down()
     {
         Schema::dropIfExists('attendance_reports');
