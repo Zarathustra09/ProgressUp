@@ -27,7 +27,10 @@ class MessageController extends Controller
                     'receiver:id,first_name,last_name,email,profile_image',
                 ])
                 ->orderBy('created_at', 'desc')
-                ->get();
+                ->get()
+                ->each(function ($message) {
+                    $message->created_at->setTimezone('Asia/Manila');
+                });
 
             DB::commit();
             return response()->json($messages);
@@ -72,6 +75,7 @@ class MessageController extends Controller
 
         try {
             $message = $message->load(['sender', 'receiver', 'chat']);
+            $message->created_at->setTimezone('Asia/Manila');
 
             DB::commit();
             return response()->json($message);
@@ -132,8 +136,11 @@ class MessageController extends Controller
                     $query->where('first_name', 'like', '%' . $search . '%')
                         ->orWhere('last_name', 'like', '%' . $search . '%');
                 })
-                ->select('id', 'first_name', 'last_name', 'email', 'profile_image')
-                ->paginate(10);
+                ->select('id', 'first_name', 'last_name', 'email', 'profile_image', 'created_at')
+                ->paginate(10)
+                ->each(function ($student) {
+                    $student->created_at->setTimezone('Asia/Manila');
+                });
 
             DB::commit();
             return response()->json($students);

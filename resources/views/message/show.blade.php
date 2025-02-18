@@ -49,7 +49,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <small class="text-muted mt-1">{{ $message->created_at->diffForHumans() }}</small>
+                            <small class="text-muted mt-1">{{ $message->created_at->setTimezone('Asia/Manila')->diffForHumans() }}</small>
                         </div>
                     </div>
                 @endforeach
@@ -99,7 +99,7 @@
                                         ${message.attachment ? `<img src="{{ Storage::url('') }}${message.attachment}" class="img-fluid mt-2" alt="Attachment">` : ''}
                                     </div>
                                 </div>
-                                <small class="text-muted mt-1">${new Date(message.created_at).toLocaleString()}</small>
+                                <small class="text-muted mt-1">${new Date(message.created_at).toLocaleString('en-US', { timeZone: 'Asia/Manila' })}</small>
                             </div>
                         `;
                                 messagesContainer.appendChild(messageElement);

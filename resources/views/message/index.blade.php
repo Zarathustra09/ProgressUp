@@ -72,14 +72,14 @@
                                                 {{ $chat->userTwo->first_name }} {{ $chat->userTwo->last_name }}
                                             </h6>
                                             @if($chat->messages->isNotEmpty())
-                                                <small class="timestamp">{{ $chat->messages->last()->created_at->diffForHumans() }}</small>
+                                                <small class="timestamp">{{ $chat->messages->last()->created_at->setTimezone('Asia/Manila')->diffForHumans() }}</small>
                                             @endif
                                         </div>
                                         <p class="mb-0 message-preview text-truncate">
                                             @if($chat->messages->isNotEmpty())
                                                 {{ $chat->messages->last()->body }}
                                             @else
-                                                No messages yet
+                                                No Message Yet
                                             @endif
                                         </p>
                                     </div>
