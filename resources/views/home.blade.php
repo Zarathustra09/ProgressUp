@@ -13,7 +13,7 @@
                                 <p><em>"{{ $quoteContent }}"</em></p>
                                 <p><em>{{ $quoteAuthor }}</em></p>
                                 </p>
-                                {{--                                <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Badges</a>--}}
+                                <a href="{{ route('report.student.create') }}" class="btn btn-primary">Create Report</a>
                             </div>
                         </div>
                         <div class="col-sm-5 text-center text-sm-left">
@@ -54,7 +54,6 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
                                     <a class="dropdown-item" href="{{route('student.index')}}">View More</a>
-                                    {{--                                    <a class="dropdown-item" href="javascript:void(0);">Delete</a>--}}
                                 </div>
                             </div>
                         </div>
@@ -88,7 +87,6 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt6">
                                     <a class="dropdown-item" href="{{route('parent.index')}}">View More</a>
-                                    {{--                                    <a class="dropdown-item" href="javascript:void(0);">Delete</a>--}}
                                 </div>
                             </div>
                         </div>
@@ -118,7 +116,6 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt4">
                                     <a class="dropdown-item" href="{{route('room.index')}}">View More</a>
-                                    {{--                                    <a class="dropdown-item" href="javascript:void(0);">Delete</a>--}}
                                 </div>
                             </div>
                         </div>
@@ -140,23 +137,33 @@
                                 <th>Sessions</th>
                                 <th>Attended</th>
                                 <th>Status</th>
+                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($allStudents as $student)
                                 @foreach($student->studentSchedules as $schedule)
-                                    @if($schedule->attended_sessions >= ($schedule->session / 2))
+                                    @php
+                                        $isHalfCompleted = $schedule->attended_sessions >= ($schedule->session / 2) && $schedule->attended_sessions < $schedule->session;
+                                        $isComplete = $schedule->attended_sessions == $schedule->session;
+                                    @endphp
+                                    @if(!($schedule->report_count == 1 && $isHalfCompleted) && !($schedule->report_count == 2 && $isComplete) && ($isHalfCompleted || $isComplete))
                                         <tr>
                                             <td>{{ $student->first_name }} {{ $student->last_name }}</td>
                                             <td>{{ $schedule->event_name }}</td>
                                             <td>{{ $schedule->session }}</td>
                                             <td>{{ $schedule->attended_sessions }}</td>
                                             <td>
-                                                @if($schedule->attended_sessions == $schedule->session)
+                                                @if($isComplete)
                                                     <span class="badge bg-success">Finished</span>
-                                                @else
+                                                @elseif($isHalfCompleted)
                                                     <span class="badge bg-warning">Half</span>
+                                                @else
+                                                    <span class="badge bg-danger">Incomplete</span>
                                                 @endif
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('report.student.create', ['student_id' => $student->id]) }}" class="btn btn-primary btn-sm">Create Report</a>
                                             </td>
                                         </tr>
                                     @endif

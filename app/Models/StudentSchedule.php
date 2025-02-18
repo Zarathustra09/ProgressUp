@@ -33,4 +33,14 @@ class StudentSchedule extends Model
     {
         return $this->hasMany(Attendance::class, 'schedule_id');
     }
+
+    public function studentReports()
+    {
+        return $this->hasMany(StudentReport::class, 'schedule_id');
+    }
+
+    public function reportCount()
+    {
+        return $this->studentReports()->count();
+    }
 }

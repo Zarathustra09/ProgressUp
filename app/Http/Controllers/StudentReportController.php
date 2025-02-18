@@ -108,6 +108,7 @@ class StudentReportController extends Controller
         StudentReport::create([
             'student_id' => $student->id,
             'teacher_id' => $teacher->id,
+            'schedule_id' => $request->schedule_id, // Add this line
             'report_data' => json_encode($reportData),
         ]);
 

@@ -75,19 +75,22 @@ class HomeController extends Controller
         return $quote;
     }
 
+    // app/Http/Controllers/HomeController.php
+
     public function getStudentsWithCompletedSchedules()
     {
-        $students = User::where('role_id', 1)->with(['studentSchedules.attendances'])->get();
+        $students = User::where('role_id', 1)->with(['studentSchedules.attendances', 'studentSchedules.studentReports'])->get();
 
         foreach ($students as $student) {
             foreach ($student->studentSchedules as $schedule) {
                 $schedule->attended_sessions = $schedule->attendances->count();
+                $schedule->report_count = $schedule->reportCount();
             }
         }
 
         $result = $students->filter(function ($student) {
             return $student->studentSchedules->filter(function ($schedule) {
-                return $schedule->attended_sessions >= ($schedule->session / 2);
+                return $schedule->report_count != 1;
             })->isNotEmpty();
         });
 
