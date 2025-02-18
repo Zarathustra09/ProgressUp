@@ -185,6 +185,10 @@
             <label>Overall Grade</label>
             <input type="text" value="{{ $reportData['overall_grade'] }}">
         </div>
+        <div class="info-field">
+            <label>Number of Session</label>
+            <input type="text" value="{{ $reportData['schedules'][0]['session'] }}">
+        </div>
         <div class="info-field full-width">
             <label>Program</label>
             <input type="text" value="{{ $reportData['schedules'][0]['event_name'] }}">

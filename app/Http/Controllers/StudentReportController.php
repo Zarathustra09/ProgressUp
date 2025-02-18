@@ -42,6 +42,7 @@ class StudentReportController extends Controller
             'activities' => 'required|array',
             'remarks' => 'required|string',
             'overall_grade' => 'required|string|in:' . implode(',', array_keys(config('grade'))),
+            'schedule_id' => 'required|exists:student_schedules,id', // Add validation for schedule_id
         ]);
 
         // Check if at least one activity is provided
@@ -65,6 +66,9 @@ class StudentReportController extends Controller
         $birthdate = $student->birthdate;
         $age = $birthdate->diffInYears(now());
 
+        // Filter the schedules to include only the selected schedule
+        $selectedSchedule = $student->studentSchedules->where('id', $request->schedule_id)->first();
+
         $reportData = [
             'student' => [
                 'id' => $student->id,
@@ -78,15 +82,14 @@ class StudentReportController extends Controller
             'activities' => [],
             'remarks' => $request->remarks,
             'overall_grade' => config('grade')[$request->overall_grade],
-            'schedules' => $student->studentSchedules->map(function ($schedule) {
-                return [
-                    'event_name' => $schedule->event_name,
-                    'description' => $schedule->description,
-                    'room' => $schedule->room->name,
-                    'start_time' => $schedule->start_time,
-                    'end_time' => $schedule->end_time,
-                ];
-            })->toArray(),
+            'schedules' => [
+                [
+                    'id' => $selectedSchedule->id,
+                    'event_name' => $selectedSchedule->event_name,
+                    'description' => $selectedSchedule->description,
+                    'session' => $selectedSchedule->session,
+                ]
+            ],
         ];
 
         foreach ($request->activities as $scheduleId => $activitySet) {

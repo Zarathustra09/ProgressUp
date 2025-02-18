@@ -10,7 +10,7 @@
                 <form action="{{ route('reports.student.store') }}" method="POST">
                     @csrf
                     <input type="hidden" name="student_id" value="{{ $studentId }}">
-
+                    <input type="hidden" name="schedule_id" id="schedule_id">
                     <div class="mb-4">
                         <label for="teacher_id" class="form-label fw-bold">Teacher's Name</label>
                         <select class="form-select" id="teacher_id" name="teacher_id" required>
@@ -109,31 +109,32 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     const scheduleId = result.value;
+                    document.getElementById('schedule_id').value = scheduleId; // Set the hidden input value
                     const scheduleName = document.querySelector(`option[value="${scheduleId}"]`).textContent;
 
                     Swal.fire({
                         title: 'Add Activity Set',
                         html: `
-                        <div id="activity-container" class="overflow-auto px-2" style="max-height: 60vh;">
-                            <div class="activity-item bg-light rounded p-3 mb-3">
-                                <span class="d-block fw-medium mb-2">Activity</span>
-                                <input type="text" class="form-control" placeholder="Enter activity" required>
-                                <textarea class="form-control mt-2" placeholder="Enter descriptions (one per line)" required></textarea>
-                                <button type="button" class="btn btn-danger btn-sm remove-activity mt-2">Remove</button>
-                            </div>
-                        </div>
-                        <div class="btn-group d-flex gap-2 mt-4">
-                            <button type="button" class="btn btn-secondary flex-fill" id="add-activity">
-                                <i class="fas fa-plus me-2"></i>Add Activity
-                            </button>
-                            <button type="button" class="btn btn-success flex-fill" id="save-activities">
-                                <i class="fas fa-save me-2"></i>Save
-                            </button>
-                            <button type="button" class="btn btn-danger flex-fill" id="cancel-activities">
-                                <i class="fas fa-times me-2"></i>Cancel
-                            </button>
-                        </div>
-                    `,
+                <div id="activity-container" class="overflow-auto px-2" style="max-height: 60vh;">
+                    <div class="activity-item bg-light rounded p-3 mb-3">
+                        <span class="d-block fw-medium mb-2">Activity</span>
+                        <input type="text" class="form-control" placeholder="Enter activity" required>
+                        <textarea class="form-control mt-2" placeholder="Enter descriptions (one per line)" required></textarea>
+                        <button type="button" class="btn btn-danger btn-sm remove-activity mt-2">Remove</button>
+                    </div>
+                </div>
+                <div class="btn-group d-flex gap-2 mt-4">
+                    <button type="button" class="btn btn-secondary flex-fill" id="add-activity">
+                        <i class="fas fa-plus me-2"></i>Add Activity
+                    </button>
+                    <button type="button" class="btn btn-success flex-fill" id="save-activities">
+                        <i class="fas fa-save me-2"></i>Save
+                    </button>
+                    <button type="button" class="btn btn-danger flex-fill" id="cancel-activities">
+                        <i class="fas fa-times me-2"></i>Cancel
+                    </button>
+                </div>
+            `,
                         showConfirmButton: false,
                         width: '600px',
                         background: '#ffffff',
@@ -150,11 +151,11 @@
                         const newActivity = document.createElement('div');
                         newActivity.classList.add('activity-item', 'bg-light', 'rounded', 'p-3', 'mb-3');
                         newActivity.innerHTML = `
-                        <span class="d-block fw-medium mb-2">Activity</span>
-                        <input type="text" class="form-control" placeholder="Enter activity" required>
-                        <textarea class="form-control mt-2" placeholder="Enter descriptions (one per line)" required></textarea>
-                        <button type="button" class="btn btn-danger btn-sm remove-activity mt-2">Remove</button>
-                    `;
+                <span class="d-block fw-medium mb-2">Activity</span>
+                <input type="text" class="form-control" placeholder="Enter activity" required>
+                <textarea class="form-control mt-2" placeholder="Enter descriptions (one per line)" required></textarea>
+                <button type="button" class="btn btn-danger btn-sm remove-activity mt-2">Remove</button>
+            `;
                         activityContainer.appendChild(newActivity);
                     });
 
@@ -196,23 +197,23 @@
                         const tableBody = document.getElementById('activities-table-body');
                         const activityRow = document.createElement('tr');
                         const activitiesHtml = Object.values(activities).map((activity) => `
-                        <div class="mb-2">
-                            <span class="fw-bold">${activity.key}</span>
-                            ${activity.descriptions.map(desc => `<div>- ${desc}</div>`).join('')}
-                        </div>
-                        <input type="hidden" name="activities[${scheduleId}][${activity.key}]" value="${activity.key}" required>
-                        ${activity.descriptions.map((desc) => `<input type="hidden" name="activities[${scheduleId}][${activity.key}][descriptions][]" value="${desc}" required>`).join('')}
-                    `).join('');
+                <div class="mb-2">
+                    <span class="fw-bold">${activity.key}</span>
+                    ${activity.descriptions.map(desc => `<div>- ${desc}</div>`).join('')}
+                </div>
+                <input type="hidden" name="activities[${scheduleId}][${activity.key}]" value="${activity.key}" required>
+                ${activity.descriptions.map((desc) => `<input type="hidden" name="activities[${scheduleId}][${activity.key}][descriptions][]" value="${desc}" required>`).join('')}
+            `).join('');
 
                         activityRow.innerHTML = `
-                        <td>${scheduleName}</td>
-                        <td>${activitiesHtml}</td>
-                        <td>
-                            <button type="button" class="btn btn-danger btn-sm remove-activity-set">
-                                <i class="fas fa-trash me-1"></i>Remove
-                            </button>
-                        </td>
-                    `;
+                <td>${scheduleName}</td>
+                <td>${activitiesHtml}</td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm remove-activity-set">
+                        <i class="fas fa-trash me-1"></i>Remove
+                    </button>
+                </td>
+            `;
                         tableBody.appendChild(activityRow);
                         $('#activities').DataTable().row.add(activityRow).draw();
                         Swal.close();
