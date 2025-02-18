@@ -16,8 +16,7 @@ class AttendanceSeeder extends Seeder
         $schedules = StudentSchedule::all();
 
         foreach ($schedules as $schedule) {
-            $session = $schedule->session;
-            $attendanceCount = min(2, $session); // Ensure attendance does not exceed session
+            $attendanceCount = rand(1, $schedule->session); // Random number between 1 and the number of sessions
 
             Attendance::factory()->count($attendanceCount)->create([
                 'schedule_id' => $schedule->id,

@@ -137,6 +137,8 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Schedule</th>
+                                <th>Sessions</th>
+                                <th>Attended</th>
                                 <th>Status</th>
                             </tr>
                             </thead>
@@ -147,6 +149,8 @@
                                         <tr>
                                             <td>{{ $student->first_name }} {{ $student->last_name }}</td>
                                             <td>{{ $schedule->event_name }}</td>
+                                            <td>{{ $schedule->session }}</td>
+                                            <td>{{ $schedule->attended_sessions }}</td>
                                             <td>
                                                 @if($schedule->attended_sessions == $schedule->session)
                                                     <span class="badge bg-success">Finished</span>

@@ -20,7 +20,7 @@ class StudentScheduleFactory extends Factory
             'end_time' => $this->faker->dateTimeBetween('+1 week', '+2 weeks'),
             'event_name' => $this->faker->sentence(3),
             'description' => $this->faker->paragraph(), // Add this line
-            'session' => $this->faker->randomDigit(),
+            'session' => $this->faker->numberBetween(5, 10),
         ];
     }
 }

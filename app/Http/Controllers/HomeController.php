@@ -77,11 +77,13 @@ class HomeController extends Controller
 
     public function getStudentsWithCompletedSchedules()
     {
-        $students = User::where('role_id', 1)->with(['studentSchedules' => function ($query) {
-            $query->withCount(['attendances as attended_sessions' => function ($query) {
-                $query->where('status', 'present');
-            }]);
-        }])->get();
+        $students = User::where('role_id', 1)->with(['studentSchedules.attendances'])->get();
+
+        foreach ($students as $student) {
+            foreach ($student->studentSchedules as $schedule) {
+                $schedule->attended_sessions = $schedule->attendances->count();
+            }
+        }
 
         $result = $students->filter(function ($student) {
             return $student->studentSchedules->filter(function ($schedule) {
