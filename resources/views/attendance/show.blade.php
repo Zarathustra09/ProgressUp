@@ -2,8 +2,15 @@
 
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home / Attendance /</span> Attendance Details</h4>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home / Attendance /</span> Attendance Details</h4>
+            <button id="create-attendance-btn" class="btn btn-primary">Create Attendance</button>
+        </div>
         @include('layouts.session')
+
+        <button type="button" class="btn btn-secondary mb-4" onclick="window.history.back();">
+            <i class="fas fa-arrow-left me-1"></i> Back
+        </button>
 
         <div class="table-responsive">
             <table id="attendance-table" class="table table-hover">
@@ -38,7 +45,6 @@
                 </tbody>
             </table>
         </div>
-        <button id="create-attendance-btn" class="btn btn-success mt-4">Create Attendance</button>
     </div>
 @endsection
 

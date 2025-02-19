@@ -31,7 +31,12 @@
                         <label for="session" class="form-label">Session</label>
                         <input type="number" id="session" name="session" class="form-control" required min="1">
                     </div>
-                    <button type="submit" class="btn btn-primary">Create Schedule</button>
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-secondary" onclick="window.history.back();">
+                            <i class="fas fa-arrow-left me-1"></i> Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">Create Schedule</button>
+                    </div>
                 </form>
             </div>
         </div>

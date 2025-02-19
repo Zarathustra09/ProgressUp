@@ -2,10 +2,12 @@
 
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home /</span> Student Reports</h4>
-{{--        <button type="button" class="btn btn-primary mb-3" id="addRecord" onclick="createReport()">--}}
-{{--            <span class="tf-icons bx bx-plus"></span>&nbsp; Add Report--}}
-{{--        </button>--}}
+        <h4 class="fw-bold py-3 mb-4">
+            <span class="text-muted fw-light">Home /</span> Student Reports
+        </h4>
+        <button type="button" class="btn btn-secondary mb-4" onclick="window.history.back();">
+            <i class="fas fa-arrow-left me-1"></i> Back
+        </button>
 
         <div class="table-responsive">
             <table id="users-table" class="table table-hover">

@@ -80,6 +80,12 @@
                 </div>
             </div>
         @endif
+
+        <div class="mt-4">
+            <button type="button" class="btn btn-secondary" onclick="window.history.back();">
+                <i class="fas fa-arrow-left me-1"></i> Back
+            </button>
+        </div>
     </div>
 @endsection
 

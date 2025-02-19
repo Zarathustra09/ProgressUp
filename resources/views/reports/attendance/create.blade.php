@@ -55,9 +55,14 @@
                         <textarea class="form-control" id="remarks" name="remarks" rows="5" required></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-file-export me-2"></i>Generate Report
-                    </button>
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-secondary" onclick="window.history.back();">
+                            <i class="fas fa-arrow-left me-2"></i>Back
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-file-export me-2"></i>Generate Report
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

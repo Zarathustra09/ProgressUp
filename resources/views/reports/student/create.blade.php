@@ -49,10 +49,14 @@
                         <input type="file" name="attachment" id="attachment" class="form-control">
                     </div>
 
-                    <div class="text-end">
+                    <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">
                             <i class="bx bx-save me-1"></i> Create Report
                         </button>
+                        <button type="button" class="btn btn-secondary" onclick="window.history.back();">
+                            <i class="fas fa-arrow-left me-1"></i> Back
+                        </button>
+
                     </div>
                 </form>
             </div>

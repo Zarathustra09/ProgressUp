@@ -2,13 +2,19 @@
 
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home /</span> Student Reports</h4>
-
-        @if($reports->isNotEmpty())
-            <div class="mb-4">
-                <a href="{{ route('report.student.create', ['student_id' => $reports->first()->student_id]) }}" class="btn btn-primary">Create Report</a>
-            </div>
-        @endif
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold py-3 mb-4">
+                <span class="text-muted fw-light">Home /</span> Student Reports
+            </h4>
+            @if($reports->isNotEmpty())
+                <div>
+                    <a href="{{ route('report.student.create', ['student_id' => $reports->first()->student_id]) }}" class="btn btn-primary">Create Report</a>
+                </div>
+            @endif
+        </div>
+        <button type="button" class="btn btn-secondary mb-4" onclick="window.history.back();">
+            <i class="fas fa-arrow-left me-1"></i> Back
+        </button>
 
         <div class="table-responsive">
             <table id="reports-table" class="table table-hover">
