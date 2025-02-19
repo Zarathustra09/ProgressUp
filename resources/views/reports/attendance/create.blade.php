@@ -27,7 +27,6 @@
                             <table class="table table-striped table-hover" id="activities">
                                 <thead class="table-light">
                                 <tr>
-                                    <th>Activity</th>
                                     <th>Descriptions</th>
                                     <th>Action</th>
                                 </tr>
@@ -76,6 +75,8 @@
                 }
             });
         });
+
+        const attendanceId = "{{ request()->query('attendance_id') }}"; // Define the attendanceId variable
 
         document.getElementById('add-activity-set').addEventListener('click', function () {
             Swal.fire({
@@ -180,7 +181,7 @@
                 `;
                 tableBody.appendChild(activityRow);
                 $('#activities').DataTable().row.add(activityRow).draw();
-                Swal.close();
+                Swal.close(); // Close the Swal modal
             });
 
             document.getElementById('cancel-activities').addEventListener('click', function () {
