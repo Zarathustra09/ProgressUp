@@ -1,49 +1,82 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <h1>Create Student Report</h1>
-        <form id="create-report-form" method="POST" action="{{ route('reports.student.store') }}" enctype="multipart/form-data">
-            @csrf
-            <input type="hidden" name="student_id" value="{{ $studentId }}">
-            <div class="mb-4">
-                <label for="teacher_id" class="form-label">Teacher</label>
-                <select name="teacher_id" id="teacher_id" class="form-control" required>
-                    @foreach($teachers as $teacher)
-                        <option value="{{ $teacher->id }}">{{ $teacher->first_name }} {{ $teacher->last_name }}</option>
-                    @endforeach
-                </select>
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4">
+            <span class="text-muted fw-light">Home /</span> Create Student Report
+        </h4>
+
+        <div class="card">
+            <div class="card-body">
+                <form id="create-report-form" method="POST" action="{{ route('reports.student.store') }}" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="student_id" value="{{ $studentId }}">
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="teacher_id" class="form-label">Teacher</label>
+                            <select name="teacher_id" id="teacher_id" class="form-select" required>
+                                @foreach($teachers as $teacher)
+                                    <option value="{{ $teacher->id }}">{{ $teacher->first_name }} {{ $teacher->last_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="schedule_id" class="form-label">Program</label>
+                            <select name="schedule_id" id="schedule_id" class="form-select" required>
+                                @foreach($programs as $id => $program)
+                                    <option value="{{ $id }}">{{ $program }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="date" class="form-label">Date</label>
+                            <input type="date" name="date" id="date" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="text" class="form-label">Report Details</label>
+                        <textarea name="text" id="text" class="form-control" rows="4" required></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="attachment" class="form-label">Attachment</label>
+                        <input type="file" name="attachment" id="attachment" class="form-control">
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bx bx-save me-1"></i> Create Report
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div class="mb-4">
-                <label for="schedule_id" class="form-label">Program</label>
-                <select name="schedule_id" id="schedule_id" class="form-control" required>
-                    @foreach($programs as $id => $program)
-                        <option value="{{ $id }}">{{ $program }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="mb-4">
-                <label for="date" class="form-label">Date</label>
-                <input type="date" name="date" id="date" class="form-control" required>
-            </div>
-            <div class="mb-4">
-                <label for="text" class="form-label">Report Details</label>
-                <textarea name="text" id="text" class="form-control" rows="4" required></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="attachment" class="form-label">Attachment</label>
-                <input type="file" name="attachment" id="attachment" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-primary">Create Report</button>
-        </form>
+        </div>
     </div>
 @endsection
 
 @push('scripts')
     <style>
-        /* Add your custom styles here */
+        .card {
+            box-shadow: 0 2px 6px 0 rgba(67, 89, 113, 0.12);
+        }
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #696cff;
+            box-shadow: 0 0 0.25rem rgba(105, 108, 255, 0.1);
+        }
     </style>
     <script>
-        // Add your custom scripts here
+        $(document).ready(function() {
+            // Any additional JavaScript can go here
+        });
     </script>
 @endpush

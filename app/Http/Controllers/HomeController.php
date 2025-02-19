@@ -30,18 +30,24 @@ class HomeController extends Controller
         $parentCount = $this->countParents();
         $studentCount = $this->countStudent();
         $roomCount = $this->countRoom();
+        $staffCount = $this->countStaff();
 //        $allStudents = $this->getStudentsWithCompletedSchedules();
         // Fetch quotes from the new API
         $quote = $this->fetchQuotes();
         $quoteContent = $quote['content'];
         $quoteAuthor = $quote['author'];
 
-        return view('home', compact('parentCount', 'studentCount', 'roomCount', 'quoteContent', 'quoteAuthor'));
+        return view('home', compact('parentCount', 'studentCount', 'roomCount', 'quoteContent', 'quoteAuthor', 'staffCount'));
     }
 
     public function countParents()
     {
         return count(User::where('role_id', '0')->get());
+    }
+
+    public function countStaff()
+    {
+        return count(User::where('role_id', '3')->get());
     }
 
     public function countStudent()
