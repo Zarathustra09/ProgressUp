@@ -154,55 +154,55 @@
                 </div>
             </div>
 
-{{--            <div class="col-12 mb-4">--}}
-{{--                <div class="card">--}}
-{{--                    <div class="card-body">--}}
-{{--                        <h5 class="card-title">Students in need of Reports</h5>--}}
-{{--                        <table id="students-table" class="display">--}}
-{{--                            <thead>--}}
-{{--                            <tr>--}}
-{{--                                <th>Name</th>--}}
-{{--                                <th>Schedule</th>--}}
-{{--                                <th>Sessions</th>--}}
-{{--                                <th>Attended</th>--}}
-{{--                                <th>Status</th>--}}
-{{--                                <th>Action</th>--}}
-{{--                            </tr>--}}
-{{--                            </thead>--}}
-{{--                            <tbody>--}}
-{{--                            @foreach($allStudents as $student)--}}
-{{--                                @foreach($student->studentSchedules as $schedule)--}}
-{{--                                    @php--}}
-{{--                                        $isHalfCompleted = $schedule->attended_sessions >= ($schedule->session / 2) && $schedule->attended_sessions < $schedule->session;--}}
-{{--                                        $isComplete = $schedule->attended_sessions == $schedule->session;--}}
-{{--                                    @endphp--}}
-{{--                                    @if(!($schedule->report_count == 1 && $isHalfCompleted) && !($schedule->report_count == 2 && $isComplete) && ($isHalfCompleted || $isComplete))--}}
-{{--                                        <tr>--}}
-{{--                                            <td>{{ $student->first_name }} {{ $student->last_name }}</td>--}}
-{{--                                            <td>{{ $schedule->event_name }}</td>--}}
-{{--                                            <td>{{ $schedule->session }}</td>--}}
-{{--                                            <td>{{ $schedule->attended_sessions }}</td>--}}
-{{--                                            <td>--}}
-{{--                                                @if($isComplete)--}}
-{{--                                                    <span class="badge bg-success">Finished</span>--}}
-{{--                                                @elseif($isHalfCompleted)--}}
-{{--                                                    <span class="badge bg-warning">Half</span>--}}
-{{--                                                @else--}}
-{{--                                                    <span class="badge bg-danger">Incomplete</span>--}}
-{{--                                                @endif--}}
-{{--                                            </td>--}}
-{{--                                            <td>--}}
-{{--                                                <a href="{{ route('report.student.create', ['student_id' => $student->id]) }}" class="btn btn-primary btn-sm">Create Report</a>--}}
-{{--                                            </td>--}}
-{{--                                        </tr>--}}
-{{--                                    @endif--}}
-{{--                                @endforeach--}}
-{{--                            @endforeach--}}
-{{--                            </tbody>--}}
-{{--                        </table>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Students in need of Reports</h5>
+                        <table id="students-table" class="display">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Schedule</th>
+                                <th>Sessions</th>
+                                <th>Attended</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($allStudents as $student)
+                                @foreach($student->studentSchedules as $schedule)
+                                    @php
+                                        $isHalfCompleted = $schedule->attended_sessions >= ($schedule->session / 2) && $schedule->attended_sessions < $schedule->session;
+                                        $isComplete = $schedule->attended_sessions == $schedule->session;
+                                    @endphp
+                                    @if(!($schedule->report_count == 1 && $isHalfCompleted) && !($schedule->report_count == 2 && $isComplete) && ($isHalfCompleted || $isComplete))
+                                        <tr>
+                                            <td>{{ $student->first_name }} {{ $student->last_name }}</td>
+                                            <td>{{ $schedule->event_name }}</td>
+                                            <td>{{ $schedule->session }}</td>
+                                            <td>{{ $schedule->attended_sessions }}</td>
+                                            <td>
+                                                @if($isComplete)
+                                                    <span class="badge bg-success">Finished</span>
+                                                @elseif($isHalfCompleted)
+                                                    <span class="badge bg-warning">Half</span>
+                                                @else
+                                                    <span class="badge bg-danger">Incomplete</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('report.student.create', ['student_id' => $student->id]) }}" class="btn btn-primary btn-sm">Create Report</a>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection

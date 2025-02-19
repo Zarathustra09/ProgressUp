@@ -31,13 +31,12 @@ class HomeController extends Controller
         $studentCount = $this->countStudent();
         $roomCount = $this->countRoom();
         $staffCount = $this->countStaff();
-//        $allStudents = $this->getStudentsWithCompletedSchedules();
-        // Fetch quotes from the new API
+        $allStudents = $this->getStudentsWithCompletedSchedules();
         $quote = $this->fetchQuotes();
         $quoteContent = $quote['content'];
         $quoteAuthor = $quote['author'];
 
-        return view('home', compact('parentCount', 'studentCount', 'roomCount', 'quoteContent', 'quoteAuthor', 'staffCount'));
+        return view('home', compact('parentCount', 'studentCount', 'roomCount', 'quoteContent', 'quoteAuthor', 'staffCount', 'allStudents'));
     }
 
     public function countParents()
@@ -81,25 +80,24 @@ class HomeController extends Controller
         return $quote;
     }
 
-    // app/Http/Controllers/HomeController.php
 
-//    public function getStudentsWithCompletedSchedules()
-//    {
-//        $students = User::where('role_id', 1)->with(['studentSchedules.attendances', 'studentSchedules.studentReports'])->get();
-//
-//        foreach ($students as $student) {
-//            foreach ($student->studentSchedules as $schedule) {
-//                $schedule->attended_sessions = $schedule->attendances->count();
-//                $schedule->report_count = $schedule->reportCount();
-//            }
-//        }
-//
-//        $result = $students->filter(function ($student) {
-//            return $student->studentSchedules->filter(function ($schedule) {
-//                return $schedule->report_count != 1;
-//            })->isNotEmpty();
-//        });
-//
-//        return $result;
-//    }
+    public function getStudentsWithCompletedSchedules()
+    {
+        $students = User::where('role_id', 1)->with(['studentSchedules.attendances', 'studentSchedules.studentReports'])->get();
+
+        foreach ($students as $student) {
+            foreach ($student->studentSchedules as $schedule) {
+                $schedule->attended_sessions = $schedule->attendances->count();
+                $schedule->report_count = $schedule->reportCount();
+            }
+        }
+
+        $result = $students->filter(function ($student) {
+            return $student->studentSchedules->filter(function ($schedule) {
+                return $schedule->report_count != 1;
+            })->isNotEmpty();
+        });
+
+        return $result;
+    }
 }
