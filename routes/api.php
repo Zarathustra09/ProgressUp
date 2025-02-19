@@ -39,8 +39,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/staff/schedule/{user_id}', [StaffController::class, 'showSchedule'])->name('staff.mobile.showSchedule');
     Route::get('/staff/attendance/{schedule_id}', [StaffController::class, 'showAttendance'])->name('staff.mobile.showAttendance');
 
-    Route::get('/students/{studentId}/report', [MobileReportController::class, 'showPdf'])->name('students.report.showPdf');
-    Route::get('/students/{reportId}/pdf', [MobileReportController::class, 'renderPdf']);
+//    Route::get('/attendance/{studentId}/report', [MobileAttendanceReportController::class, 'showPdf'])->name('students.attendance.showPdf');
+    Route::get('/attendance/{attendanceId}/pdf', [MobileAttendanceReportController::class, 'renderPdf']);
 
-    Route::get('/attendance-reports/{id}', [MobileAttendanceReportController::class, 'show'])->name('mobile.attendanceReport.show');
+    Route::get('/schedule-reports/{scheduleId}', [MobileReportController::class, 'index'])->name('mobile.report.index');
+    Route::get('/schedule-report/{id}', [MobileReportController::class, 'show'])->name('mobile.report.show');
 });

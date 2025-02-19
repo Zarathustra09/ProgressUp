@@ -7,6 +7,13 @@
             <a href="{{ route('studentSchedules.create', ['room_id' => $student->branch_id, 'student_id' => $student->id]) }}" class="btn btn-primary">
                 Create Schedule
             </a>
+
+        </div>
+
+        <div class="my-4">
+            <button type="button" class="btn btn-secondary" onclick="window.history.back();">
+                <i class="fas fa-arrow-left me-1"></i> Back
+            </button>
         </div>
 
         @include('layouts.session')
@@ -81,11 +88,7 @@
             </div>
         @endif
 
-        <div class="mt-4">
-            <button type="button" class="btn btn-secondary" onclick="window.history.back();">
-                <i class="fas fa-arrow-left me-1"></i> Back
-            </button>
-        </div>
+
     </div>
 @endsection
 
