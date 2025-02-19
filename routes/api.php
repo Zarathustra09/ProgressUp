@@ -42,6 +42,6 @@ Route::middleware('auth:sanctum')->group(function () {
 //    Route::get('/attendance/{studentId}/report', [MobileAttendanceReportController::class, 'showPdf'])->name('students.attendance.showPdf');
     Route::get('/attendance/{attendanceId}/pdf', [MobileAttendanceReportController::class, 'renderPdf']);
 
-    Route::get('/schedule-reports/{scheduleId}', [MobileReportController::class, 'index'])->name('mobile.report.index');
-    Route::get('/schedule-report/{id}', [MobileReportController::class, 'show'])->name('mobile.report.show');
+    Route::get('/schedule-reports/{id}', [MobileReportController::class, 'index'])->name('mobile.report.index');
+    Route::get('/schedule-report/show/{id}', [MobileReportController::class, 'show'])->name('mobile.report.show');
 });

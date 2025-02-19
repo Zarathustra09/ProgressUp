@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 
 class MobileReportController extends Controller
 {
-    public function index($scheduleId)
+    public function index($id)
     {
-        $reports = StudentReport::where('schedule_id', $scheduleId)->get();
+        $reports = StudentReport::where('student_id', $id)->get();
         return response()->json(['reports' => $reports]);
     }
 
