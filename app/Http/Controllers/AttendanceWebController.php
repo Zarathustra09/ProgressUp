@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attendance;
 use App\Models\StudentSchedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -15,5 +16,28 @@ class AttendanceWebController extends Controller
         Log::info('Student Schedule found:', ['studentSchedule' => $studentSchedule]);
 
         return view('attendance.show', compact('studentSchedule'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'student_id' => 'required|exists:users,id',
+            'schedule_id' => 'required|exists:student_schedules,id',
+            'date' => 'required|date',
+            'status' => 'required|string|in:present,absent,late',
+        ]);
+
+        $attendance = Attendance::create([
+            'student_id' => $request->student_id,
+            'schedule_id' => $request->schedule_id,
+            'date' => $request->date,
+            'status' => $request->status,
+        ]);
+
+        if ($attendance) {
+            return response()->json(['success' => 'Attendance created successfully.'], 200);
+        } else {
+            return response()->json(['error' => 'Failed to create attendance.'], 500);
+        }
     }
 }

@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             'address' => '123 Admin St',
             'province' => 'Admin Province',
             'birthdate' => '1980-01-01',
-            'profile_image' => 'path/to/profile_image.jpg',
+            'profile_image' => null,
             'parent_id' => null,
             'email' => 'test@example.com',
             'password' => Hash::make('password'),

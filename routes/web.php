@@ -105,12 +105,17 @@ Route::resource('student-medical-information', StudentMedicalInformationControll
 Route::resource('student-school-details', StudentSchoolDetailsController::class);
 
 
-Route::put('/attendance-reports/{attendanceId}', [AttendanceReportController::class, 'update'])->name('attendance_reports.update');
+//Route::put('/attendance-reports/{attendanceId}', [AttendanceReportController::class, 'update'])->name('attendance_reports.update');
 Route::get('/attendance/{studentScheduleId}', [AttendanceWebController::class, 'show'])->name('attendance.show');
-Route::post('/attendance-reports', [AttendanceReportController::class, 'store'])->name('attendance_reports.store');
-Route::get('/attendance-reports/check/{attendanceId}', [AttendanceReportController::class, 'check']);
-Route::get('/attendance-reports/{attendanceId}/edit', [AttendanceReportController::class, 'edit'])->name('attendance_reports.edit');
-Route::get('/attendance-reports/{attendanceId}', [AttendanceReportController::class, 'show'])->name('attendance_reports.show');
+Route::post('/attendance/store', [AttendanceWebController::class, 'store'])->name('attendance.store');
+
+
+Route::post('/attendanceStore', [AttendanceReportController::class, 'store'])->name('storeAttendance');
+Route::get('/attendance/reports/check/{attendanceId}', [AttendanceReportController::class, 'check'])->name('attendance.reports.check');
+//Route::get('/attendance-reports/{attendanceId}/edit', [AttendanceReportController::class, 'edit'])->name('attendance.reports.edit');
+Route::get('/attendance/reports/{attendanceId}', [AttendanceReportController::class, 'show'])->name('attendance.reports.show');
+Route::get('/attendanceCreate', [AttendanceReportController::class, 'create'])->name('createAttendance');
+Route::delete('/attendance-reports/{id}', [AttendanceReportController::class, 'destroy'])->name('attendance.report.destroy');
 
 Route::get('/reports', [ReportController::class, 'index'])->name('report.index');
 Route::get('/reports/attendance-rate', [ReportController::class, 'attendanceRate'])->name('reports.attendance_rate');

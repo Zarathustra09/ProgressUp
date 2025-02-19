@@ -4,9 +4,11 @@
     <div class="container-xxl flex-grow-1 container-p-y">
         <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home /</span> Student Reports</h4>
 
-        <div class="mb-4">
-            <a href="{{ route('report.student.create', ['student_id' => $reports->first()->student_id]) }}" class="btn btn-primary">Create Report</a>
-        </div>
+        @if($reports->isNotEmpty())
+            <div class="mb-4">
+                <a href="{{ route('report.student.create', ['student_id' => $reports->first()->student_id]) }}" class="btn btn-primary">Create Report</a>
+            </div>
+        @endif
 
         <div class="table-responsive">
             <table id="reports-table" class="table table-hover">
@@ -19,7 +21,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($reports as $report)
+                @forelse($reports as $report)
                     <tr id="report-row-{{ $report->id }}">
                         <td>{{ $report->student->first_name }} {{ $report->student->last_name }}</td>
                         <td>{{ $report->student->email }}</td>
@@ -37,7 +39,11 @@
                             </form>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="4" class="text-center">No reports found.</td>
+                    </tr>
+                @endforelse
                 </tbody>
             </table>
         </div>
@@ -142,12 +148,9 @@
         }
     </style>
     <script>
-
         $(document).ready(function() {
             $('#reports-table').DataTable();
         });
-
-
 
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.show-report-btn').forEach(button => {
