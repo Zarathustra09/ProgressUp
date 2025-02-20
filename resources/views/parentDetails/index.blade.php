@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(auth()->user()->role_id == 2 ? 'layouts.app' : 'layouts.staff.app')
 
 @section('content')
     <div class="content-wrapper">
@@ -7,9 +7,15 @@
 
         <div class="container-xxl flex-grow-1 container-p-y">
             <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Parent /</span> Details</h4>
-            <a href="{{ route('parent.index') }}" class="btn btn-secondary mb-2">
-                Back
-            </a>
+            @if(auth()->user()->role_id == 2)
+                <a href="{{ route('parent.index') }}" class="btn btn-secondary mb-2">
+                    Back
+                </a>
+            @else
+                <a href="{{ route('staffParent.index') }}" class="btn btn-secondary mb-2">
+                    Back
+                </a>
+            @endif
           @include('layouts.session')
             <div class="row">
                 <div class="col-md-12">

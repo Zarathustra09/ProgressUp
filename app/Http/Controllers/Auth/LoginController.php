@@ -10,7 +10,20 @@ class LoginController extends Controller
 {
     use AuthenticatesUsers;
 
-    protected $redirectTo = '/home';
+    protected function redirectTo()
+    {
+        $role = auth()->user()->role_id;
+
+        switch ($role) {
+            case 2:
+                return route('home');
+            case 3:
+                return route('staffPages.home');
+            default:
+                auth()->logout();
+                return route('login')->withErrors(['permission' => 'You do not have permission to access the website']);
+        }
+    }
 
     public function __construct()
     {
@@ -18,11 +31,5 @@ class LoginController extends Controller
         $this->middleware('auth')->only('logout');
     }
 
-    protected function authenticated(Request $request, $user)
-    {
-        if ($user->role_id != 2 && $user->role_id != 3) {
-            auth()->logout();
-            return redirect()->route('login')->withErrors(['permission' => 'You do not have permission to access the website']);
-        }
-    }
+
 }

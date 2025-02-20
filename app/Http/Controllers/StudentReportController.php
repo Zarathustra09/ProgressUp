@@ -13,7 +13,19 @@ class StudentReportController extends Controller
 {
     public function index()
     {
-        $users = User::where('role_id', 1)->with('roomStudent.room')->get();
+        $currentUser = auth()->user();
+
+        if ($currentUser->role_id == 3) {
+            $users = User::where('role_id', 1)
+                ->where('branch_id', $currentUser->branch_id)
+                ->with('roomStudent.room')
+                ->get();
+        } else {
+            $users = User::where('role_id', 1)
+                ->with('roomStudent.room')
+                ->get();
+        }
+
         return view('reports.student.index', compact('users'));
     }
 
@@ -55,7 +67,7 @@ class StudentReportController extends Controller
             'schedule_id' => 'required|exists:student_schedules,id',
             'date' => 'required|date',
             'text' => 'required|string',
-            'attachment' => 'nullable|file',
+            'attachment' => 'nullable|file|mimes:jpeg,png',
         ]);
 
         DB::beginTransaction();

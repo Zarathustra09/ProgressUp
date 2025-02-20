@@ -12,6 +12,9 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomScheduleController;
 use App\Http\Controllers\RoomStudentController;
+use App\Http\Controllers\Staff\StaffHomeController;
+use App\Http\Controllers\Staff\StaffParentController;
+use App\Http\Controllers\Staff\StaffStudentController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\StudentMedicalInformationController;
@@ -60,6 +63,7 @@ Route::get('/parent-student/show/{id}/{studentId}', [ParentDetailsController::cl
 Route::put('/parent-student/update/{id}/{studentId}', [ParentDetailsController::class, 'update'])->name('parent-student.update');
 
 Route::get('/student/index', [StudentController::class, 'index'])->name('student.index');
+Route::get('/students/list', [StudentController::class, 'list'])->name('students.list');
 
 Route::get('/branch/index', [RoomController::class, 'index'])->name('room.index');
 Route::post('/branch', [RoomController::class, 'store'])->name('room.store');
@@ -99,7 +103,7 @@ Route::get('/showSingleSchedule/{id}', [StudentScheduleController::class, 'showS
 Route::delete('/studentSchedules/{id}', [StudentScheduleController::class, 'destroy'])->name('studentSchedules.destroy');
 
 
-Route::get('/students/list', [StudentController::class, 'list'])->name('students.list');
+
 
 Route::resource('student-medical-information', StudentMedicalInformationController::class);
 Route::resource('student-school-details', StudentSchoolDetailsController::class);
@@ -139,3 +143,20 @@ Route::get('reports/student', [StudentReportController::class, 'index'])->name('
 //Route::get('reports/student/{id}/view-pdf', [StudentReportController::class, 'viewPdf'])->name('reports.student.viewPdf');
 //Route::get('reports/student/{id}/print', [StudentReportController::class, 'print'])->name('reports.student.print');
 
+
+//Staff Pages
+Route::get('/staffPages/home', [StaffHomeController::class, 'index'])->name('staffPages.home');
+
+
+
+//Staff Parent Functions
+Route::get('/staffParent/index', [StaffParentController::class, 'index'])->name('staffParent.index');
+Route::post('/staffParent', [StaffParentController::class, 'store'])->name('staffParent.store');
+Route::get('/staffParent/{user}', [StaffParentController::class, 'show'])->name('staffParent.show');
+Route::put('/staffParent/{user}', [StaffParentController::class, 'update'])->name('staffParent.update');
+Route::delete('/staffParent/{user}', [StaffParentController::class, 'destroy'])->name('staffParent.destroy');
+
+
+//Staff Student Functions
+Route::get('/staffStudent/index', [StaffStudentController::class, 'index'])->name('staffStudent.index');
+Route::get('/staffStudent/list', [StaffStudentController::class, 'list'])->name('staffStudent.list');

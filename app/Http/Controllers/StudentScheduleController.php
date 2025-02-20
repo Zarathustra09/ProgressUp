@@ -68,12 +68,11 @@ class StudentScheduleController extends Controller
         try {
             $schedule = StudentSchedule::create($request->all());
             Log::info('Student schedule created successfully:', $schedule->toArray());
+            return redirect()->route('studentSchedules.show', $schedule->student_id)->with('success', 'Student schedule created successfully.');
         } catch (\Exception $e) {
             Log::error('Error creating student schedule:', ['error' => $e->getMessage()]);
-            return redirect()->back()->with('error', 'There was an error creating the student schedule.');
+            return redirect()->back()->withInput()->with('error', 'There was an error creating the student schedule.');
         }
-
-        return redirect()->route('studentSchedules.show', $schedule->student_id)->with('success', 'Student schedule created successfully.');
     }
 
     public function update(Request $request, $id)

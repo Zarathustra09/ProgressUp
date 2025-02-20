@@ -25,5 +25,16 @@ class ResetPasswordController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected function redirectTo()
+    {
+        $user = auth()->user();
+        if ($user->role_id == 2) {
+            return route('home');
+        } elseif ($user->role_id == 3) {
+            return route('staffPages.home');
+        } else {
+            auth()->logout();
+            return route('login')->withErrors(['permission' => 'You do not have permission to access the website']);
+        }
+    }
 }
