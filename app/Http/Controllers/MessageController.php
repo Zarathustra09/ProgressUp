@@ -6,6 +6,7 @@ use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class MessageController extends Controller
 {
@@ -59,9 +60,14 @@ class MessageController extends Controller
                 $data['attachment'] = $request->file('attachment')->store('attachments', 'public');
             }
 
+            $data['created_at'] = now()->setTimezone('Asia/Manila');
+            $data['updated_at'] = now()->setTimezone('Asia/Manila');
+
             $message = Message::create($data);
 
             DB::commit();
+
+            Log::info('Message created', ['message' => $message]);
             return response()->json($message, 201);
         } catch (\Exception $e) {
             DB::rollBack();

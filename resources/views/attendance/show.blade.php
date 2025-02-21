@@ -26,7 +26,7 @@
                 @foreach($studentSchedule->attendances as $attendance)
                     <tr>
                         <td>{{ $studentSchedule->event_name }}</td>
-                        <td>{{ $attendance->date->format('Y-m-d') }}</td>
+                        <td>{{ $attendance->date->format('Y-m-d H:i') }}</td> <!-- Updated to include hour and minutes -->
                         <td>{{ ucfirst($attendance->status) }}</td>
                         <td>
                             <a href="#" class="btn btn-primary report-btn" data-attendance-id="{{ $attendance->id }}">

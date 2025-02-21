@@ -26,24 +26,17 @@ class AttendanceController extends Controller
             'status' => 'required|in:present,absent,late',
         ]);
 
-        // Check if the user_id matches the student_id
-//        if ($request->user_id !== $request->student_id) {
-//            return response()->json(['error' => 'Unauthorized'], 403);
-//        }
-
-
         $student = User::findOrFail($request->student_id);
         if ((int)$student->parent_id !== (int)$request->user_id) {
             Log::info('Parent ID: ' . $student->parent_id . ' User ID: ' . $request->user_id . ' Student ID: ' . $request->student_id);
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
-        $currentDate = now()->toDateString();
+        $currentDateTime = now()->setTimezone('Asia/Manila');
 
-        // Check if an attendance record already exists for the given student_id and today's date
         $existingAttendance = Attendance::where('student_id', $request->student_id)
             ->where('schedule_id', $request->schedule_id)
-            ->whereDate('created_at', $currentDate)
+            ->whereDate('date', $currentDateTime->toDateString())
             ->first();
 
         if ($existingAttendance) {
@@ -51,11 +44,11 @@ class AttendanceController extends Controller
         }
 
         $schedule = StudentSchedule::findOrFail($request->schedule_id);
-        $currentTime = now();
-
-        if ($currentTime->greaterThan($schedule->start_time)) {
+        if ($currentDateTime->greaterThan($schedule->start_time)) {
             $request->merge(['status' => 'late']);
         }
+
+        $request->merge(['date' => $currentDateTime]);
 
         $attendance = Attendance::create($request->all());
         return response()->json($attendance, 201);

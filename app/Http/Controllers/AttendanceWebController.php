@@ -13,6 +13,11 @@ class AttendanceWebController extends Controller
     {
         $studentSchedule = StudentSchedule::with('attendances')->findOrFail($studentScheduleId);
 
+        // Convert the date to Asia/Manila timezone
+        $studentSchedule->attendances->each(function ($attendance) {
+            $attendance->date = $attendance->date->setTimezone('Asia/Manila');
+        });
+
         Log::info('Student Schedule found:', ['studentSchedule' => $studentSchedule]);
 
         return view('attendance.show', compact('studentSchedule'));
@@ -27,10 +32,12 @@ class AttendanceWebController extends Controller
             'status' => 'required|string|in:present,absent,late',
         ]);
 
+        $manilaDate = \Carbon\Carbon::parse($request->date)->setTimezone('Asia/Manila');
+
         $attendance = Attendance::create([
             'student_id' => $request->student_id,
             'schedule_id' => $request->schedule_id,
-            'date' => $request->date,
+            'date' => $manilaDate,
             'status' => $request->status,
         ]);
 

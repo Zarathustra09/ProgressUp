@@ -17,7 +17,7 @@ class Attendance extends Model
     ];
 
     protected $casts = [
-        'date' => 'date',
+        'date' => 'datetime',
     ];
 
     public function student()

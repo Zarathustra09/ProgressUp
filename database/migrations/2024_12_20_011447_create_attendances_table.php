@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('student_id')->constrained('users');
             $table->foreignId('schedule_id')->constrained('student_schedules');
-            $table->date('date');
+            $table->dateTime('date'); // Change this line
             $table->enum('status', ['present', 'absent', 'late']);
             $table->timestamps();
         });
