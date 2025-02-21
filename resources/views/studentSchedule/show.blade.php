@@ -4,9 +4,12 @@
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home / Student Schedules /</span> Schedule Details</h4>
-            <a href="{{ route('studentSchedules.create', ['room_id' => $student->branch_id, 'student_id' => $student->id]) }}" class="btn btn-primary">
-                Create Schedule
-            </a>
+
+            @if(auth()->user()->role_id == 2)
+                <a href="{{ route('studentSchedules.create', ['room_id' => $student->branch_id, 'student_id' => $student->id]) }}" class="btn btn-primary">
+                    Create Schedule
+                </a>
+            @endif
 
         </div>
 
@@ -66,12 +69,15 @@
                                     <td>{{ $schedule->attendances->count() }}</td>
                                     <td>
                                         <a href="{{ route('attendance.show', $schedule->id) }}" class="btn btn-sm btn-info">View</a>
-                                        <button type="button" class="btn btn-sm btn-warning edit-button" data-id="{{ $schedule->id }}">Edit</button>
+                                        @if(auth()->user()->role_id == 2)
+                                          <button type="button" class="btn btn-sm btn-warning edit-button" data-id="{{ $schedule->id }}">Edit</button>
+
                                         <form action="{{ route('studentSchedules.destroy', $schedule->id) }}" method="POST" class="d-inline delete-form">
                                             @csrf
                                             @method('DELETE')
                                             <button type="button" class="btn btn-sm btn-danger delete-button">Delete</button>
                                         </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

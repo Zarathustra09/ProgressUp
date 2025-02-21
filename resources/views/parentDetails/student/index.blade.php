@@ -66,9 +66,13 @@
                             @endif
                         </div>
                     </div>
-                    <button type="button" class="btn btn-primary mb-3" id="addRecord" onclick="createUser()">
-                        <span class="tf-icons bx bx-plus"></span>&nbsp; Add Record
-                    </button>
+
+                    @if(auth()->user()->role_id == 2)
+                        <button type="button" class="btn btn-primary mb-3" id="addRecord" onclick="createUser()">
+                            <span class="tf-icons bx bx-plus"></span>&nbsp; Add Record
+                        </button>
+
+                    @endif
                 </div>
             </div>
         </div>

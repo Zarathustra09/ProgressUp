@@ -3,10 +3,11 @@
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
         <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Home /</span> Staff Parents</h4>
-
-        <button type="button" class="btn btn-primary mb-3" id="addRecord" onclick="createUser()">
-            <span class="tf-icons bx bx-plus"></span>&nbsp; Add Record
-        </button>
+        @if(auth()->user()->role_id == 2)
+            <button type="button" class="btn btn-primary mb-3" id="addRecord" onclick="createUser()">
+                <span class="tf-icons bx bx-plus"></span>&nbsp; Add Record
+            </button>
+        @endif
 
         <div class="table-responsive">
             <table id="users-table" class="table table-hover">
@@ -32,12 +33,15 @@
                             <a href="javascript:void(0)" onclick="viewUser({{ $user->id }})" class="text-info">
                                 <i class="bx bx-show"></i>
                             </a>
-                            <a href="javascript:void(0)" onclick="editUser({{ $user->id }})" class="text-warning me-2">
-                                <i class="bx bx-edit"></i>
-                            </a>
-                            <a href="javascript:void(0)" onclick="deleteUser({{ $user->id }})" class="text-danger me-2">
-                                <i class="bx bx-trash"></i>
-                            </a>
+
+                            @if(auth()->user()->role_id == 2)
+                                <a href="javascript:void(0)" onclick="editUser({{ $user->id }})" class="text-warning me-2">
+                                    <i class="bx bx-edit"></i>
+                                </a>
+                                <a href="javascript:void(0)" onclick="deleteUser({{ $user->id }})" class="text-danger me-2">
+                                    <i class="bx bx-trash"></i>
+                                </a>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

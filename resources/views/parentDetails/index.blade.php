@@ -47,20 +47,21 @@
                                     id="uploadedAvatar"
                                 />
 
-                                <div class="button-wrapper">
-                                    <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
-                                        <span class="d-none d-sm-block">Print Profile</span>
-                                        <i class="bx bx-upload d-block d-sm-none"></i>
-                                        <input
-                                            type="file"
-                                            id="upload"
-                                            class="account-file-input"
-                                            hidden
-                                            accept="image/png, image/jpeg"
-                                        />
-                                    </label>
-                                    <p class="text-muted mb-0">{{$parent->address}} {{$parent->province}}}</p>
-                                </div>
+{{--                                <div class="button-wrapper">--}}
+{{--                                    <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">--}}
+{{--                                        <span class="d-none d-sm-block">Print Profile</span>--}}
+{{--                                        <i class="bx bx-upload d-block d-sm-none"></i>--}}
+{{--                                        <input--}}
+{{--                                            type="file"--}}
+{{--                                            id="upload"--}}
+{{--                                            class="account-file-input"--}}
+{{--                                            hidden--}}
+{{--                                            accept="image/png, image/jpeg"--}}
+{{--                                        />--}}
+{{--                                    </label>--}}
+{{--                         --}}
+{{--                                </div>--}}
+                                <p class="text-muted mb-0">{{$parent->address}} {{$parent->province}}</p>
                             </div>
                         </div>
                         <hr class="my-0" />
