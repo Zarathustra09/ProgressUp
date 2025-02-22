@@ -35,7 +35,7 @@
                             <a href="javascript:void(0)" onclick="editRoom({{ $room->id }})" class="text-warning me-2">
                                 <i class="bx bx-edit"></i>
                             </a>
-                            <a href="javascript:void(0)" onclick="deleteRoom({{ $room->id }})" class="text-danger me-2">
+                            <a href="javascript:void(0)" onclick="deleteRoom({{ $room->id }}, '{{ $room->name }}')" class="text-danger me-2">
                                 <i class="bx bx-trash"></i>
                             </a>
                         </td>
@@ -230,17 +230,25 @@
             });
         }
 
-        function deleteRoom(id) {
+        function deleteRoom(id, roomName) {
             Swal.fire({
                 title: '<h4 class="fw-bold text-danger">Are you sure?</h4>',
-                text: 'This action cannot be undone!',
+                text: 'This action cannot be undone! Please enter the room name to confirm.',
                 icon: 'warning',
+                input: 'text',
+                inputPlaceholder: 'Enter room name',
                 showCancelButton: true,
                 confirmButtonText: 'Delete',
                 cancelButtonText: 'Cancel',
                 customClass: {
                     confirmButton: 'btn btn-danger btn-block',
                     cancelButton: 'btn btn-secondary btn-block ms-2'
+                },
+                preConfirm: (inputValue) => {
+                    if (inputValue !== roomName) {
+                        Swal.showValidationMessage('Room name does not match.');
+                        return false;
+                    }
                 }
             }).then((result) => {
                 if (result.isConfirmed) {

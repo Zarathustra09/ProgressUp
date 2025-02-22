@@ -50,6 +50,14 @@ class RoomController extends Controller
     public function destroy($id)
     {
         $room = Room::findOrFail($id);
+
+        // Delete related student schedules and their attendances
+        foreach ($room->studentSchedules as $schedule) {
+            $schedule->attendances()->delete();
+            $schedule->delete();
+        }
+
+        // Delete the room
         $room->delete();
 
         return response()->json(['success' => 'Room deleted successfully.']);
