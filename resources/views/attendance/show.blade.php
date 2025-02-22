@@ -77,7 +77,7 @@
                     <input type="hidden" id="schedule_id" value="{{ $studentSchedule->id }}">
                     <div class="mb-3">
                         <label for="date" class="form-label">Date</label>
-                        <input type="date" id="date" class="form-control">
+                        <input type="datetime-local" id="date" class="form-control">
                     </div>
                     <div class="mb-3">
                         <label for="status" class="form-label">Status</label>
