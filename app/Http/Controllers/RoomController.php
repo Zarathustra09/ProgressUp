@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class RoomController extends Controller
@@ -49,18 +50,50 @@ class RoomController extends Controller
 
     public function destroy($id)
     {
-        $room = Room::findOrFail($id);
+        DB::beginTransaction();
 
-        // Delete related student schedules and their attendances
-        foreach ($room->studentSchedules as $schedule) {
-            $schedule->attendances()->delete();
-            $schedule->delete();
+        try {
+            $room = Room::findOrFail($id);
+
+            // Log the room to be deleted
+            Log::info('Deleting room:', ['room' => $room]);
+
+            // Delete related student schedules and their attendances
+            foreach ($room->studentSchedules as $schedule) {
+                Log::info('Deleting student schedule:', ['schedule' => $schedule]);
+                $schedule->attendances()->delete();
+                $schedule->delete();
+            }
+
+            // Delete related attendances for users
+            foreach ($room->users as $user) {
+                Log::info('Deleting attendances for user:', ['user' => $user]);
+                $user->attendances()->delete();
+            }
+
+            // Delete related users
+            foreach ($room->users as $user) {
+                Log::info('Deleting user:', ['user' => $user]);
+                $user->delete();
+            }
+
+            // Delete related room staff
+            foreach ($room->roomStaff as $staff) {
+                Log::info('Deleting room staff:', ['staff' => $staff]);
+                $staff->delete();
+            }
+
+            // Delete the room
+            $room->delete();
+
+            DB::commit();
+
+            return response()->json(['success' => 'Room and related records deleted successfully.']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Failed to delete room:', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'Failed to delete room.'], 500);
         }
-
-        // Delete the room
-        $room->delete();
-
-        return response()->json(['success' => 'Room deleted successfully.']);
     }
 
     public function list()
