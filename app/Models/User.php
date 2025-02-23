@@ -89,5 +89,10 @@ class User extends Authenticatable
         return $this->hasMany(StudentReport::class, 'student_id', 'id')->where('role_id', 1);
     }
 
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class, 'student_id');
+    }
+
 
 }
