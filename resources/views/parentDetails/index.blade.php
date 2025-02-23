@@ -39,29 +39,14 @@
                         <div class="card-body">
                             <div class="d-flex align-items-start align-items-sm-center gap-4">
                                 <img
-                                    src="https://via.placeholder.com/100"
+                                    src="{{ $parent->profile_image ? Storage::url($parent->profile_image) : 'https://placehold.co/100' }}"
                                     alt="user-avatar"
                                     class="d-block rounded"
                                     height="100"
                                     width="100"
                                     id="uploadedAvatar"
                                 />
-
-{{--                                <div class="button-wrapper">--}}
-{{--                                    <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">--}}
-{{--                                        <span class="d-none d-sm-block">Print Profile</span>--}}
-{{--                                        <i class="bx bx-upload d-block d-sm-none"></i>--}}
-{{--                                        <input--}}
-{{--                                            type="file"--}}
-{{--                                            id="upload"--}}
-{{--                                            class="account-file-input"--}}
-{{--                                            hidden--}}
-{{--                                            accept="image/png, image/jpeg"--}}
-{{--                                        />--}}
-{{--                                    </label>--}}
-{{--                         --}}
-{{--                                </div>--}}
-                                <p class="text-muted mb-0">{{$parent->address}} {{$parent->province}}</p>
+                                <p class="text-muted mb-0">{{ $parent->address }} {{ $parent->province }}</p>
                             </div>
                         </div>
                         <hr class="my-0" />

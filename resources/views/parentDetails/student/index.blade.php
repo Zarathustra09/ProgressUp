@@ -44,7 +44,7 @@
                                                 <div class="card-body">
                                                     <div class="d-flex align-items-start align-items-sm-center gap-4">
                                                         <img
-                                                            src="{{ $student->profile_image ? asset('storage/' . $student->profile_image) : 'https://via.placeholder.com/100' }}"
+                                                            src="{{ $student->profile_image ? asset('storage/' . $student->profile_image) : 'https://placehold.co/100' }}"
                                                             alt="student-avatar"
                                                             class="d-block rounded"
                                                             height="100"
