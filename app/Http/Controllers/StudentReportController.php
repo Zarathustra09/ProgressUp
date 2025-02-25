@@ -84,7 +84,7 @@ class StudentReportController extends Controller
             DB::commit();
 
             return redirect()->route('reports.student.show', ['id' => $report->student_id])
-                ->with('success', 'Report created successfully.');
+                ->with('successCreated', 'Report created successfully.');
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error creating report: ' . $e->getMessage());

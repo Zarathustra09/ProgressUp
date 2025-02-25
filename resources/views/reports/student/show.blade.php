@@ -264,5 +264,22 @@
             }
         });
         @endif
+
+        @if(session('successCreated'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Created!',
+            text: '{{ session('successCreated') }}',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            customClass: {
+                container: 'custom-swal-container',
+                popup: 'custom-swal-popup'
+            }
+        });
+        @endif
     </script>
 @endpush
